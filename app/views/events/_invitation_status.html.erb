@@ -1,0 +1,26 @@
+<div id="invitation_status">
+  <ul class="list-disc pl-6 mb-6">
+    <% @event.users.each do |user| %>
+      <li class="mb-2">
+        <%= user.first_name %> <%= user.last_name %> (<%= user.tag %>) - RSVP: <%= EventParticipation.find_by(event: @event, user: user).rsvp_status %>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="flex space-x-4">
+    <%= button_to "Accept", update_rsvp_event_path(@event, status: "accepted"),
+        method: :patch,
+        class: "bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600",
+        data: { turbo: "true" } %>
+
+    <%= button_to "Maybe", update_rsvp_event_path(@event, status: "maybe"),
+        method: :patch,
+        class: "bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600",
+        data: { turbo: "true" } %>
+
+    <%= button_to "Decline", update_rsvp_event_path(@event, status: "declined"),
+        method: :patch,
+        class: "bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600",
+        data: { turbo: "true" } %>
+  </div>
+</div>

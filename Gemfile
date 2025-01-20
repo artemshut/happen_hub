@@ -32,7 +32,10 @@ gem 'hotwire-rails' # For Hotwire integration
 gem 'stimulus-rails' # For Stimulus integration
 gem 'tailwindcss-rails' # For TailwindCSS integration
 gem 'devise' # For user authentication
+gem 'omniauth'
 gem 'omniauth-google-oauth2' # For Google authentication
+
+gem 'fullcalendar-rails'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -60,6 +63,8 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem 'webpacker'
+  gem 'pry-rails'
 end
 
 group :test do

@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "invitation_status" do %>
+  <%= render partial: "events/invitation_status", locals: { event: @event } %>
+<% end %>

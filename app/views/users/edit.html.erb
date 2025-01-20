@@ -1,0 +1,37 @@
+<h1 class="text-3xl font-bold mb-6">Edit Profile</h1>
+
+<%= form_for @user, url: update_profile_path, class: "space-y-6" do |f| %>
+  <div class="mb-4">
+    <%= f.label :first_name, class: "block text-gray-700 font-bold mb-2" %>
+    <%= f.text_field :first_name, required: true, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :last_name, class: "block text-gray-700 font-bold mb-2" %>
+    <%= f.text_field :last_name, required: true, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :email, class: "block text-gray-700 font-bold mb-2" %>
+    <%= f.email_field :email, required: true, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :birthday, class: "block text-gray-700 font-bold mb-2" %>
+    <%= f.date_select :birthday, start_year: 1900, end_year: Date.today.year - 18, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :password, class: "block text-gray-700 font-bold mb-2" %>
+    <%= f.password_field :password, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :password_confirmation, class: "block text-gray-700 font-bold mb-2" %>
+    <%= f.password_field :password_confirmation, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+  </div>
+
+  <div class="text-right">
+    <%= f.submit 'Update Profile', class: "bg-accent-red text-white px-6 py-2 rounded hover:bg-red-600" %>
+  </div>
+<% end %>
