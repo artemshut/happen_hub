@@ -1,4 +1,4 @@
-class FriendshipsController < ApplicationController
+class Users::FriendshipsController < ApplicationController
   before_action :authenticate_user!
 
   # GET /friends
