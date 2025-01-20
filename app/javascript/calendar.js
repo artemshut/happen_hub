@@ -1,6 +1,6 @@
-import { Calendar } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import { Calendar } from "@fullcalendar/core";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
 import "flatpickr/dist/flatpickr.css";
 import flatpickr from "flatpickr";
 

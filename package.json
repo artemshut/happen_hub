@@ -8,7 +8,8 @@
     "@rails/webpacker": "5.4.4",
     "@tailwindcss/typography": "^0.5.16",
     "flatpickr": "^4.6.13",
-    "trix": "^2.1.12"
+    "trix": "^2.1.12",
+    "tui-calendar": "^1.15.3"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
