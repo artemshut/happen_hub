@@ -16,5 +16,5 @@
     <% end %>
   </div>
 <% else %>
-  <p class="text-gray-700">You have no events at the moment.</p>
+  <p class="text-gray-700">You have no events at the moment. <%= link_to 'Create an Event', new_event_path, class: "text-accent-red hover:underline" %>.</p>
 <% end %>

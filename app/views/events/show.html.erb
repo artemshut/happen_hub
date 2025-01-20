@@ -1,16 +1,24 @@
 <h1 class="text-3xl font-bold mb-6"><%= @event.title %></h1>
 
-<h2 class="text-2xl font-semibold mb-4">Participants</h2>
+<div class="prose prose-lg max-w-none">
+  <h2 class="text-2xl font-semibold mb-4">About</h2>
+  <%= render_rich_text_with_embeds(@event.description) %>
+</div>
 
-<%= render partial: "events/invitation_status", locals: { event: @event } %>
+<div>
+  <h2 class="text-2xl font-semibold mb-4">Participants</h2>
+  <%= render partial: "events/invitation_status", locals: { event: @event } %>
+</div>
 
 <h2 class="text-2xl font-semibold mb-4">Add Friends to Event</h2>
-<ul class="list-disc pl-6 mb-6">
+<ul class="list-none space-y-26">
   <% @friends.each do |friend| %>
     <li class="mb-2">
       <%= friend.first_name %> <%= friend.last_name %> (<%= friend.tag %>)
-      <%= button_to 'Add as Attending', add_friend_event_path(@event, friend_id: friend.id, rsvp_status: 'accepted'), method: :post, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
-      <%= button_to 'Add as Maybe', add_friend_event_path(@event, friend_id: friend.id, rsvp_status: 'pending'), method: :post, class: "bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400" %>
+      <div class="flex space-x-4">
+        <%= button_to 'Add as Attending', add_friend_event_path(@event, friend_id: friend.id, rsvp_status: 'accepted'), method: :post, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
+        <%= button_to 'Add as Maybe', add_friend_event_path(@event, friend_id: friend.id, rsvp_status: 'pending'), method: :post, class: "bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400" %>
+      </div>
     </li>
   <% end %>
 </ul>

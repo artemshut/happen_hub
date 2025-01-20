@@ -12,6 +12,8 @@ class Event < ApplicationRecord
 
   enum :visibility, { private: "private", friends: "friends" }, prefix: true
 
+  has_rich_text :description
+
   def self.for_user(user)
     includes(:users)
       .where("events.user_id = ? OR event_participations.user_id = ?", user.id, user.id)

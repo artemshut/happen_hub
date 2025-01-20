@@ -10,7 +10,7 @@ class GroupsController < ApplicationController
 
   # GET /groups/:id
   def show
-    @members = current_user.friends - @group.users
+    @members = @group.users
   end
 
   # GET /groups/new
