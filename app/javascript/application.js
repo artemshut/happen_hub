@@ -33,6 +33,11 @@ document.addEventListener('turbo:load', function() {
       eventClick: function(info) {
         window.location.href = info.event.url;
       },
+      dateClick: function (info) {
+        // Redirect to the New Event form, passing the clicked date as a parameter
+        const date = info.dateStr; // e.g., "2025-01-20"
+        window.location.href = `/events/new?date=${date}`;
+      },
     });
 
     calendar.render();

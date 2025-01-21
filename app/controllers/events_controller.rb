@@ -25,7 +25,8 @@ class EventsController < ApplicationController
 
   # GET /groups/:group_id/events/new
   def new
-    @event = current_user.events.new
+    @event = Event.new
+    @event.start_time = params[:date] if params[:date].present?
   end
 
   def add_friend
@@ -54,7 +55,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = current_user.events.new(event_params)
+    @event = Event.new(event_params)
     @event.user = current_user
     if @event.save!
       redirect_to event_path(@event), notice: 'Event created successfully.'
