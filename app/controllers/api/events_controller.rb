@@ -18,7 +18,7 @@ class Api::EventsController < ApplicationController
       title: event.title,
       start: event.start_time.iso8601,
       end: event.end_time.iso8601,
-      location: event_path(event),
+      url: event_path(event),
       extendedProps: {
         status: event.status,
         color: event_color(event.status) # Include the color here

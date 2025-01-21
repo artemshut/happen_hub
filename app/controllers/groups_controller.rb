@@ -16,12 +16,13 @@ class GroupsController < ApplicationController
   # GET /groups/new
   def new
     @group = current_user.groups.new
-    @friends = current_user.friends
+    @friends = current_user.inverse_friendships.where(status: :accepted).map(&:user) + current_user.friendships.where(status: :accepted).map(&:friend)
   end
 
   # POST /groups
   def create
     @group = current_user.groups.new(group_params)
+    group.group_memberships.build(user: current_user)
     if @group.save
       add_friends_to_group
       redirect_to @group, notice: 'Group created successfully.'
@@ -33,7 +34,7 @@ class GroupsController < ApplicationController
 
   # GET /groups/:id/edit
   def edit
-    @friends = current_user.friends
+    @friends = current_user.inverse_friendships.where(status: :accepted).map(&:user) + current_user.friendships.where(status: :accepted).map(&:friend)
   end
 
   # PATCH/PUT /groups/:id
@@ -54,7 +55,6 @@ class GroupsController < ApplicationController
   end
 
   def add_friend
-    group = Group.find(params[:id])
     friend = User.find(params[:friend_id])
     if group.add_friend(friend)
       redirect_to group_path(group), notice: 'Friend added to the group.'

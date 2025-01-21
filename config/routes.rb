@@ -3,10 +3,6 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
-  devise_scope :user do
-    get '/users/sign_out', to: 'devise/sessions#destroy'
-  end
-
   authenticated :user do
     get '/dashboard', to: 'users#dashboard', as: :dashboard
     get '/profile/edit', to: 'users#edit', as: :edit_profile
@@ -21,9 +17,11 @@ Rails.application.routes.draw do
     end
 
     resources :events do
+      resources :event_suggestions, only: [:create, :update]
       member do
         post :add_friend
         patch :update_rsvp
+        post 'invite_group/:group_id', to: 'events#invite_group', as: 'invite_group'
       end
     end
   end
@@ -33,7 +31,7 @@ Rails.application.routes.draw do
   end
 
   # Root route
-  root 'home#index'
+  root 'users#dashboard'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

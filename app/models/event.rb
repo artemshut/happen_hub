@@ -4,6 +4,7 @@ class Event < ApplicationRecord
   has_many :rsvps, dependent: :destroy
   has_many :event_participations, dependent: :destroy
   has_many :users, through: :event_participations
+  has_many :event_suggestions, dependent: :destroy
 
   validates :title, :start_time, :end_time, presence: true
 

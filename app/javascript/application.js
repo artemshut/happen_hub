@@ -3,79 +3,36 @@ import "controllers"
 import "trix"
 import "@rails/actiontext"
 
-// const initDatePicker = () => {
-//   flatpickr(".datepicker", {
-//     enableTime: true,
-//     dateFormat: "Y-m-d H:i",
-//   });
-// };
+document.addEventListener('turbo:load', function () {
+  var dateInputs = document.querySelectorAll('.datepicker');
 
-// import Calendar from 'tui-calendar';
+  if (dateInputs.length > 0) {
+    dateInputs.forEach(function (input) {
+      flatpickr(input, {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+      });
+    });
+  }
+});
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   const calendarEl = document.getElementById("calendar");
 
-//   if (calendarEl) {
-//     // Initialize the TUI Calendar
-//     const calendar = new Calendar(calendarEl, {
-//       defaultView: "month",
-//       useCreationPopup: true,
-//       useDetailPopup: true,
-//       calendars: [
-//         {
-//           id: "default",
-//           name: "My Calendar",
-//           backgroundColor: "#03bd9e",
-//           borderColor: "#03bd9e",
-//         },
-//       ],
-//       template: {
-//         time(schedule) {
-//           // Render clickable links for event titles
-//           return `<a href="${schedule.location}" target="_blank" rel="noopener noreferrer">${schedule.title}</a>`;
-//         },
-//         monthGrid(schedule) {
-//           // Render clickable links in the month grid
-//           return `<a href="${schedule.location}" target="_blank" rel="noopener noreferrer">${schedule.title}</a>`;
-//         },
-//       },
-//     });
-
-//     calendar.on("clickSchedule", (event) => {
-//       const { schedule } = event;
-//       if (schedule.location) {
-//         window.open(schedule.location, "_blank");
-//       }
-//     });
-
-//     // Fetch events from the API and add them to the calendar
-//     fetch("/api/events")
-//       .then((response) => response.json())
-//       .then((events) => {
-//         const formattedEvents = events.map((event) => ({
-//           id: event.id,
-//           calendarId: "default",
-//           title: event.title,
-//           category: "time",
-//           start: event.start,
-//           end: event.end,
-//           url: event.url,
-//         }));
-//         calendar.createSchedules(formattedEvents);
-//       })
-//       .catch((error) => console.error("Error fetching events:", error));
-//   }
-// });
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('turbo:load', function() {
   var calendarEl = document.getElementById('calendar');
 
   if (calendarEl) {
     var calendar = new FullCalendar.Calendar(calendarEl, {
+      plugins: [FullCalendar.globalPlugins[7], FullCalendar.globalPlugins[6]],
       initialView: 'dayGridMonth',
       events: '/api/events', // Adjust this endpoint as needed
       editable: true,        // Enable drag-and-drop
       selectable: true,      // Allow date selection
+      eventDidMount: (info) => {
+        info.el.style.backgroundColor = info.event.extendedProps.color;
+      },
+      eventClick: function(info) {
+        window.location.href = info.event.url;
+      },
     });
 
     calendar.render();

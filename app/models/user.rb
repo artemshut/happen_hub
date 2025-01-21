@@ -3,11 +3,15 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: %i[google_oauth2]
 
-  has_many :groups
+  has_many :group_memberships, dependent: :destroy
+  has_many :groups, through: :group_memberships
   has_many :events, through: :groups
   has_many :friendships, dependent: :destroy
   has_many :event_participations, dependent: :destroy
   has_many :friends, through: :friendships, source: :friend
+
+  has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
+  has_many :inverse_friends, through: :inverse_friendships, source: :user
 
   validates :email, presence: true, uniqueness: true
   validates :tag, presence: true, uniqueness: true

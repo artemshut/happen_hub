@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  event: one
+  user: one
+  suggested_start_time: 2025-01-21 17:36:02
+  suggested_end_time: 2025-01-21 17:36:02
+  status: MyString
+
+two:
+  event: two
+  user: two
+  suggested_start_time: 2025-01-21 17:36:02
+  suggested_end_time: 2025-01-21 17:36:02
+  status: MyString

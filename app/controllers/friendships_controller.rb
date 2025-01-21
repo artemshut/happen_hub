@@ -1,4 +1,4 @@
-class Users::FriendshipsController < ApplicationController
+class FriendshipsController < ApplicationController
   before_action :authenticate_user!
 
   def create
@@ -28,6 +28,6 @@ class Users::FriendshipsController < ApplicationController
 
   def index
     @pending_requests = current_user.inverse_friendships.where(status: :pending)
-    @friends = current_user.friendships.where(status: :accepted).map(&:friend)
+    @friends = current_user.inverse_friendships.where(status: :accepted).map(&:user) + current_user.friendships.where(status: :accepted).map(&:friend)
   end
 end

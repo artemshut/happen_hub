@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_20_162026) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_21_163602) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -60,6 +60,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_20_162026) do
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_event_participations_on_event_id"
     t.index ["user_id"], name: "index_event_participations_on_user_id"
+  end
+
+  create_table "event_suggestions", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "suggested_start_time"
+    t.datetime "suggested_end_time"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_event_suggestions_on_event_id"
+    t.index ["user_id"], name: "index_event_suggestions_on_user_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -130,6 +142,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_20_162026) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "event_participations", "events"
   add_foreign_key "event_participations", "users"
+  add_foreign_key "event_suggestions", "events"
+  add_foreign_key "event_suggestions", "users"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
 end

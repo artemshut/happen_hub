@@ -40,8 +40,25 @@
       <li class="mb-2">
         <span class="font-medium text-gray-700"><%= user.first_name %> <%= user.last_name %></span>
         (<span class="text-gray-500"><%= user.tag %></span>)
-        <%= button_to 'Add Friend', friendships_path(friend_id: user.id), method: :post, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
+        <%= button_to 'Add Friend', friendships_path(friend_id: user.id, status: 'accepted'), method: :post, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
       </li>
     <% end %>
   </ul>
+<% end %>
+
+<h1>Friend Requests</h1>
+
+<h2>Pending Requests</h2>
+<% if @pending_requests.any? %>
+  <ul>
+    <% @pending_requests.each do |request| %>
+      <li>
+        <%= request.user.full_name %>
+        <%= button_to "Accept", friendship_path(request, status: :accepted), method: :patch, class: "bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" %>
+        <%= button_to "Decline", friendship_path(request, status: :declined), method: :patch, class: "bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No pending requests.</p>
 <% end %>

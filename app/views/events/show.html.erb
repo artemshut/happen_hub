@@ -28,6 +28,48 @@
       method: :patch, class: "bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" %>
 <% end %>
 
+<%= form_with model: [@event, EventSuggestion.new], local: true do |form| %>
+  <div class="mb-4">
+    <%= form.label :suggested_start_time, 'Suggest New Start Time', class: 'block text-gray-700 font-bold mb-2' %>
+    <%= form.text_field :suggested_start_time, class: 'datepicker w-full border border-gray-300 rounded px-4 py-2' %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :suggested_end_time, 'Suggest New End Time', class: 'block text-gray-700 font-bold mb-2' %>
+    <%= form.text_field :suggested_end_time, class: 'datepicker w-full border border-gray-300 rounded px-4 py-2' %>
+  </div>
+
+  <%= form.submit 'Submit Suggestion', class: 'bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600' %>
+<% end %>
+
+<h3 class="text-xl font-bold mt-6">Suggestions</h3>
+<% @event.event_suggestions.each do |suggestion| %>
+  <div class="p-4 border rounded-lg mb-4">
+    <p>Suggested by: <%= suggestion.user.full_name %></p>
+    <p>Start Time: <%= suggestion.suggested_start_time %></p>
+    <p>End Time: <%= suggestion.suggested_end_time %></p>
+    <p>Status: <%= suggestion.status.capitalize %></p>
+
+    <% if current_user == @event.user && suggestion.pending? %>
+      <%= link_to 'Approve', event_event_suggestion_path(@event, suggestion, status: 'approved'), method: :patch, class: 'text-green-500' %>
+      <%= link_to 'Reject', event_event_suggestion_path(@event, suggestion, status: 'rejected'), method: :patch, class: 'text-red-500 ml-4' %>
+    <% end %>
+  </div>
+<% end %>
+
+<h2>Invite Groups</h2>
+<ul>
+  <% current_user.groups.each do |group| %>
+    <li>
+      <%= group.name %>
+      <%= button_to "Invite Group", invite_group_event_path(@event, group_id: group.id),
+                    method: :post,
+                    class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" %>
+    </li>
+  <% end %>
+</ul>
+
+
 <%= link_to 'Back to Events', events_path %>
 
 <div id="calendar"></div>

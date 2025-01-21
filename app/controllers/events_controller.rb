@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp]
-  before_action :authorize_user!, only: %i[edit update destroy add_friend update_rsvp]
+  before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group]
+  before_action :authorize_user!, only: %i[edit update destroy add_friend update_rsvp invite_group]
 
   # GET /groups/:group_id/events
   def index
@@ -80,6 +80,19 @@ class EventsController < ApplicationController
   def destroy
     @event.destroy
     redirect_to events_path, notice: 'Event deleted successfully.'
+  end
+
+  def invite_group
+    @group = Group.find(params[:group_id])
+
+    # Invite all group members to the event
+    @group.users.each do |user|
+      unless @event.event_participations.exists?(user: user)
+        @event.event_participations.create(user: user, rsvp_status: :pending)
+      end
+    end
+
+    redirect_to event_path(@event), notice: "Invitations sent to all members of #{@group.name}."
   end
 
   private
