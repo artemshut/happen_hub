@@ -10,30 +10,74 @@ import "@rails/actiontext"
 //   });
 // };
 
-import Calendar from 'tui-calendar';
+// import Calendar from 'tui-calendar';
 
-document.addEventListener('turbo:load', () => {
-  const calendarEl = document.getElementById('calendar');
+// document.addEventListener("DOMContentLoaded", () => {
+//   const calendarEl = document.getElementById("calendar");
+
+//   if (calendarEl) {
+//     // Initialize the TUI Calendar
+//     const calendar = new Calendar(calendarEl, {
+//       defaultView: "month",
+//       useCreationPopup: true,
+//       useDetailPopup: true,
+//       calendars: [
+//         {
+//           id: "default",
+//           name: "My Calendar",
+//           backgroundColor: "#03bd9e",
+//           borderColor: "#03bd9e",
+//         },
+//       ],
+//       template: {
+//         time(schedule) {
+//           // Render clickable links for event titles
+//           return `<a href="${schedule.location}" target="_blank" rel="noopener noreferrer">${schedule.title}</a>`;
+//         },
+//         monthGrid(schedule) {
+//           // Render clickable links in the month grid
+//           return `<a href="${schedule.location}" target="_blank" rel="noopener noreferrer">${schedule.title}</a>`;
+//         },
+//       },
+//     });
+
+//     calendar.on("clickSchedule", (event) => {
+//       const { schedule } = event;
+//       if (schedule.location) {
+//         window.open(schedule.location, "_blank");
+//       }
+//     });
+
+//     // Fetch events from the API and add them to the calendar
+//     fetch("/api/events")
+//       .then((response) => response.json())
+//       .then((events) => {
+//         const formattedEvents = events.map((event) => ({
+//           id: event.id,
+//           calendarId: "default",
+//           title: event.title,
+//           category: "time",
+//           start: event.start,
+//           end: event.end,
+//           url: event.url,
+//         }));
+//         calendar.createSchedules(formattedEvents);
+//       })
+//       .catch((error) => console.error("Error fetching events:", error));
+//   }
+// });
+
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
 
   if (calendarEl) {
-    const calendar = new Calendar(calendarEl, {
-      defaultView: 'month', // Options: day, week, month
-      taskView: true,       // Show the task view
-      scheduleView: true,   // Show the schedule view
-      useDetailPopup: true, // Show a popup when clicking events
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: '/api/events', // Adjust this endpoint as needed
+      editable: true,        // Enable drag-and-drop
+      selectable: true,      // Allow date selection
     });
 
-    // Example schedules
-    calendar.createSchedules([
-      {
-        id: '1',
-        calendarId: '1',
-        title: 'Meeting',
-        category: 'time',
-        dueDateClass: '',
-        start: '2025-01-20T10:00:00',
-        end: '2025-01-20T12:00:00',
-      },
-    ]);
+    calendar.render();
   }
 });
