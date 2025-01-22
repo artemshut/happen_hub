@@ -43,3 +43,35 @@ document.addEventListener('turbo:load', function() {
     calendar.render();
   }
 });
+
+document.addEventListener("turbo:load", function () {
+  const flashMessages = document.querySelectorAll("#flash-messages .flash-message");
+
+  flashMessages.forEach((message) => {
+    setTimeout(() => {
+      message.style.opacity = "0";
+      setTimeout(() => {
+        message.remove();
+      }, 300); // Wait for fade-out before removing
+    }, 5000); // Auto-dismiss after 5 seconds
+  });
+});
+
+document.addEventListener("turbo:load", function () {
+  const dropdowns = document.querySelectorAll(".group");
+
+  dropdowns.forEach((dropdown) => {
+    const menu = dropdown.querySelector(".group-hover\\:block");
+    dropdown.addEventListener("mouseleave", () => {
+      setTimeout(() => {
+        if (!dropdown.matches(":hover")) {
+          menu.classList.add("hidden");
+        }
+      }, 50); // Adjust delay as needed
+    });
+
+    dropdown.addEventListener("mouseenter", () => {
+      menu.classList.remove("hidden");
+    });
+  });
+});

@@ -59,3 +59,40 @@ ul > li::marker,
 ol > li::marker {
   color: #ff4d4d; /* Optional: Custom marker color */
 }
+
+/* Flash message animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.flash-message {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Flash message types */
+.flash-notice {
+  background-color: #4caf50; /* Green for success */
+  color: white;
+}
+
+.flash-alert {
+  background-color: #f44336; /* Red for errors */
+  color: white;
+}
+
+.flash-info {
+  background-color: #2196f3; /* Blue for information */
+  color: white;
+}
+
+.flash-warning {
+  background-color: #ff9800; /* Orange for warnings */
+  color: white;
+}

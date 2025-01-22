@@ -22,7 +22,9 @@ class GroupsController < ApplicationController
   # POST /groups
   def create
     @group = current_user.groups.new(group_params)
-    group.group_memberships.build(user: current_user)
+    @group.user = current_user
+    @group.group_memberships.build(user: current_user)
+    binding.pry
     if @group.save
       add_friends_to_group
       redirect_to @group, notice: 'Group created successfully.'

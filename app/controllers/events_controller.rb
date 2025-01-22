@@ -58,6 +58,12 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     @event.user = current_user
     if @event.save!
+      Activity.create(
+        user: current_user,
+        action: "created_event",
+        target: @event,
+        metadata: { event_name: @event.name }
+      )
       redirect_to event_path(@event), notice: 'Event created successfully.'
     else
       render :new, status: :unprocessable_entity

@@ -27,26 +27,85 @@
     <%= javascript_importmap_tags %>
   </head>
   <body class="bg-primary text-accent-black font-sans">
-    <header class="bg-accent-red text-white py-4 shadow-md">
-      <div class="container mx-auto px-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold">
-          <%= link_to "HappenHub", root_path, class: "hover:underline" %>
-        </h1>
-        <nav>
-          <% if user_signed_in? %>
-            <%= link_to "Dashboard", dashboard_path, class: "px-4 hover:underline" %>
-            <%= link_to "My Events", events_path, class: "px-4 hover:underline" %>
-            <%= link_to "Groups", groups_path, class: "px-4 hover:underline" %>
-            <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "px-4 hover:underline" %>
-          <% else %>
-            <%= link_to "Login", new_user_session_path, class: "px-4 hover:underline" %>
-            <%= link_to "Sign Up", new_user_registration_path, class: "px-4 hover:underline" %>
-          <% end %>
-        </nav>
-      </div>
-    </header>
+  <header class="bg-accent-red text-white py-4 shadow-md">
+  <div class="container mx-auto px-4 flex justify-between items-center">
+    <!-- Logo -->
+    <h1 class="text-2xl font-bold">
+      <%= link_to "HappenHub", root_path, class: "hover:underline" %>
+    </h1>
+
+    <!-- Navigation -->
+    <nav class="flex space-x-6">
+      <% if user_signed_in? %>
+        <!-- Dashboard Link -->
+        <%= link_to "Dashboard", dashboard_path, class: "px-4 hover:underline" %>
+
+        <!-- Events Dropdown -->
+        <div class="relative group">
+  <button class="flex items-center px-4 hover:underline">
+    Events
+    <% if current_user.pending_event_requests.any? %>
+      <span class="bg-white text-accent-red text-xs font-bold rounded-full px-2 ml-2">
+        <%= current_user.pending_event_requests.count %>
+      </span>
+    <% end %>
+  </button>
+  <div class="absolute hidden group-hover:block bg-red-700 text-white shadow-md rounded-lg mt-2 py-2 w-40">
+    <%= link_to "My Events", events_path, class: "block px-4 py-2 hover:bg-red-500" %>
+    <%= link_to "Create Event", new_event_path, class: "block px-4 py-2 hover:bg-red-500" %>
+  </div>
+</div>
+
+
+        <!-- Groups Dropdown -->
+        <div class="relative group">
+          <button class="flex items-center px-4 hover:underline">
+            Groups
+          </button>
+          <div class="absolute hidden group-hover:block bg-red-700 text-white shadow-md rounded-lg mt-2 py-2 w-40">
+            <%= link_to "All Groups", groups_path, class: "block px-4 py-2 hover:bg-red-500" %>
+            <%= link_to "Create Group", new_group_path, class: "block px-4 py-2 hover:bg-red-500" %>
+          </div>
+        </div>
+
+        <!-- Friends Dropdown -->
+        <div class="relative group">
+          <button class="flex items-center px-4 hover:underline">
+            Friends
+            <% if current_user.pending_friend_requests.any? %>
+              <span class="bg-white text-accent-red text-xs font-bold rounded-full px-2 ml-2">
+                <%= current_user.pending_friend_requests.count %>
+              </span>
+            <% end %>
+          </button>
+          <div class="absolute hidden group-hover:block bg-red-700 text-white shadow-md rounded-lg mt-2 py-2 w-40">
+            <%= link_to "View Friends", friendships_path, class: "block px-4 py-2 hover:bg-red-500" %>
+            <%= link_to "Friend Requests", friendships_path, class: "block px-4 py-2 hover:bg-red-500" %>
+          </div>
+        </div>
+
+        <!-- Logout -->
+        <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "px-4 hover:underline" %>
+      <% else %>
+        <!-- Login/Signup for Guests -->
+        <%= link_to "Login", new_user_session_path, class: "px-4 hover:underline" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "px-4 hover:underline" %>
+      <% end %>
+    </nav>
+  </div>
+</header>
+
 
     <main class="container mx-auto px-4 py-8">
+      <div id="flash-messages" class="fixed top-4 right-4 space-y-2 z-50">
+        <% flash.each do |type, message| %>
+          <div class="flash-message <%= flash_class(type) %> p-4 rounded-lg shadow-md">
+            <%= message %>
+            <button class="close-flash ml-4 text-sm font-bold text-white hover:opacity-75" onclick="this.parentElement.style.display='none';">×</button>
+          </div>
+        <% end %>
+      </div>
+
       <%= yield %>
     </main>
 

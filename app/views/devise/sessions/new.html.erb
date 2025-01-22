@@ -1,26 +1,36 @@
-<h2>Log in</h2>
+<div class="min-h-[80vh] flex items-center justify-center px-4">
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-xs">
+    <h1 class="text-xl font-bold text-center text-gray-800 mb-6">Welcome Back</h1>
+    <%= form_with url: new_user_session_path, scope: :user, local: true, class: "space-y-4" do |f| %>
+      <div>
+        <%= f.label :email, "Email Address", class: "block text-gray-700 font-medium mb-2" %>
+        <%= f.email_field :email, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-accent-red focus:border-accent-red" %>
+      </div>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+      <div>
+        <%= f.label :password, "Password", class: "block text-gray-700 font-medium mb-2" %>
+        <%= f.password_field :password, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-accent-red focus:border-accent-red" %>
+      </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <%= f.check_box :remember_me, {}, true, false %>
+          <label for="user_remember_me" class="ml-2 text-sm text-gray-600">Remember me</label>
+        </div>
+        <%= link_to "Forgot your password?", new_user_password_path, class: "text-sm text-accent-red hover:underline" %>
+      </div>
 
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+      <div>
+        <%= f.submit "Log In", class: "w-full bg-accent-red text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600" %>
+      </div>
+    <% end %>
+
+    <div class="mt-6 text-center">
+      <p class="text-sm text-gray-600">
+        Don't have an account?
+        <%= link_to "Sign Up", new_user_registration_path, class: "text-accent-red hover:underline font-medium" %>
+      </p>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
   </div>
-<% end %>
+</div>
 
-<%= render "devise/shared/links" %>

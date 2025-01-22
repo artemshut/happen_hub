@@ -1,47 +1,112 @@
-<h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+<div class="container mx-auto px-4 py-6">
+  <!-- Welcome Header -->
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to Your Dashboard</h1>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  <!-- Groups Section -->
-  <div class="border border-gray-300 rounded-lg shadow-md p-4 bg-white">
-    <h2 class="text-xl font-semibold text-accent-red mb-2">Your Groups</h2>
-    <p class="text-gray-600 mb-4">Manage your groups and their members.</p>
-    <%= link_to 'View Groups', groups_path, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
-  </div>
+  <!-- Layout: Main Content (Left) and Sidebar (Right) -->
+  <div class="flex flex-wrap lg:flex-nowrap">
+    <!-- Main Content -->
+    <div class="w-full lg:w-7/12 p-4">
+      <!-- Upcoming Events -->
+      <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Upcoming Events</h2>
+        <% if @upcoming_events.any? %>
+          <ul>
+            <% @upcoming_events.each do |event| %>
+              <li class="mb-4 border border-gray-200 rounded-lg shadow-md p-4">
+                <h3 class="text-lg font-semibold">
+                  <%= link_to event.name, event_path(event), class: "text-accent-red hover:underline" %>
+                </h3>
+                <p class="text-sm text-gray-600">
+                  <%= event.start_time.strftime('%A, %B %d, %Y %H:%M') %>
+                </p>
+                <p class="text-sm">
+                  Status: <span class="font-bold"><%= event_participation_status(event) %></span>
+                </p>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-gray-600">No upcoming events. <%= link_to "Create one", new_event_path, class: "text-accent-red hover:underline" %>.</p>
+        <% end %>
+      </div>
 
-  <!-- Events Section -->
-  <div class="border border-gray-300 rounded-lg shadow-md p-4 bg-white">
-    <h2 class="text-xl font-semibold text-accent-red mb-2">Your Events</h2>
-    <p class="text-gray-600 mb-4">Check out your upcoming events or create a new one.</p>
-    <%= link_to 'View Events', events_path, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
-  </div>
+      <!-- Pending Invitations -->
+      <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Pending Invitations</h2>
+        <% if @pending_invitations.any? %>
+          <ul>
+            <% @pending_invitations.each do |invite| %>
+              <li class="mb-4 border border-gray-200 rounded-lg shadow-md p-4">
+                <p class="text-gray-700">
+                  <strong><%= invite.event.name %></strong> - <%= invite.event.start_time.strftime('%B %d, %Y') %>
+                </p>
+                <div class="flex space-x-2 mt-2">
+                  <%= link_to "Accept", accept_invitation_path(invite), method: :post, class: "bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600" %>
+                  <%= link_to "Decline", decline_invitation_path(invite), method: :delete, class: "bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" %>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-gray-600">No pending event invitations.</p>
+        <% end %>
+      </div>
 
-  <!-- Friends Section -->
-  <div class="border border-gray-300 rounded-lg shadow-md p-4 bg-white">
-    <h2 class="text-xl font-semibold text-accent-red mb-2">Your Friends</h2>
-    <p class="text-gray-600 mb-4">Manage your friend list or add new connections.</p>
-    <%= link_to 'View Friends', friendships_path, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
-  </div>
-</div>
-
-<!-- Quick Actions Section -->
-<div class="mt-8">
-  <h2 class="text-2xl font-semibold mb-4">Quick Actions</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div class="border border-gray-300 rounded-lg shadow-md p-4 bg-white">
-      <h3 class="text-lg font-semibold text-gray-700 mb-2">Create a Group</h3>
-      <%= link_to 'New Group', new_group_path, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
+      <!-- Friend Activity -->
+      <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Friend Activity</h2>
+        <% if @friend_activities.any? %>
+          <ul>
+            <% @friend_activities.each do |activity| %>
+              <li class="mb-4 text-gray-700">
+                <%= activity.user.name %> <%= activity.description %> - <%= time_ago_in_words(activity.created_at) %> ago
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-gray-600">No recent friend activity.</p>
+        <% end %>
+      </div>
     </div>
-    <div class="border border-gray-300 rounded-lg shadow-md p-4 bg-white">
-      <h3 class="text-lg font-semibold text-gray-700 mb-2">Create an Event</h3>
-      <%= link_to 'New Event', new_event_path, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
-    </div>
-    <div class="border border-gray-300 rounded-lg shadow-md p-4 bg-white">
-      <h3 class="text-lg font-semibold text-gray-700 mb-2">Search for Friends</h3>
-      <%= link_to 'Find Friends', friendships_path, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
+
+    <!-- Sidebar -->
+    <div class="w-full lg:w-5/12 p-4">
+      <!-- Calendar -->
+      <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Your Calendar</h2>
+        <div id="calendar-container" class="border border-gray-300 rounded-lg shadow-md">
+          <div id="calendar" class="w-full"></div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Quick Actions</h2>
+        <div class="flex flex-col space-y-4">
+          <%= link_to "Create Event", new_event_path, class: "bg-accent-red text-white px-6 py-3 rounded-lg hover:bg-red-600" %>
+          <%= link_to "Create Group", new_group_path, class: "bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400" %>
+          <%= link_to "Check Availability", friendships_path, class: "bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600" %>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div>
+        <h2 class="text-xl font-bold mb-4">Your Stats</h2>
+        <div class="grid grid-cols-1 gap-4">
+          <div class="bg-gray-100 p-4 rounded-lg text-center">
+            <p class="text-2xl font-bold text-accent-red"><%= @total_events || 0 %></p>
+            <p class="text-gray-600">Events Attended</p>
+          </div>
+          <div class="bg-gray-100 p-4 rounded-lg text-center">
+            <p class="text-2xl font-bold text-accent-red"><%= @total_groups || 0 %></p>
+            <p class="text-gray-600">Groups Joined</p>
+          </div>
+          <div class="bg-gray-100 p-4 rounded-lg text-center">
+            <p class="text-2xl font-bold text-accent-red"><%= @total_friends || 0 %></p>
+            <p class="text-gray-600">Total Friends</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-
-<div class="mt-8">
-  <div id="calendar"></div>
 </div>

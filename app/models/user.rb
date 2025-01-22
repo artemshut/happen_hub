@@ -43,6 +43,14 @@ class User < ApplicationRecord
     where("tag ILIKE ?", "%#{query}%")
   end
 
+  def pending_event_requests
+    event_participations.where(rsvp_status: :pending)
+  end
+
+  def pending_friend_requests
+    inverse_friendships.where(status: :pending)
+  end
+
   private
 
   def assign_unique_tag

@@ -7,6 +7,13 @@ class UsersController < ApplicationController
     @friends = @user.friends
     @groups = @user.groups
     @events = @user.events
+    @friend_activities = Activity.for_friends(current_user).recent
+    @upcoming_events = current_user.events.where('start_time >= ?', Time.current).order(:start_time)
+    @pending_invitations = current_user.event_participations.where(rsvp_status: :pending)
+    @total_events = current_user.events.count
+    @total_groups = current_user.groups.count
+    @total_friends = current_user.friends.count
+
   end
 
   # GET /profile/edit
