@@ -8,6 +8,21 @@
       </div>
 
       <div>
+        <%= f.label :first_name, class: "block text-gray-700 font-medium mb-2" %>
+        <%= f.text_field :first_name, required: true, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+      </div>
+
+      <div>
+        <%= f.label :last_name, class: "block text-gray-700 font-medium mb-2" %>
+        <%= f.text_field :last_name, required: true, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+      </div>
+
+      <div>
+        <%= f.label :birthday, class: "block text-gray-700 font-medium mb-2" %>
+        <%= f.text_field :birthday, required: true, class: "datepicker-date w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+      </div>
+
+      <div>
         <%= f.label :password, "Password", class: "block text-gray-700 font-medium mb-2" %>
         <%= f.password_field :password, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-accent-red focus:border-accent-red" %>
       </div>

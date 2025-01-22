@@ -5,8 +5,6 @@ Rails.application.routes.draw do
 
   authenticated :user do
     get '/dashboard', to: 'users#dashboard', as: :dashboard
-    get '/profile/edit', to: 'users#edit', as: :edit_profile
-    patch '/profile', to: 'users#update', as: :update_profile
 
     resources :friendships, only: %i[index create update]
 
@@ -16,8 +14,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :profile, only: [:show, :edit, :update]
+
     resources :events do
       resources :event_suggestions, only: [:create, :update]
+      resources :comments, only: :create
+      
       member do
         post :add_friend
         patch :update_rsvp

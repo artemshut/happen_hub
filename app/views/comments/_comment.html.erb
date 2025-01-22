@@ -1,0 +1,7 @@
+<%= turbo_frame_tag dom_id(comment) do %>
+  <div class="mb-4 border-b pb-2">
+    <p class="text-sm text-gray-600"><strong><%= comment.user.first_name || "Anonymous" %></strong> wrote:</p>
+    <p class="text-gray-800"><%= comment.content %></p>
+    <p class="text-xs text-gray-500"><%= time_ago_in_words(comment.created_at) %> ago</p>
+  </div>
+<% end %>

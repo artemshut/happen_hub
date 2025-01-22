@@ -13,11 +13,15 @@ class User < ApplicationRecord
   has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
   has_many :inverse_friends, through: :inverse_friendships, source: :user
 
+  has_many :comments, dependent: :destroy
+
   validates :email, presence: true, uniqueness: true
   validates :tag, presence: true, uniqueness: true
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
   validates :birthday, presence: true
+  validates :password, presence: true, if: -> { password.present? }
+  
 
   before_validation :assign_unique_tag
 

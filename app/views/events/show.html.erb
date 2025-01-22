@@ -69,6 +69,26 @@
   <% end %>
 </ul>
 
+<div id="comments">
+  <%= turbo_frame_tag "comments" do %>
+    <%= render @event.comments %>
+  <% end %>
+</div>
+
+<div id="debug"></div>
+
+<!-- New Comment Form -->
+<div class="mt-4">
+  <%= form_with model: [@event, Comment.new], local: false do |f| %>
+    <div class="mb-4">
+      <%= f.text_area :content, placeholder: "Write your comment here...", rows: 3, class: "w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300" %>
+    </div>
+    <div class="text-right">
+      <%= f.submit "Add Comment", class: "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600" %>
+    </div>
+  <% end %>
+</div>
+
 
 <%= link_to 'Back to Events', events_path %>
 

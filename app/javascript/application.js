@@ -75,3 +75,11 @@ document.addEventListener("turbo:load", function () {
     });
   });
 });
+
+document.addEventListener("turbo:load", () => {
+  flatpickr(".datepicker-date", {
+    altInput: true,
+    altFormat: "F j, Y", // Display format (e.g., January 1, 2023)
+    dateFormat: "Y-m-d", // Submission format (e.g., 2023-01-01)
+  });
+});
