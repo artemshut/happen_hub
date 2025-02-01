@@ -6,9 +6,9 @@ export default class extends Controller {
   connect() {
     this.members = new Set(); // Track selected members
     this.existingMembers = JSON.parse(this.data.get("existingValues") || "[]");
-    this.groupId = this.element.dataset.groupId || null
+    this.groupId = this.element.dataset.groupId || null;
 
-    // Load existing group members as tags
+    // Load existing group members as tags with remove buttons
     this.existingMembers.forEach(member => this.addMemberTag(member.id, member.name, true));
   }
 
@@ -21,8 +21,9 @@ export default class extends Controller {
       return;
     }
 
+    // Send request with group_id if available
     const url = this.groupId ? `/friendships/search?q=${query}&group_id=${this.groupId}` : `/friendships/search?q=${query}`;
-
+    
     const response = await fetch(url);
     const users = await response.json();
 
@@ -30,7 +31,7 @@ export default class extends Controller {
     const filteredUsers = users.filter(user => !this.members.has(user.id));
 
     this.resultsTarget.innerHTML = filteredUsers.map(user => `
-      <li class="p-2 hover:bg-gray-200 cursor-pointer"
+      <li class="p-2 hover:bg-gray-200 cursor-pointer m-px"
           data-id="${user.id}"
           data-name="${user.full_name}"
           data-action="click->friend-search#addMember">
@@ -55,22 +56,19 @@ export default class extends Controller {
     tag.className = "bg-blue-500 text-white px-3 py-1 rounded-full text-sm flex items-center space-x-2";
     tag.innerHTML = `
       ${name}
-      ${!preloaded ? `<button class="ml-2 text-white font-bold" data-id="${id}" data-action="click->friend-search#removeMember">×</button>` : ""}
+      <button class="ml-2 text-white font-bold" data-id="${id}" data-action="click->friend-search#removeMember">×</button>
     `;
 
     this.selectedFriendsTarget.appendChild(tag);
 
-    if (!preloaded) {
-      // Add hidden input field for form submission
+    // Ensure hidden input is added to form submission
+    if (!this.hiddenFieldsTarget.querySelector(`input[value="${id}"]`)) {
       const hiddenInput = document.createElement("input");
       hiddenInput.type = "hidden";
-      hiddenInput.name = "group[friend_ids][]"; // Adjusted for GroupMembership
+      hiddenInput.name = "group[user_ids][]";
       hiddenInput.value = id;
       this.hiddenFieldsTarget.appendChild(hiddenInput);
     }
-
-    this.resultsTarget.classList.add("hidden");
-    this.inputTarget.value = ""; // Reset input
   }
 
   removeMember(event) {
