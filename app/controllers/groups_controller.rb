@@ -24,7 +24,6 @@ class GroupsController < ApplicationController
     @group = current_user.groups.new(group_params)
     @group.user = current_user
     @group.group_memberships.build(user: current_user)
-    binding.pry
     if @group.save
       add_friends_to_group
       redirect_to @group, notice: 'Group created successfully.'
@@ -89,12 +88,22 @@ class GroupsController < ApplicationController
   end
 
   def update_group_friends
-    @group.group_memberships.destroy_all
-    return unless params[:group][:friend_ids]
-
-    friend_ids = params[:group][:friend_ids].reject(&:blank?)
-    friend_ids.each do |friend_id|
-      @group.add_friend(User.find(friend_id))
+    return unless params[:group][:user_ids]
+  
+    new_user_ids = params[:group][:user_ids].reject(&:blank?).map(&:to_i)
+    existing_user_ids = @group.group_memberships.pluck(:user_id)
+  
+    # Find users to add (new ones)
+    users_to_add = new_user_ids - existing_user_ids
+    users_to_add.each do |user_id|
+      @group.group_memberships.create(user_id: user_id)
+    end
+  
+    # Find users to remove (users that were unchecked)
+    users_to_remove = existing_user_ids - new_user_ids
+    users_to_remove.each do |user_id|
+      @group.group_memberships.find_by(user_id: user_id)&.destroy
     end
   end
+  
 end

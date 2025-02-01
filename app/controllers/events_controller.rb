@@ -20,6 +20,7 @@ class EventsController < ApplicationController
 
   # GET /groups/:group_id/events/:id
   def show
+    @comment = Comment.new
     @friends = current_user.friends - @event.users
   end
 
@@ -62,7 +63,7 @@ class EventsController < ApplicationController
         user: current_user,
         action: "created_event",
         target: @event,
-        metadata: { event_name: @event.name }
+        metadata: { event_name: @event.title }
       )
       redirect_to event_path(@event), notice: 'Event created successfully.'
     else

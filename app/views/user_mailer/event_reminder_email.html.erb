@@ -1,0 +1,12 @@
+<% @title = "Reminder: #{@event.title} is Tomorrow!" %>
+
+<h2>⏰ Don’t Forget! "<%= @event.title %>" is happening soon.</h2>
+
+<p><strong>Date:</strong> <%= @event.start_time.strftime("%B %d, %Y - %I:%M %p") %></p>
+<p><strong>Location:</strong> <%= @event.location %></p>
+
+<p>
+  <a href="<%= event_url(@event) %>" class="button">View Event Details</a>
+</p>
+
+<p>We hope to see you there!</p>

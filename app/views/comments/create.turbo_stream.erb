@@ -1,3 +1,7 @@
-<%= turbo_stream.append "comments" do %>
-  <%= render @comment %>
+<%= turbo_stream.replace "event_comment_form" do %>
+  <%= render partial: "comments/form", locals: { event: @event, comment: Comment.new } %>
+<% end %>
+
+<%= turbo_stream.append "event_#{@event.id}_comments" do %>
+  <%= render partial: "comments/comment", locals: { comment: @comment } %>
 <% end %>

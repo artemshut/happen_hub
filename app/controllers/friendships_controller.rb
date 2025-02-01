@@ -6,9 +6,9 @@ class FriendshipsController < ApplicationController
     friendship = current_user.friendships.build(friend: @friend, status: :pending)
 
     if friendship.save
-      redirect_to users_path, notice: "Friend request sent."
+      redirect_to friendships_path, notice: "Friend request sent."
     else
-      redirect_to users_path, alert: "Unable to send friend request."
+      redirect_to friendships_path, alert: "Unable to send friend request."
     end
   end
 
@@ -27,7 +27,29 @@ class FriendshipsController < ApplicationController
   end
 
   def index
-    @pending_requests = current_user.inverse_friendships.where(status: :pending)
-    @friends = current_user.inverse_friendships.where(status: :accepted).map(&:user) + current_user.friendships.where(status: :accepted).map(&:friend)
+    @invitations = current_user.inverse_friendships.where(status: :pending)
+    @pending_requests = current_user.friendships.where(status: :pending)
+    @friends = current_user.friends
+  end
+
+  def destroy
+    friendship = current_user.friendships.find_by(friend_id: (params[:id]))
+    friendship.destroy
+    redirect_to friendships_path, notice: "Friend removed."
+  end
+
+  def search
+    query = params[:q].downcase
+    group_id = params[:group_id].presence
+    existing_user_ids = group_id ? GroupMembership.where(group_id: group_id).pluck(:user_id) : []
+
+    users = current_user.friendships.includes(:friend)
+                        .where(status: "accepted")
+                        .map(&:friend)
+                        .reject { |user| existing_user_ids.include?(user.id) }
+                        .select { |user| user.first_name.downcase.include?(query) || user.last_name.downcase.include?(query) }
+                        .first(5)
+
+    render json: users.map { |user| { id: user.id, full_name: "#{user.first_name} #{user.last_name}" } }
   end
 end

@@ -1,0 +1,11 @@
+<% @title = "New Friend Request!" %>
+
+<h2>You have a new friend request from <%= @user.full_name %>! 🤝</h2>
+
+<p>Click below to accept or reject the request:</p>
+
+<p>
+  <a href="<%= friendships_url %>" class="button">Manage Friend Requests</a>
+</p>
+
+<p>Happy networking!</p>

@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   authenticated :user do
     get '/dashboard', to: 'users#dashboard', as: :dashboard
 
-    resources :friendships, only: %i[index create update]
+    resources :friendships, only: %i[index create update destroy] do
+      collection do
+        get :search
+      end
+    end
 
     resources :groups do
       member do
@@ -18,7 +22,7 @@ Rails.application.routes.draw do
 
     resources :events do
       resources :event_suggestions, only: [:create, :update]
-      resources :comments, only: :create
+      resources :comments, only: [:create, :update, :destroy, :edit]
       
       member do
         post :add_friend

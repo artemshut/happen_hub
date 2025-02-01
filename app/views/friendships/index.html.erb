@@ -1,64 +1,86 @@
-<h1 class="text-3xl font-bold mb-6">Your Friends</h1>
+<div class="max-w-4xl mx-auto px-6 py-8">
+  <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">Your Friends</h1>
 
-<h2 class="text-2xl font-semibold mb-4">Friends List</h2>
-<ul class="list-disc pl-6 mb-6">
-  <% @friends.each do |friend| %>
-    <li class="mb-2">
-      <span class="font-medium text-gray-700"><%= friend.first_name %> <%= friend.last_name %></span>
-      (<span class="text-gray-500"><%= friend.tag %></span>)
-    </li>
-  <% end %>
-</ul>
+  <!-- Friends List -->
+  <div class="bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Friends List</h2>
 
-<h2 class="text-2xl font-semibold mb-4">Pending Friend Requests</h2>
-<ul class="list-disc pl-6 mb-6">
-  <% @pending_requests.each do |request| %>
-    <li class="mb-2">
-      <span class="font-medium text-gray-700"><%= request.user.first_name %> <%= request.user.last_name %></span>
-      (<span class="text-gray-500"><%= request.user.tag %></span>)
-      <div class="mt-2 flex space-x-2">
-        <%= button_to 'Accept', friendship_path(request.user, status: 'accept'), method: :patch, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
-        <%= button_to 'Decline', friendship_path(request.user, status: 'decline'), method: :patch, class: "bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400" %>
+    <% if @friends.any? %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <% @friends.each do |friend| %>
+          <div class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-sm">
+            <div class="flex items-center">
+              <div class="bg-blue-500 text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold">
+                <%= friend.first_name[0].upcase %>
+              </div>
+              <div class="ml-3">
+                <p class="font-semibold text-gray-900"><%= friend.full_name %></p>
+                <p class="text-sm text-gray-600">(@<%= friend.tag %>)</p>
+              </div>
+            </div>
+            <%= link_to "Remove", friendship_path(friend), method: :delete, class: "text-red-500 hover:text-red-700 text-sm" %>
+          </div>
+        <% end %>
       </div>
-    </li>
-  <% end %>
-</ul>
-
-<h2 class="text-2xl font-semibold mb-4">Find Friends by Tag</h2>
-<%= form_with url: friendships_path, method: :get, local: true, class: "space-y-4" do %>
-  <div class="flex items-center space-x-4">
-    <%= label_tag :query, 'Search by tag:', class: "font-medium text-gray-700" %>
-    <%= text_field_tag :query, params[:query], class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
-    <%= submit_tag 'Search', class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
+    <% else %>
+      <p class="text-gray-500 text-center">You have no friends yet.</p>
+    <% end %>
   </div>
-<% end %>
 
-<% if params[:query].present? %>
-  <h3 class="text-xl font-semibold mt-6">Search Results</h3>
-  <ul class="list-disc pl-6">
-    <% User.search_by_tag(params[:query]).each do |user| %>
-      <li class="mb-2">
-        <span class="font-medium text-gray-700"><%= user.first_name %> <%= user.last_name %></span>
-        (<span class="text-gray-500"><%= user.tag %></span>)
-        <%= button_to 'Add Friend', friendships_path(friend_id: user.id, status: 'accepted'), method: :post, class: "bg-accent-red text-white px-4 py-2 rounded hover:bg-red-600" %>
-      </li>
+  <!-- Pending Friend Requests -->
+  <div class="bg-white shadow-md rounded-lg p-6 mt-8">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Pending Friend Requests</h2>
+
+    <% if @pending_requests.any? %>
+      <div class="space-y-4">
+        <% @pending_requests.each do |request| %>
+          <div class="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm">
+            <div>
+              <p class="font-semibold text-gray-900"><%= request.friend.full_name %></p>
+              <p class="text-sm text-gray-600">(@<%= request.friend.tag %>)</p>
+              <p class="text-xs text-gray-500 mt-1">
+                Status: <span class="text-yellow-600 font-semibold">Pending</span>
+              </p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-500 text-center">No pending friend requests.</p>
     <% end %>
-  </ul>
-<% end %>
+  </div>
 
-<h1>Friend Requests</h1>
+  <!-- Pending Invitations -->
+  <div class="bg-white shadow-md rounded-lg p-6 mt-8">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Pending Invitations</h2>
 
-<h2>Pending Requests</h2>
-<% if @pending_requests.any? %>
-  <ul>
-    <% @pending_requests.each do |request| %>
-      <li>
-        <%= request.user.full_name %>
-        <%= button_to "Accept", friendship_path(request, status: :accepted), method: :patch, class: "bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" %>
-        <%= button_to "Decline", friendship_path(request, status: :declined), method: :patch, class: "bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" %>
-      </li>
+    <% if @invitations.any? %>
+      <div class="space-y-4">
+        <% @invitations.each do |request| %>
+          <div class="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm">
+            <div>
+              <p class="font-semibold text-gray-900"><%= request.user.full_name %></p>
+              <p class="text-sm text-gray-600">(@<%= request.user.tag %>)</p>
+            </div>
+            <div class="flex space-x-2">
+              <%= button_to "Accept", friendship_path(request, status: :accepted), method: :patch, class: "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm" %>
+              <%= button_to "Decline", friendship_path(request, status: :declined), method: :patch, class: "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-500 text-center">No pending invitations.</p>
     <% end %>
-  </ul>
-<% else %>
-  <p>No pending requests.</p>
-<% end %>
+  </div>
+
+  <!-- Find Friends by Tag -->
+  <div class="bg-white shadow-md rounded-lg p-6 mt-8">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Find Friends by Tag</h2>
+    <form action="<%= friendships_path %>" method="get" class="flex items-center space-x-2">
+      <input type="text" name="q" placeholder="Search by tag..."
+             class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent-red">
+      <button type="submit" class="bg-accent-red text-white px-4 py-2 rounded-lg hover:bg-red-600">Search</button>
+    </form>
+  </div>
+</div>

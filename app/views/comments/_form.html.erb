@@ -1,0 +1,11 @@
+<%= turbo_frame_tag "event_comment_form" do %>
+  <%= form_with(model: [event, comment]) do |form| %>
+
+    <div class="mb-4">
+      <%= form.text_area :content, placeholder: "Write your comment here...", rows: 3, class: "w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300" %>
+    </div>
+    <div class="text-right">
+      <%= form.submit "Add Comment", class: "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600" %>
+    </div>
+  <% end %>
+<% end %>

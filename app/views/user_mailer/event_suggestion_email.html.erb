@@ -1,0 +1,12 @@
+<% @title = "New Event Suggestion for #{@event.title}" %>
+
+<h2><%= @suggestion.user.full_name %> suggested a new time for "<%= @event.title %>" ⏳</h2>
+
+<p><strong>Suggested Start:</strong> <%= @suggestion.suggested_start_time.strftime("%B %d, %Y - %I:%M %p") %></p>
+<p><strong>Suggested End:</strong> <%= @suggestion.suggested_end_time.strftime("%B %d, %Y - %I:%M %p") %></p>
+
+<p>
+  <a href="<%= event_url(@event) %>" class="button">Review Suggestion</a>
+</p>
+
+<p>Approve or reject the new schedule now!</p>

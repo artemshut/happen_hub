@@ -35,6 +35,7 @@ gem 'devise' # For user authentication
 gem 'omniauth'
 gem 'omniauth-google-oauth2' # For Google authentication
 gem 'fullcalendar-rails'
+gem 'sidekiq' # For background jobs
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -63,6 +64,8 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
   gem 'pry-rails'
+  gem "letter_opener"
+  gem "letter_opener_web"
 end
 
 group :test do

@@ -1,0 +1,14 @@
+<% @title = "You're Invited: #{@event.title}" %>
+
+<h2>You're invited to "<%= @event.title %>" 🎈</h2>
+
+<p><%= @event.description %></p>
+
+<p><strong>Date:</strong> <%= @event.start_time.strftime("%B %d, %Y - %I:%M %p") %></p>
+<p><strong>Location:</strong> <%= @event.location %></p>
+
+<p>
+  <a href="<%= event_url(@event) %>" class="button">View Event</a>
+</p>
+
+<p>Let your friends know if you're coming!</p>

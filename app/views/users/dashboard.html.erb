@@ -13,7 +13,7 @@
             <% @upcoming_events.each do |event| %>
               <li class="mb-4 border border-gray-200 rounded-lg shadow-md p-4">
                 <h3 class="text-lg font-semibold">
-                  <%= link_to event.name, event_path(event), class: "text-accent-red hover:underline" %>
+                  <%= link_to event.title, event_path(event), class: "text-accent-red hover:underline" %>
                 </h3>
                 <p class="text-sm text-gray-600">
                   <%= event.start_time.strftime('%A, %B %d, %Y %H:%M') %>
@@ -37,11 +37,12 @@
             <% @pending_invitations.each do |invite| %>
               <li class="mb-4 border border-gray-200 rounded-lg shadow-md p-4">
                 <p class="text-gray-700">
-                  <strong><%= invite.event.name %></strong> - <%= invite.event.start_time.strftime('%B %d, %Y') %>
+                  <strong><%= invite.event.title %></strong> - <%= invite.event.start_time.strftime('%B %d, %Y') %>
                 </p>
                 <div class="flex space-x-2 mt-2">
-                  <%= link_to "Accept", accept_invitation_path(invite), method: :post, class: "bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600" %>
-                  <%= link_to "Decline", decline_invitation_path(invite), method: :delete, class: "bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" %>
+                  <%= link_to "Accept", update_rsvp_event_path(invite.event, status: "accepted"), method: :patch, class: "bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600" %>
+                  <%= link_to "Maybe", update_rsvp_event_path(invite.event, status: "maybe"), method: :patch, class: "bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600" %>
+                  <%= link_to "Decline", update_rsvp_event_path(invite.event, status: "declined"), method: :delete, class: "bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" %>
                 </div>
               </li>
             <% end %>
@@ -58,7 +59,7 @@
           <ul>
             <% @friend_activities.each do |activity| %>
               <li class="mb-4 text-gray-700">
-                <%= activity.user.name %> <%= activity.description %> - <%= time_ago_in_words(activity.created_at) %> ago
+                <%= activity.user.full_name %> - <%= time_ago_in_words(activity.created_at) %> ago
               </li>
             <% end %>
           </ul>
@@ -74,7 +75,7 @@
       <div class="mb-8">
         <h2 class="text-xl font-bold mb-4">Your Calendar</h2>
         <div id="calendar-container" class="p-4 border border-gray-300 rounded-lg shadow-md">
-          <div id="calendar" class="w-full"></div>
+          <div id="calendar" class="bg-white rounded-lg shadow-md p-6"></div>
         </div>
       </div>
 

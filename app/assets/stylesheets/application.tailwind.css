@@ -96,3 +96,150 @@ ol > li::marker {
   background-color: #ff9800; /* Orange for warnings */
   color: white;
 }
+
+/* Make the calendar smaller */
+.fc {
+  border-radius: 8px;
+  padding: 12px;
+  background-color: #ffffff;
+  font-size: 0.85rem; /* Reduce text size */
+
+  .fc-toolbar-title {
+    font-size: 1.2rem; /* Smaller title */
+    font-weight: 600;
+    color: #1e293b;
+    text-align: center;
+    margin: 4px 0;
+  }
+}
+
+/* Adjust Toolbar Layout */
+/* .fc-toolbar { */
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+} */
+
+/* Smaller Navigation Buttons (Prev, Next, Today) */
+/* .fc-toolbar .fc-button-group {
+  display: flex;
+  gap: 6px;
+} */
+
+/* .fc-toolbar .fc-button {
+  background-color: #1e293b;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+} */
+
+.fc-toolbar .fc-button:hover {
+  background-color: #334155;
+}
+
+.fc-toolbar .fc-button.fc-button-active {
+  background-color: #f56565;
+}
+
+/* Smaller View Mode Buttons ("Month", "Week", "Day") */
+.fc-button-group .fc-button {
+  margin: 0 2px;
+  border-radius: 5px;
+  background-color: #1e293b;
+  color: white;
+  padding: 4px 6px;
+  font-size: 0.75rem;
+  transition: 0.3s;
+}
+
+.fc-button-group .fc-button:hover {
+  background-color: #334155;
+}
+
+.fc-button-group .fc-button.fc-button-active {
+  background-color: #f56565;
+}
+
+/* Reduce Calendar Cell Size */
+.fc-daygrid-day {
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  transition: background-color 0.3s ease;
+  height: 30px; /* Smaller cell height */
+}
+
+.fc-daygrid-day:hover {
+  background-color: #edf2f7;
+}
+
+/* Reduce Size of Today's Highlight */
+.fc-day-today {
+  background-color: #fef2f2;
+}
+
+/* Make Events Smaller */
+.fc-event {
+  border-radius: 5px;
+  padding: 2px 4px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .fc-toolbar {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .fc-toolbar-title {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .fc-button {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+  }
+
+  .fc-event {
+    font-size: 0.7rem;
+  }
+}
+
+
+/* Ensure Leaflet map does NOT get overridden by other translate3d styles */
+.leaflet-pane,
+.leaflet-marker-pane,
+.leaflet-tile-pane {
+  will-change: transform;
+  transform: none !important; /* Forces Leaflet to ignore global translate3d */
+}
+
+/* Ensure the Leaflet container is properly positioned */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden; /* Prevents extra tiles */
+}
+
+button[data-action="click->friend-search#removeMember"] {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+button[data-action="click->friend-search#removeMember"]:hover {
+  color: #ff4d4f;
+}
+
+ul {
+  margin-left: 0 !important;
+}

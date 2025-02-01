@@ -1,0 +1,5 @@
+<%= turbo_stream.remove "comment_#{@comment.id}" %>
+
+<%= turbo_stream.update "event_#{@event.id}_comment_count" do %>
+  <%= pluralize(@event.comments.size, 'comment') %>
+<% end %>

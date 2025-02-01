@@ -55,6 +55,12 @@ class User < ApplicationRecord
     inverse_friendships.where(status: :pending)
   end
 
+  def friends
+    friend_ids = friendships.where(status: "accepted").pluck(:friend_id) +
+                  inverse_friendships.where(status: "accepted").pluck(:user_id)
+    User.where(id: friend_ids)
+  end
+
   private
 
   def assign_unique_tag

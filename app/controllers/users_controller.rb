@@ -13,7 +13,6 @@ class UsersController < ApplicationController
     @total_events = current_user.events.count
     @total_groups = current_user.groups.count
     @total_friends = current_user.friends.count
-
   end
 
   # GET /profile/edit
