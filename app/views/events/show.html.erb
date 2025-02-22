@@ -102,10 +102,7 @@
   <!-- Right Column: Calendar & Comments (5/12) -->
   <div class="lg:col-span-5 space-y-8 sticky top-8">
     <!-- Calendar -->
-    <div class="bg-white rounded-lg shadow-md p-5">
-      <h2 class="text-lg font-bold mb-4">Your Calendar</h2>
-      <div id="calendar" class="rounded-lg"></div>
-    </div>
+    <%= render 'shared/calendar' %>
 
     <!-- Comments -->
     <div class="bg-white shadow-md rounded-lg p-5">
@@ -119,22 +116,3 @@
     </div>
   </div>
 </div>
-
-
-<!-- Tab Switching Script -->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const tabs = document.querySelectorAll(".tab-btn");
-    const contents = document.querySelectorAll(".tab-content");
-
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", function () {
-        tabs.forEach((t) => t.classList.remove("active"));
-        contents.forEach((c) => c.classList.add("hidden"));
-
-        this.classList.add("active");
-        document.getElementById(this.dataset.tab).classList.remove("hidden");
-      });
-    });
-  });
-</script>

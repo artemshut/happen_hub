@@ -1,0 +1,108 @@
+<div class="bg-white text-gray-900">
+  <!-- Hero Section -->
+  <section class="container mx-auto px-6 py-20 text-center opacity-0 transform scale-90 animate-fade-in">
+    <h1 class="text-5xl font-extrabold leading-tight">
+      Plan Events <span class="text-red-500">Effortlessly</span> with HappenHub
+    </h1>
+    <p class="mt-4 text-lg text-gray-600">
+      Organize, invite, and track events with real-time updates and seamless RSVPs.
+    </p>
+    <div class="mt-8 flex justify-center space-x-6">
+      <a href="<%= new_user_registration_path %>" class="btn-primary">Get Started</a>
+      <a href="#features" class="btn-secondary scroll-link">Learn More</a>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="bg-gray-100 py-16 opacity-0 transform translate-y-10 animate-scroll-fade">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-6">How It Works</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+          <h3 class="text-xl font-semibold mb-2">1. Create an Event</h3>
+          <p class="text-gray-600">Set up your event in seconds with details, date, and location.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+          <h3 class="text-xl font-semibold mb-2">2. Invite Friends</h3>
+          <p class="text-gray-600">Send invites to friends and track their RSVP responses in real-time.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+          <h3 class="text-xl font-semibold mb-2">3. Enjoy the Event</h3>
+          <p class="text-gray-600">Get automatic reminders and stay updated on event changes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="container mx-auto px-6 py-16 text-center opacity-0 transform translate-y-10 animate-scroll-fade">
+    <h2 class="text-3xl font-bold mb-6">Why Choose HappenHub?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="feature-card">
+        <h3 class="text-xl font-semibold mb-2">🔔 Real-Time Notifications</h3>
+        <p class="text-gray-600">Get instant updates on RSVPs, changes, and messages.</p>
+      </div>
+      <div class="feature-card">
+        <h3 class="text-xl font-semibold mb-2">📍 Integrated Maps</h3>
+        <p class="text-gray-600">Easily find event locations and navigate effortlessly.</p>
+      </div>
+      <div class="feature-card">
+        <h3 class="text-xl font-semibold mb-2">📅 Smart Scheduling</h3>
+        <p class="text-gray-600">Suggest and vote on the best event times with friends.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="bg-gray-100 py-16 opacity-0 transform translate-y-10 animate-scroll-fade">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-6">What Our Users Say</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="testimonial-card">
+          <p>"HappenHub changed the way I plan my meetups. Super easy to use!"</p>
+          <p class="text-red-500 font-semibold mt-2">- Alex M.</p>
+        </div>
+        <div class="testimonial-card">
+          <p>"The RSVP tracking feature is genius. 10/10 would recommend!"</p>
+          <p class="text-red-500 font-semibold mt-2">- Sarah L.</p>
+        </div>
+        <div class="testimonial-card">
+          <p>"I love how seamless and fast everything updates in real-time."</p>
+          <p class="text-red-500 font-semibold mt-2">- Mark R.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="py-20 bg-red-500 text-white text-center opacity-0 transform translate-y-10 animate-scroll-fade">
+    <h2 class="text-4xl font-bold mb-6">Start Your Event Journey Now</h2>
+    <a href="<%= new_user_registration_path %>" class="btn-primary bg-white text-red-500 hover:bg-gray-200">Sign Up</a>
+  </section>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Scroll Animations
+    const sections = document.querySelectorAll(".animate-scroll-fade");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("animate-fade-in-up");
+        }
+      });
+    });
+
+    sections.forEach((section) => observer.observe(section));
+
+    // Smooth Scroll for "Learn More"
+    document.querySelectorAll(".scroll-link").forEach((link) => {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute("href").substring(1);
+        const targetElement = document.getElementById(targetId);
+        targetElement.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+  });
+</script>

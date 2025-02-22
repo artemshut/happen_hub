@@ -118,3 +118,18 @@ document.addEventListener("turbo:load", () => {
     dateFormat: "Y-m-d", // Submission format (e.g., 2023-01-01)
   });
 });
+
+document.addEventListener("turbo:load", function () {
+  const tabs = document.querySelectorAll(".tab-btn");
+  const contents = document.querySelectorAll(".tab-content");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", function () {
+      tabs.forEach((t) => t.classList.remove("active"));
+      contents.forEach((c) => c.classList.add("hidden"));
+
+      this.classList.add("active");
+      document.getElementById(this.dataset.tab).classList.remove("hidden");
+    });
+  });
+});

@@ -21,7 +21,6 @@
     <!-- FullCalendar JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.15/index.global.min.js"></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sS20aT51U2YiDiNuNRsxlrK7NjEGMYJk/wCr4IBH5HdPhdk/A5hXeXY6Bf3D+LZz" crossorigin=""/>
 
     <%= javascript_importmap_tags %>
   </head>
@@ -31,15 +30,12 @@
       <div class="container mx-auto px-4 flex justify-between items-center">
         <!-- Logo -->
         <h1 class="text-2xl font-bold">
-          <%= link_to "HappenHub", root_path, class: "hover:underline" %>
+          <%= link_to "HappenHub", dashboard_path, class: "hover:underline" %>
         </h1>
 
         <!-- Navigation -->
         <nav class="flex space-x-6 z-50 relative">
           <% if user_signed_in? %>
-            <!-- Dashboard Link -->
-            <%= link_to "Dashboard", dashboard_path, class: "px-4 hover:underline" %>
-
             <!-- Events Dropdown -->
             <div class="relative group">
               <button class="flex items-center px-4 hover:underline">
