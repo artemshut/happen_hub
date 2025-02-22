@@ -29,7 +29,6 @@ gem "solid_queue"
 gem "solid_cable"
 
 gem 'hotwire-rails' # For Hotwire integration
-gem 'stimulus-rails' # For Stimulus integration
 gem 'tailwindcss-rails' # For TailwindCSS integration
 gem 'devise' # For user authentication
 gem 'omniauth'
