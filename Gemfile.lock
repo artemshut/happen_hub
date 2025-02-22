@@ -467,13 +467,13 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
-  aws-sdk-s3 (~> 1.179)
+  aws-sdk-s3
   bootsnap
   brakeman
   capybara
   debug
   devise
-  dockerfile-rails (>= 1.7)
+  dockerfile-rails
   fullcalendar-rails
   hotwire-rails
   image_processing (~> 1.13)
@@ -503,4 +503,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   2.4.10
+   2.4.19
