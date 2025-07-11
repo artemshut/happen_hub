@@ -16,7 +16,7 @@
                   <%= link_to event.title, event_path(event), class: "text-accent-red" %>
                 </h3>
                 <p class="text-sm text-gray-600">
-                  <%= event.start_time.strftime('%A, %B %d, %Y %H:%M') %>
+                  <%= formatted_event_date(event.start_time) %>
                 </p>
                 <%= render partial: "events/invitation_status_small", locals: { event: event } %>
               </li>
