@@ -61,6 +61,19 @@ class User < ApplicationRecord
     User.where(id: friend_ids)
   end
 
+  def upcoming_events
+    Event
+    .left_joins(:event_participations)
+    .where(
+      "events.user_id = :user_id OR (event_participations.user_id = :user_id AND event_participations.rsvp_status = :accepted)",
+      user_id: id,
+      accepted: "accepted"
+    )
+    .where("start_time > ?", Time.current)
+    .distinct
+    .order(:start_time)
+  end
+
   private
 
   def assign_unique_tag

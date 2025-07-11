@@ -25,4 +25,8 @@ class Event < ApplicationRecord
   def add_friend_with_rsvp(user, rsvp_status = 'pending')
     event_participations.create(user: user, rsvp_status: rsvp_status)
   end
+
+  def owned_by?(current_user)
+    user == current_user
+  end
 end

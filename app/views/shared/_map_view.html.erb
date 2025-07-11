@@ -1,0 +1,10 @@
+<div class="bg-white shadow-md rounded-lg p-6">
+  <h2 class="text-xl font-semibold mb-4">Event Location</h2>
+  <div class="prose prose-lg max-w-none mb-4">
+    <%= render_rich_text_with_embeds(@event.location) %>
+  </div>
+  <div data-controller="google-map"
+  data-google-map-lat-value="<%= @event.latitude %>"
+  data-google-map-lng-value="<%= @event.longitude %>"
+  style="height: 400px; width: 100%;"></div>
+</div>

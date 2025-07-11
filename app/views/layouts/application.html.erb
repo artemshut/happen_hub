@@ -20,7 +20,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
     <!-- FullCalendar JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.15/index.global.min.js"></script>
-
+    <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google, :maps, :api_key)}&libraries=places", async: true, defer: true %>
 
     <%= javascript_importmap_tags %>
   </head>
@@ -30,7 +30,7 @@
       <div class="container mx-auto px-4 flex justify-between items-center">
         <!-- Logo -->
         <h1 class="text-2xl font-bold">
-          <%= link_to "HappenHub", dashboard_path, class: "hover:underline" %>
+          <%= link_to "HappenHub", dashboard_path %>
         </h1>
 
         <!-- Navigation -->
@@ -38,7 +38,7 @@
           <% if user_signed_in? %>
             <!-- Events Dropdown -->
             <div class="relative group">
-              <button class="flex items-center px-4 hover:underline">
+              <button class="flex items-center px-4">
                 Events
                 <% if current_user.pending_event_requests.any? %>
                   <span class="bg-white text-accent-red text-xs font-bold rounded-full px-2 ml-2">
@@ -54,7 +54,7 @@
 
             <!-- Groups Dropdown -->
             <div class="relative group">
-              <button class="flex items-center px-4 hover:underline">
+              <button class="flex items-center px-4">
                 Groups
               </button>
               <div class="absolute hidden group-hover:block bg-red-700 text-white shadow-lg rounded-lg mt-2 py-2 w-40 z-50">
@@ -65,7 +65,7 @@
 
             <!-- Friends Dropdown -->
             <div class="relative group">
-              <button class="flex items-center px-4 hover:underline">
+              <button class="flex items-center px-4">
                 Friends
                 <% if current_user.pending_friend_requests.any? %>
                   <span class="bg-white text-accent-red text-xs font-bold rounded-full px-2 ml-2">
@@ -92,8 +92,8 @@
             </div>
           <% else %>
             <!-- Login/Signup for Guests -->
-            <%= link_to "Login", new_user_session_path, class: "px-4 hover:underline" %>
-            <%= link_to "Sign Up", new_user_registration_path, class: "px-4 hover:underline" %>
+            <%= link_to "Login", new_user_session_path, class: "px-4" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "px-4" %>
           <% end %>
         </nav>
       </div>

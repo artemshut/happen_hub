@@ -13,19 +13,17 @@
             <% @upcoming_events.each do |event| %>
               <li class="mb-4 border border-gray-200 rounded-lg shadow-md p-4">
                 <h3 class="text-lg font-semibold">
-                  <%= link_to event.title, event_path(event), class: "text-accent-red hover:underline" %>
+                  <%= link_to event.title, event_path(event), class: "text-accent-red" %>
                 </h3>
                 <p class="text-sm text-gray-600">
                   <%= event.start_time.strftime('%A, %B %d, %Y %H:%M') %>
                 </p>
-                <p class="text-sm">
-                  Status: <span class="font-bold"><%= event_participation_status(event) %></span>
-                </p>
+                <%= render partial: "events/invitation_status_small", locals: { event: event } %>
               </li>
             <% end %>
           </ul>
         <% else %>
-          <p class="text-gray-600">No upcoming events. <%= link_to "Create one", new_event_path, class: "text-accent-red hover:underline" %>.</p>
+          <p class="text-gray-600">No upcoming events. <%= link_to "Create one", new_event_path, class: "text-accent-red" %>.</p>
         <% end %>
       </div>
 
