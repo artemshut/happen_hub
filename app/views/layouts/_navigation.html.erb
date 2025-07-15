@@ -1,0 +1,90 @@
+<nav class="text-white px-6 py-4 flex items-center justify-between z-50 relative">
+  <% if user_signed_in? %>
+    <div class="flex space-x-6 items-center">
+      <!-- Events Dropdown -->
+      <div class="relative" data-controller="dropdown">
+        <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-red-300">
+          Events
+          <% if current_user.pending_event_requests.any? %>
+            <span class="bg-white text-accent-red text-xs font-bold rounded-full px-2 ml-2">
+              <%= current_user.pending_event_requests.count %>
+            </span>
+          <% end %>
+          <span data-dropdown-target="arrow" class="transition-transform duration-200">
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </button>
+        <div data-dropdown-target="menu"
+            class="absolute left-0 mt-2 w-44 bg-red-700 text-white shadow-lg rounded-lg py-2 hidden opacity-0 scale-y-95 origin-top transition-all duration-200 z-50">
+          <%= link_to "My Events", events_path, class: "block px-4 py-2 hover:bg-red-500" %>
+          <%= link_to "Create Event", new_event_path, class: "block px-4 py-2 hover:bg-red-500" %>
+        </div>
+      </div>
+
+      <!-- Groups Dropdown -->
+      <div class="relative" data-controller="dropdown">
+        <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-red-300">
+          Groups
+          <span data-dropdown-target="arrow" class="transition-transform duration-200">
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </button>
+        <div data-dropdown-target="menu"
+            class="absolute left-0 mt-2 w-44 bg-red-700 text-white shadow-lg rounded-lg py-2 hidden opacity-0 scale-y-95 origin-top transition-all duration-200 z-50">
+          <%= link_to "All Groups", groups_path, class: "block px-4 py-2 hover:bg-red-500" %>
+          <%= link_to "Create Group", new_group_path, class: "block px-4 py-2 hover:bg-red-500" %>
+        </div>
+      </div>
+
+      <!-- Friends Dropdown -->
+      <div class="relative" data-controller="dropdown">
+        <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-red-300">
+          Friends
+          <% if current_user.pending_friend_requests.any? %>
+            <span class="bg-white text-accent-red text-xs font-bold rounded-full px-2 ml-2">
+              <%= current_user.pending_friend_requests.count %>
+            </span>
+          <% end %>
+          <span data-dropdown-target="arrow" class="transition-transform duration-200">
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </button>
+        <div data-dropdown-target="menu"
+            class="absolute left-0 mt-2 w-44 bg-red-700 text-white shadow-lg rounded-lg py-2 hidden opacity-0 scale-y-95 origin-top transition-all duration-200 z-50">
+          <%= link_to "View Friends", friendships_path, class: "block px-4 py-2 hover:bg-red-500" %>
+          <%= link_to "Friend Requests", friendships_path, class: "block px-4 py-2 hover:bg-red-500" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <div class="relative ml-2" data-controller="dropdown">
+      <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-red-300">
+        <%= current_user.full_name %>
+        <span data-dropdown-target="arrow" class="transition-transform duration-200">
+          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M19 9l-7 7-7-7" />
+          </svg>
+        </span>
+      </button>
+      <div data-dropdown-target="menu"
+          class="absolute right-0 mt-2 w-44 bg-red-700 text-white shadow-lg rounded-lg py-2 hidden opacity-0 scale-y-95 origin-top transition-all duration-200 z-50">
+        <%= link_to "Profile", profile_path, class: "block px-4 py-2 hover:bg-red-500" %>
+        <%= link_to "Settings", "/settings", class: "block px-4 py-2 hover:bg-red-500" %>
+        <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "block px-4 py-2 hover:bg-red-500" %>
+      </div>
+    </div>
+  <% else %>
+    <!-- Guest Navigation -->
+    <div class="ml-auto flex space-x-4">
+      <%= link_to "Login", new_user_session_path, class: "hover:text-red-300" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-red-300" %>
+    </div>
+  <% end %>
+</nav>

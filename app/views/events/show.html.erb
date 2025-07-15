@@ -77,7 +77,7 @@
         <div class="tab-content hidden" id="tab-groups">
           <h2 class="text-xl font-bold mb-4">Invite Groups</h2>
           <ul class="list-none space-y-2">
-            <% current_user.groups.each do |group| %>
+            <% current_user.created_groups.each do |group| %>
               <li class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm">
                 <span><%= group.name %></span>
                 <%= button_to "Invite Group", invite_group_event_path(@event, group_id: group.id), method: :post, class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" %>

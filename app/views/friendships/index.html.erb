@@ -74,13 +74,35 @@
     <% end %>
   </div>
 
-  <!-- Find Friends by Tag -->
   <div class="bg-white shadow-md rounded-lg p-6 mt-8">
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Find Friends by Tag</h2>
-    <form action="<%= friendships_path %>" method="get" class="flex items-center space-x-2">
-      <input type="text" name="q" placeholder="Search by tag..."
-             class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent-red">
-      <button type="submit" class="bg-accent-red text-white px-4 py-2 rounded-lg hover:bg-red-600">Search</button>
+
+    <!-- 🔍 Form sends GET to /users/search -->
+    <form
+      action="<%= search_users_path %>"
+      method="get"
+      data-turbo-frame="search_results"
+      data-turbo="true"
+      class="flex items-center gap-4"
+    >
+      <input
+        type="text"
+        name="q"
+        placeholder="Search by tag..."
+        class="flex-grow border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent-red"
+      >
+      <button
+        type="submit"
+        class="bg-accent-red text-white px-4 py-2 rounded-lg hover:bg-red-600"
+      >
+        Search
+      </button>
     </form>
+
+    <!-- 🧠 This is where results will appear -->
+    <turbo-frame id="search_results" class="mt-6">
+      <p class="text-sm text-gray-500">Enter a tag above to find a friend.</p>
+    </turbo-frame>
   </div>
+
 </div>

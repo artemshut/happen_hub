@@ -49,7 +49,7 @@ class EventsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("invitation_status", partial: "events/invitation_status", locals: { error: "Failed to update status." }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("invitation_status", partial: "events/invitation_status_full", locals: { error: "Failed to update status." }) }
         format.html { redirect_to event_path(@event), alert: "Failed to update RSVP status." }
       end
     end
@@ -94,9 +94,9 @@ class EventsController < ApplicationController
     @group = Group.find(params[:group_id])
 
     # Invite all group members to the event
-    @group.users.each do |user|
-      unless @event.event_participations.exists?(user: user)
-        @event.event_participations.create(user: user, rsvp_status: :pending)
+    @group.members.each do |member|
+      unless @event.event_participations.exists?(user: member)
+        @event.event_participations.create(user: member, rsvp_status: :pending)
       end
     end
 

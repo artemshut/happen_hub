@@ -3,10 +3,9 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
-
-
   authenticated :user do
     get '/dashboard', to: 'users#dashboard', as: :dashboard
+    get 'users/search', to: 'users#search', as: :search_users, defaults: { format: :turbo_stream }
 
     resources :friendships, only: %i[index create update destroy] do
       collection do

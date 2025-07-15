@@ -1,0 +1,18 @@
+<% if users.any? %>
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <% users.each do |user| %>
+      <div class="flex mt-2 items-center justify-between border border-gray-200 rounded-xl p-4 bg-gray-50 hover:shadow-sm transition">
+        <div>
+          <p class="font-semibold text-gray-800"><%= user.full_name %></p>
+          <div class="flex flex-wrap gap-2 mt-1">
+            <%= user.tag %>
+          </div>
+        </div>
+        <%= button_to "Add Friend", friendships_path(friend_id: user.id), method: :post,
+              class: "bg-accent-red text-white px-4 py-1.5 rounded-lg hover:bg-red-600 text-sm" %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-gray-500 text-sm">No users found for that tag.</p>
+<% end %>

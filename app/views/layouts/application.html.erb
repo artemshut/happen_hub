@@ -34,75 +34,14 @@
         </h1>
 
         <!-- Navigation -->
-        <nav class="flex space-x-6 z-50 relative">
-          <% if user_signed_in? %>
-            <!-- Events Dropdown -->
-            <div class="relative group">
-              <button class="flex items-center px-4">
-                Events
-                <% if current_user.pending_event_requests.any? %>
-                  <span class="bg-white text-accent-red text-xs font-bold rounded-full px-2 ml-2">
-                    <%= current_user.pending_event_requests.count %>
-                  </span>
-                <% end %>
-              </button>
-              <div class="absolute hidden group-hover:block bg-red-700 text-white shadow-lg rounded-lg mt-2 py-2 w-40 z-50">
-                <%= link_to "My Events", events_path, class: "block px-4 py-2 hover:bg-red-500" %>
-                <%= link_to "Create Event", new_event_path, class: "block px-4 py-2 hover:bg-red-500" %>
-              </div>
-            </div>
-
-            <!-- Groups Dropdown -->
-            <div class="relative group">
-              <button class="flex items-center px-4">
-                Groups
-              </button>
-              <div class="absolute hidden group-hover:block bg-red-700 text-white shadow-lg rounded-lg mt-2 py-2 w-40 z-50">
-                <%= link_to "All Groups", groups_path, class: "block px-4 py-2 hover:bg-red-500" %>
-                <%= link_to "Create Group", new_group_path, class: "block px-4 py-2 hover:bg-red-500" %>
-              </div>
-            </div>
-
-            <!-- Friends Dropdown -->
-            <div class="relative group">
-              <button class="flex items-center px-4">
-                Friends
-                <% if current_user.pending_friend_requests.any? %>
-                  <span class="bg-white text-accent-red text-xs font-bold rounded-full px-2 ml-2">
-                    <%= current_user.pending_friend_requests.count %>
-                  </span>
-                <% end %>
-              </button>
-              <div class="absolute hidden group-hover:block bg-red-700 text-white shadow-lg rounded-lg mt-2 py-2 w-40 z-50">
-                <%= link_to "View Friends", friendships_path, class: "block px-4 py-2 hover:bg-red-500" %>
-                <%= link_to "Friend Requests", friendships_path, class: "block px-4 py-2 hover:bg-red-500" %>
-              </div>
-            </div>
-
-            <!-- Profile Dropdown -->
-            <div class="relative group">
-              <button class="text-white font-medium hover:text-red-300">
-                <%= current_user.full_name %>
-              </button>
-              <div class="absolute hidden group-hover:block bg-red-700 text-white shadow-lg rounded-lg mt-2 py-2 w-40 z-50">
-                <%= link_to "Profile", profile_path, class: "block px-4 py-2 hover:bg-red-500" %>
-                <%= link_to "Settings", "/settings", class: "block px-4 py-2 hover:bg-red-500" %>
-                <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "block px-4 py-2 hover:bg-red-500" %>
-              </div>
-            </div>
-          <% else %>
-            <!-- Login/Signup for Guests -->
-            <%= link_to "Login", new_user_session_path, class: "px-4" %>
-            <%= link_to "Sign Up", new_user_registration_path, class: "px-4" %>
-          <% end %>
-        </nav>
+        <%= render "layouts/navigation" %>
       </div>
     </header>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 flex-grow">
       <!-- Flash Messages -->
-      <div id="flash-messages" class="fixed top-4 right-4 space-y-2 z-50">
+      <div id="flash-messages" class="fixed bottom-6 left-4 space-y-2 z-50">
         <% flash.each do |type, message| %>
           <div class="flash-message <%= flash_class(type) %> p-4 rounded-lg shadow-md">
             <%= message %>

@@ -30,6 +30,31 @@ class UsersController < ApplicationController
     end
   end
 
+  def search
+    @users = if params[:q].present?
+      User.where("tag ILIKE ?", "%#{params[:q]}%")
+          .where.not(id: current_user.id)
+          .where.not(id: current_user.friends.pluck(:id))
+    else
+      []
+    end
+  
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "search_results",
+          partial: "users/search_results",
+          locals: { users: @users }
+        )
+      end
+  
+      format.html do
+        # Fallback (needed if accessed directly)
+        render partial: "users/search_results", locals: { users: @users }, layout: false
+      end
+    end
+  end
+
   private
 
   def user_params

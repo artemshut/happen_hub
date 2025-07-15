@@ -73,24 +73,24 @@ document.addEventListener("turbo:load", function () {
   });
 });
 
-document.addEventListener("turbo:load", function () {
-  const dropdowns = document.querySelectorAll(".group");
+// document.addEventListener("turbo:load", function () {
+//   const dropdowns = document.querySelectorAll(".group");
 
-  dropdowns.forEach((dropdown) => {
-    const menu = dropdown.querySelector(".group-hover\\:block");
-    dropdown.addEventListener("mouseleave", () => {
-      setTimeout(() => {
-        if (!dropdown.matches(":hover")) {
-          menu.classList.add("hidden");
-        }
-      }, 50); // Adjust delay as needed
-    });
+//   dropdowns.forEach((dropdown) => {
+//     const menu = dropdown.querySelector(".group-hover\\:block");
+//     dropdown.addEventListener("mouseleave", () => {
+//       setTimeout(() => {
+//         if (!dropdown.matches(":hover")) {
+//           menu.classList.add("hidden");
+//         }
+//       }, 50); // Adjust delay as needed
+//     });
 
-    dropdown.addEventListener("mouseenter", () => {
-      menu.classList.remove("hidden");
-    });
-  });
-});
+//     dropdown.addEventListener("mouseenter", () => {
+//       menu.classList.remove("hidden");
+//     });
+//   });
+// });
 
 document.addEventListener("turbo:load", () => {
   const tabButtons = document.querySelectorAll(".tab-btn");
@@ -100,11 +100,9 @@ document.addEventListener("turbo:load", () => {
     btn.addEventListener("click", () => {
       const targetId = btn.getAttribute("data-tab");
 
-      // Deactivate all tabs
       tabButtons.forEach((b) => b.classList.remove("active"));
       tabContents.forEach((content) => content.classList.add("hidden"));
 
-      // Activate the selected tab
       btn.classList.add("active");
       document.getElementById(targetId).classList.remove("hidden");
     });

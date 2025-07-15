@@ -14,29 +14,32 @@
       <%= form.text_area :description, class: "w-full border border-gray-300 rounded-lg px-4 py-2" %>
     </div>
 
-    <!-- Friend Search -->
-    <div class="mb-4" data-controller="friend-search"
-        data-group-id="<%= @group&.id %>"
-        data-friend-search-existing-values="<%= @group&.group_memberships&.includes(:user)&.map { |gm| { id: gm.user.id, name: gm.user.full_name } }.to_json || '[]' %>">
-      <label class="block text-lg font-semibold mb-2">Add Friends to Group</label>
+    <div class="mt-6">
+      <h3 class="text-lg font-medium text-gray-800 mb-2">Add Friends to Group</h3>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <%= hidden_field_tag "group[member_ids][]", "" %>
 
-      <!-- Search Input -->
-      <input type="text" placeholder="Search friends..."
-            class="w-full border border-gray-300 rounded-lg px-4 py-2"
-            data-action="input->friend-search#search"
-            data-friend-search-target="input">
-
-      <!-- Selected Friends (Tags) -->
-      <div class="mt-2 flex flex-wrap gap-2" data-friend-search-target="selectedFriends"></div>
-
-      <!-- Hidden Inputs (for form submission) -->
-      <div data-friend-search-target="hiddenFields"></div>
-
-      <!-- Search Results -->
-      <ul class="mt-2 bg-white border border-gray-300 rounded-lg hidden max-h-48 overflow-y-auto"
-          data-friend-search-target="results"></ul>
+        <% current_user.friends.each do |friend| %>
+          <div
+            data-controller="friend-select"
+            data-action="click->friend-select#toggle"
+            class="border border-gray-300 rounded-xl p-4 cursor-pointer transition-all bg-white hover:shadow-md"
+            data-friend-select-target="box"
+          >
+            <input
+              type="checkbox"
+              name="group[member_ids][]"
+              value="<%= friend.id %>"
+              <%= "checked" if @group.persisted? && @group.members.include?(friend) %>
+              hidden
+              data-friend-select-target="input"
+            >
+            <p class="font-semibold text-gray-800"><%= friend.full_name %></p>
+            <p class="text-sm text-gray-500"><%= friend.tag %></p>
+          </div>
+        <% end %>
+      </div>
     </div>
-
 
     <!-- Submit -->
     <div class="mt-6">

@@ -293,3 +293,8 @@ ul {
     transform: translateY(0) !important;
   }
 }
+
+.hover-trigger:hover + .dropdown-menu,
+.dropdown-menu:hover {
+  display: flex;
+}

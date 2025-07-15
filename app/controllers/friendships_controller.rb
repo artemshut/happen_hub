@@ -33,9 +33,13 @@ class FriendshipsController < ApplicationController
   end
 
   def destroy
-    friendship = current_user.friendships.find_by(friend_id: (params[:id]))
-    friendship.destroy
-    redirect_to friendships_path, notice: "Friend removed."
+    friendship = Friendship.between(current_user, User.find(params[:id]))
+    if friendship.destroy
+      remove_friend_from_groups(User.find(params[:id]))
+      redirect_to friendships_path, notice: "Friend removed."
+    else
+      redirect_to friendships_path, alert: "Unable to remove friendship."
+    end
   end
 
   def search
@@ -51,5 +55,14 @@ class FriendshipsController < ApplicationController
                         .first(5)
 
     render json: users.map { |user| { id: user.id, full_name: "#{user.first_name} #{user.last_name}" } }
+  end
+
+  private
+
+  def remove_friend_from_groups(friend)
+    current_user.created_groups.each do |group|
+      membership = group.group_memberships.find_by(user: friend)
+      membership.destroy if membership
+    end
   end
 end
