@@ -1,0 +1,5 @@
+<%= turbo_stream.replace dom_id(@suggestion) do %>
+  <turbo-frame id="<%= dom_id(@suggestion) %>" class="animate-highlight">
+    <%= render partial: "event_suggestions/event_suggestion", locals: { suggestion: @suggestion, event: @event } %>
+  </turbo-frame>
+<% end %>

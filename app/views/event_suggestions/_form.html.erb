@@ -1,0 +1,13 @@
+<turbo-frame id="new_event_suggestion">
+  <%= form_with model: [@event, EventSuggestion.new], local: false, data: { turbo_frame: "suggestions" }, class: "space-y-4" do |form| %>
+    <div>
+      <%= form.label :suggested_start_time, 'Start Time', class: 'block font-medium text-sm text-gray-700' %>
+      <%= form.datetime_local_field :suggested_start_time, class: 'w-full border border-gray-300 rounded px-4 py-2' %>
+    </div>
+    <div>
+      <%= form.label :suggested_end_time, 'End Time', class: 'block font-medium text-sm text-gray-700' %>
+      <%= form.datetime_local_field :suggested_end_time, class: 'w-full border border-gray-300 rounded px-4 py-2' %>
+    </div>
+    <%= form.submit 'Submit Suggestion', class: 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700' %>
+  <% end %>
+</turbo-frame>

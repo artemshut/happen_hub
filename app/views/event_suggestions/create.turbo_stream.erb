@@ -1,0 +1,3 @@
+<%= turbo_stream.prepend "suggestions_list", partial: "event_suggestions/event_suggestion", locals: { suggestion: @suggestion, event: @event } %>
+
+<%= turbo_stream.replace "new_event_suggestion", partial: "event_suggestions/form", locals: { event: @event, suggestion: EventSuggestion.new } %>

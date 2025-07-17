@@ -3,32 +3,47 @@ class EventSuggestionsController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    suggestion = @event.event_suggestions.build(suggestion_params)
-    suggestion.user = current_user
-    suggestion.status = :pending
+    @suggestion = @event.event_suggestions.build(suggestion_params)
+    @suggestion.user = current_user
+    @suggestion.status = :pending
 
-    if suggestion.save
-      redirect_to event_path(@event), notice: 'Suggestion submitted successfully.'
+    if @suggestion.save
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to @event, notice: "Suggestion added." }
+      end
     else
-      redirect_to event_path(@event), alert: 'Failed to submit the suggestion.'
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("new_event_suggestion", partial: "event_suggestions/form", locals: { event: @event, suggestion: @suggestion }) }
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 
   def update
-    suggestion = @event.event_suggestions.find(params[:id])
+    @event = Event.find(params[:event_id])
+    @suggestion = @event.event_suggestions.find(params[:id])
 
-    if params[:status] == 'approved'
-      @event.update(start_time: suggestion.suggested_start_time, end_time: suggestion.suggested_end_time)
-      suggestion.update(status: :approved)
-      @event.event_suggestions.where.not(id: suggestion.id).update_all(status: :rejected)
-      redirect_to event_path(@event), notice: 'Event updated with the suggested time.'
-    elsif params[:status] == 'rejected'
-      suggestion.update(status: :rejected)
-      redirect_to event_path(@event), notice: 'Suggestion rejected.'
+    params[:status] = params[:status].presence || "approved"
+    case params[:status]
+    when "approved"
+      @event.update!(start_time: @suggestion.suggested_start_time, end_time: @suggestion.suggested_end_time)
+      @suggestion.update!(status: :approved)
+      @event.event_suggestions.where.not(id: @suggestion.id).update_all(status: :rejected)
+    when "rejected"
+      @suggestion.update!(status: :rejected)
     else
-      redirect_to event_path(@event), alert: 'Invalid status update.'
+      head :unprocessable_entity
+      return
+    end
+  
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to @event, notice: "Updated" }
     end
   end
+  
+  
 
   private
 

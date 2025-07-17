@@ -10,12 +10,9 @@ class EventsController < ApplicationController
                                 .where("event_participations.user_id = ? OR events.user_id = ?", current_user.id, current_user.id)
 
     # Events visible to the user's friends
-    friends_visible = Event.where(visibility: "friends")
-                           .joins("INNER JOIN friendships ON friendships.friend_id = events.user_id")
-                           .where("friendships.user_id = ?", current_user.id)
+    friends_visible = Event.visible_for_friend(current_user)
 
-    # Combine the results using UNION
-    @events = Event.from("(#{own_or_participating.to_sql} UNION #{friends_visible.to_sql}) AS events").distinct
+    @events = (own_or_participating + friends_visible).uniq
   end
 
   # GET /groups/:group_id/events/:id
@@ -110,7 +107,9 @@ class EventsController < ApplicationController
   end
 
   def authorize_user!
-    redirect_to events_path, alert: 'Not authorized.' unless @event.user == current_user || @event.users.include?(current_user)
+    unless @event.user == current_user || @event.users.include?(current_user) || Event.visible_for_friend(current_user).include?(@event)
+      redirect_to events_path, alert: 'Not authorized.' 
+    end
   end
 
   def event_params

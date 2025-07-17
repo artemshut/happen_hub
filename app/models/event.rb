@@ -20,7 +20,13 @@ class Event < ApplicationRecord
     includes(:users)
       .where("events.user_id = ? OR event_participations.user_id = ?", user.id, user.id)
       .references(:event_participations)
-  end 
+  end
+
+  def self.visible_for_friend(user)
+    where(visibility: "friends")
+      .joins("INNER JOIN friendships ON (friendships.user_id = events.user_id OR friendships.friend_id = events.user_id)")
+      .where("friendships.user_id = :id OR friendships.friend_id = :id", id: user.id)
+  end
 
   def add_friend_with_rsvp(user, rsvp_status = 'pending')
     event_participations.create(user: user, rsvp_status: rsvp_status)

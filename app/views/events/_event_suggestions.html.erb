@@ -1,0 +1,16 @@
+<div class="tab-content hidden" id="tab-suggestions">
+  <details class="mb-6">
+    <summary class="cursor-pointer text-blue-600 font-semibold hover:underline">+ Suggest New Time</summary>
+    <div class="mt-4">
+      <%= render partial: "event_suggestions/form", locals: { event: @event } %>
+    </div>
+  </details>
+
+  <h3 class="text-xl font-semibold mb-4">Suggestions</h3>
+
+  <div id="suggestions_list" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <%- @event.event_suggestions.each do |suggestion| %>
+      <%= render partial: "event_suggestions/event_suggestion", locals: { suggestion: suggestion, event: @event } %>
+    <% end %>
+  </div>
+</div>

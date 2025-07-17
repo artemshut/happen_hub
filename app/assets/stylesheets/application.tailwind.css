@@ -298,3 +298,26 @@ ul {
 .dropdown-menu:hover {
   display: flex;
 }
+
+[data-turbo-frame] {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+[data-turbo-frame][data-replaced] {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+turbo-frame[aria-busy="true"] {
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.animate-highlight {
+  animation: pulse-green 0.5s ease;
+}
+
+@keyframes pulse-green {
+  0% { background-color: #d1fae5; }
+  100% { background-color: white; }
+}

@@ -32,59 +32,14 @@
 
       <!-- Tab Contents -->
       <div class="p-6 text-sm">
-        <div class="tab-content" id="tab-friends">
-          <h2 class="text-xl font-bold mb-4">Add Friends to Event</h2>
-          <ul class="list-none space-y-2">
-            <% @friends.each do |friend| %>
-              <li class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm">
-                <span><%= friend.first_name %> <%= friend.last_name %> (<%= friend.tag %>)</span>
-                <div class="flex space-x-2">
-                  <%= button_to 'Add as Attending', add_friend_event_path(@event, friend_id: friend.id, rsvp_status: 'accepted'), method: :post, class: "bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" %>
-                  <%= button_to 'Add as Maybe', add_friend_event_path(@event, friend_id: friend.id, rsvp_status: 'pending'), method: :post, class: "bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600" %>
-                </div>
-              </li>
-            <% end %>
-          </ul>
-        </div>
+        <!-- Add Friends to Event -->
+        <%= render 'events/add_friends_to_event', event: @event %>
 
         <!-- Event Suggestions -->
-        <div class="tab-content hidden" id="tab-suggestions">
-          <h2 class="text-xl font-bold mb-4">Event Suggestions</h2>
-          <%= form_with model: [@event, EventSuggestion.new], local: true do |form| %>
-            <div class="mb-4">
-              <%= form.label :suggested_start_time, 'Suggest New Start Time', class: 'block text-gray-700 font-bold mb-2' %>
-              <%= form.text_field :suggested_start_time, class: 'datepicker w-full border border-gray-300 rounded px-4 py-2' %>
-            </div>
-            <div class="mb-4">
-              <%= form.label :suggested_end_time, 'Suggest New End Time', class: 'block text-gray-700 font-bold mb-2' %>
-              <%= form.text_field :suggested_end_time, class: 'datepicker w-full border border-gray-300 rounded px-4 py-2' %>
-            </div>
-            <%= form.submit 'Submit Suggestion', class: 'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600' %>
-          <% end %>
-
-          <h3 class="text-lg font-bold mt-6">Existing Suggestions</h3>
-          <% @event.event_suggestions.each do |suggestion| %>
-            <div class="p-4 border rounded-lg mb-4">
-              <p>Suggested by: <%= suggestion.user.full_name %></p>
-              <p>Start Time: <%= suggestion.suggested_start_time %></p>
-              <p>End Time: <%= suggestion.suggested_end_time %></p>
-              <p>Status: <%= suggestion.status.capitalize %></p>
-            </div>
-          <% end %>
-        </div>
+        <%= render 'events/event_suggestions', event: @event %>
 
         <!-- Invite Groups -->
-        <div class="tab-content hidden" id="tab-groups">
-          <h2 class="text-xl font-bold mb-4">Invite Groups</h2>
-          <ul class="list-none space-y-2">
-            <% current_user.created_groups.each do |group| %>
-              <li class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm">
-                <span><%= group.name %></span>
-                <%= button_to "Invite Group", invite_group_event_path(@event, group_id: group.id), method: :post, class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" %>
-              </li>
-            <% end %>
-          </ul>
-        </div>
+        <% render 'events/group_invitations', event: @event %>
       </div>
     </div>
 
