@@ -30,7 +30,7 @@ gem "solid_cable"
 
 gem 'hotwire-rails' # For Hotwire integration
 gem 'stimulus-rails' # For Stimulus integration
-gem 'tailwindcss-rails' # For TailwindCSS integration
+gem "tailwindcss-rails", "~> 3.3.1"
 gem 'devise' # For user authentication
 gem 'omniauth'
 gem 'omniauth-google-oauth2' # For Google authentication
