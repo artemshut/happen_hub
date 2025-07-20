@@ -4,51 +4,47 @@ export default class extends Controller {
   static targets = ["menu", "arrow"]
 
   connect() {
-    this.handleClickOutside = this.closeIfClickedOutside.bind(this)
-    document.addEventListener("click", this.handleClickOutside)
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") this.close()
-    })
+    this._closeAllHandler = () => this.close()
+    this._clickOutsideHandler = (event) => {
+      if (!this.element.contains(event.target)) {
+        this.close()
+      }
+    }
+
+    window.addEventListener("dropdown:closeAll", this._closeAllHandler)
+    document.addEventListener("click", this._clickOutsideHandler)
   }
 
   disconnect() {
-    document.removeEventListener("click", this.handleClickOutside)
+    window.removeEventListener("dropdown:closeAll", this._closeAllHandler)
+    document.removeEventListener("click", this._clickOutsideHandler)
   }
 
-  toggle(event) {
-    event.stopPropagation()
-    const menu = this.menuTarget
-    const arrow = this.hasArrowTarget ? this.arrowTarget : null
-    const isHidden = menu.classList.contains("hidden")
-
-    if (isHidden) {
-      menu.classList.remove("hidden")
-      requestAnimationFrame(() => {
-        menu.classList.remove("opacity-0", "scale-y-95")
-      })
-      if (arrow) arrow.classList.add("rotate-180")
+  toggle() {
+    const isOpen = this.menuTarget.classList.contains("scale-y-100")
+    window.dispatchEvent(new CustomEvent("dropdown:closeAll"))
+    if (isOpen) {
+      this.close()
     } else {
-      menu.classList.add("opacity-0", "scale-y-95")
-      setTimeout(() => {
-        menu.classList.add("hidden")
-      }, 200)
-      if (arrow) arrow.classList.remove("rotate-180")
+      this.open()
     }
   }
 
-  closeIfClickedOutside(e) {
-    if (!this.element.contains(e.target)) {
-      this.close()
+  open() {
+    this.menuTarget.classList.remove("hidden", "opacity-0", "scale-y-95")
+    this.menuTarget.classList.add("block", "opacity-100", "scale-y-100")
+
+    if (this.hasArrowTarget) {
+      this.arrowTarget.classList.add("rotate-180")
     }
   }
 
   close() {
-    const menu = this.menuTarget
-    const arrow = this.hasArrowTarget ? this.arrowTarget : null
-    menu.classList.add("opacity-0", "scale-y-95")
-    setTimeout(() => {
-      menu.classList.add("hidden")
-    }, 200)
-    if (arrow) arrow.classList.remove("rotate-180")
+    this.menuTarget.classList.remove("block", "opacity-100", "scale-y-100")
+    this.menuTarget.classList.add("hidden", "opacity-0", "scale-y-95")
+
+    if (this.hasArrowTarget) {
+      this.arrowTarget.classList.remove("rotate-180")
+    }
   }
 }

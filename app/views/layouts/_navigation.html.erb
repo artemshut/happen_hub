@@ -2,7 +2,7 @@
   <% if user_signed_in? %>
     <div class="flex space-x-6 items-center">
       <!-- Events Dropdown -->
-      <div class="relative" data-controller="dropdown">
+      <div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnClickOutside">
         <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-red-300">
           Events
           <% if current_user.pending_event_requests.any? %>
@@ -24,7 +24,7 @@
       </div>
 
       <!-- Groups Dropdown -->
-      <div class="relative" data-controller="dropdown">
+      <div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnClickOutside">
         <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-red-300">
           Groups
           <span data-dropdown-target="arrow" class="transition-transform duration-200">
@@ -41,7 +41,7 @@
       </div>
 
       <!-- Friends Dropdown -->
-      <div class="relative" data-controller="dropdown">
+      <div class="relative" data-controller="dropdown" data-action="click@window->dropdown#closeOnClickOutside">
         <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-red-300">
           Friends
           <% if current_user.pending_friend_requests.any? %>
@@ -64,7 +64,7 @@
     </div>
 
     <!-- Profile Dropdown -->
-    <div class="relative ml-4" data-controller="dropdown">
+    <div class="relative ml-4" data-controller="dropdown" data-action="click@window->dropdown#closeOnClickOutside">
       <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-red-300">
         <%= current_user.full_name %>
         <span data-dropdown-target="arrow" class="transition-transform duration-200">
