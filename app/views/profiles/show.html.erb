@@ -3,6 +3,11 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
       <h1 class="text-3xl font-extrabold text-gray-900">Your Profile</h1>
+      <% if current_user.avatar.attached? %>
+        <%= image_tag current_user.avatar.variant(resize_to_fill: [32, 32]), class: "rounded-full w-8 h-8" %>
+      <% else %>
+        <%= image_tag "default-avatar.png", class: "rounded-full w-8 h-8" %>
+      <% end %>
       <%= link_to "Edit Profile", edit_profile_path, class: "bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition" %>
     </div>
 

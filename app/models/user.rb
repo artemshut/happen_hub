@@ -3,6 +3,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: %i[google_oauth2]
 
+  has_one_attached :avatar
+  
   has_many :group_memberships, dependent: :destroy
   has_many :created_groups, class_name: "Group", foreign_key: "user_id", inverse_of: :creator
   has_many :groups, through: :group_memberships
