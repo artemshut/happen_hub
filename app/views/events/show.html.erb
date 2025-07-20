@@ -6,6 +6,10 @@
       <h1 class="text-3xl font-extrabold text-gray-900 mb-4"><%= @event.title %></h1>
     </div>
 
+    <% if @event.cover_image.attached? %>
+      <%= image_tag @event.cover_image.variant(resize_to_limit: [800, 600]) %>
+    <% end %>
+
     <!-- About Section -->
     <div class="bg-white shadow-md rounded-lg p-6">
       <h2 class="text-xl font-semibold mb-4">About</h2>

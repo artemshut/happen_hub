@@ -1,4 +1,6 @@
 class Event < ApplicationRecord
+  has_one_attached :cover_image
+  
   belongs_to :group, optional: true
   belongs_to :user
   has_many :rsvps, dependent: :destroy
