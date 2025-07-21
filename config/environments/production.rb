@@ -59,17 +59,12 @@ Rails.application.configure do
 
   # Set host to be used by links generated in mailer templates.
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: "yourdomain.com", protocol: "https" }
+  config.action_mailer.default_url_options = { host: "happenhub.com", protocol: "https" }
 
-  config.action_mailer.smtp_settings = {
-    address: "smtp.sendgrid.net",
-    port: 587,
-    domain: "yourdomain.com",
-    authentication: "plain",
-    enable_starttls_auto: true,
-    user_name: "apikey",
-    password: ENV["SENDGRID_API_KEY"]
+  config.action_mailer.delivery_method = :enveloop
+
+  config.action_mailer.enveloop_settings = { 
+    api_key: ENV['ENVELOOP_API_TOKEN']
   }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.

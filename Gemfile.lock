@@ -135,6 +135,8 @@ GEM
     dotenv (3.1.8)
     drb (2.2.3)
     ed25519 (1.4.0)
+    enveloop (0.2.0)
+      faraday
     erb (5.0.2)
     erubi (1.13.1)
     et-orbi (1.2.11)
@@ -484,6 +486,7 @@ DEPENDENCIES
   debug
   devise
   dockerfile-rails (>= 1.7)
+  enveloop
   fullcalendar-rails
   hotwire-rails
   image_processing (~> 1.2)
