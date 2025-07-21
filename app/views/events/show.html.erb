@@ -1,13 +1,20 @@
 <div class="container mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
   <!-- Left Column: Event Details (7/12) -->
   <div class="lg:col-span-7 space-y-8">
-    <!-- Event Title -->
-    <div>
-      <h1 class="text-3xl font-extrabold text-gray-900 mb-4"><%= @event.title %></h1>
-    </div>
-
     <% if @event.cover_image.attached? %>
-      <%= image_tag @event.cover_image.variant(resize_to_limit: [800, 600]) %>
+      <div class="relative rounded-xl overflow-hidden shadow-lg h-64">
+        <%= image_tag @event.cover_image.variant(resize_to_fill: [1200, 400]), class: "w-full h-full object-cover" %>
+        <div class="absolute inset-0 bg-black/40 flex items-end p-6">
+          <h1 class="text-white text-3xl font-bold"><%= @event.title %></h1>
+        </div>
+      </div>
+    <% else %>
+      <div class="relative rounded-xl overflow-hidden shadow-lg h-64 bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
+        <%= image_tag "default_event.jpg", class: "w-full h-full object-cover" %>
+        <div class="absolute inset-0 bg-black/40 flex items-end p-6">
+          <h1 class="text-white text-3xl font-bold"><%= @event.title %></h1>
+        </div>
+      </div>
     <% end %>
 
     <!-- About Section -->
