@@ -37,7 +37,7 @@ class Event < ApplicationRecord
   end
 
   def send_create_email_notification
-    EnveloopMailer.user_welcome_email(recipient: event.user).deliver_now
+    EnveloopMailer.user_welcome_email(event.user).deliver_now
   end
 
   def owned_by?(current_user)
