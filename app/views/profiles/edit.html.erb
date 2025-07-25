@@ -73,3 +73,20 @@
     </div>
   </div>
 </div>
+
+<%= form_with model: current_user, url: avatar_user_path(current_user), method: :patch, html: { data: { controller: "avatar-upload" } } do |f| %>
+  <div class="space-y-4">
+    <label class="block text-sm font-medium text-gray-700">Upload Avatar</label>
+    <input type="file"
+           accept="image/*"
+           data-avatar-upload-target="input"
+           data-action="change->avatar-upload#preview"
+           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"/>
+
+    <% if current_user.avatar.attached? %>
+      <%= image_tag current_user.avatar.variant(resize_to_limit: [200, 200]), class: "rounded-full w-32 h-32 object-cover", id: "current-avatar" %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render "shared/image_crop_modal", id: "avatar-cropper-modal" %>

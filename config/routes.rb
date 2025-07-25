@@ -14,6 +14,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :user, only: [] do
+      patch :avatar, to: "users#update_avatar"
+    end
+
     resources :groups do
       member do
         post :add_friend
