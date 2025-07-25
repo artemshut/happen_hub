@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "public_profiles/show"
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
@@ -49,6 +50,7 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # config/routes.rb
+  get '/u/:username', to: 'public_profiles#show', as: :public_profile
+  post '/u/:username/friend_request', to: 'public_profiles#add_friend', as: :send_friend_request
 end

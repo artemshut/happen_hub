@@ -38,6 +38,10 @@ gem 'fullcalendar-rails'
 gem 'sidekiq' # For background jobs
 gem 'enveloop'
 
+# For QR code generation
+gem 'rqrcode'
+gem 'chunky_png' # required by rqrcode
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 

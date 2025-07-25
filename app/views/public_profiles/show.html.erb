@@ -1,0 +1,32 @@
+<!-- app/views/public_profiles/show.html.erb -->
+
+<div class="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
+  <div class="text-center">
+    <% if @user.avatar.attached? %>
+      <%= image_tag @user.avatar.variant(resize_to_limit: [120, 120]), class: "rounded-full mx-auto" %>
+    <% else %>
+      <%= image_tag "blank_avatar.jpg", class: "rounded-full mx-auto" %>
+    <% end %>
+
+    <h1 class="text-2xl font-bold mt-4">@<%= @user.username %></h1>
+    <p class="text-gray-600"><%= @user.full_name %></p>
+  </div>
+
+  <% if current_user && current_user != @user %>
+    <% if @is_friend %>
+      <p class="text-green-500 text-center mt-4">You're already friends</p>
+    <% elsif @request_sent %>
+      <p class="text-yellow-500 text-center mt-4">Friend request sent</p>
+    <% else %>
+      <%= button_to "Add Friend", send_friend_request_path(@user.username),
+            method: :post,
+            class: "block mx-auto mt-6 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded" %>
+    <% end %>
+  <% end %>
+
+  <div class="mt-6 text-center">
+    <p class="text-sm text-gray-500 mb-2">Scan to share:</p>
+    <%= image_tag RQRCode::QRCode.new(public_profile_url(@user.username)).as_png(size: 200).to_data_url, alt: "QR code", class: "mx-auto" %>
+    <p class="mt-2 text-xs text-gray-400 break-all"><%= public_profile_url(@user.username) %></p>
+  </div>
+</div>

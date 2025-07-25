@@ -11,8 +11,6 @@ class Event < ApplicationRecord
 
   validates :title, :start_time, :end_time, presence: true
 
-  after_create :send_create_email_notification
-
   scope :upcoming, -> { where('start_time >= ?', Time.now) }
   scope :past, -> { where('start_time < ?', Time.now) }
 
@@ -34,10 +32,6 @@ class Event < ApplicationRecord
 
   def add_friend_with_rsvp(user, rsvp_status = 'pending')
     event_participations.create(user: user, rsvp_status: rsvp_status)
-  end
-
-  def send_create_email_notification
-    EnveloopMailer.user_welcome_email(self.user).deliver_now
   end
 
   def owned_by?(current_user)

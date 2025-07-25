@@ -28,6 +28,10 @@
         <p class="text-gray-600"><strong>Tag:</strong> <%= current_user.tag || "No tag available" %></p>
         <p class="text-gray-600"><strong>Member Since:</strong> <%= current_user.created_at.strftime('%B %d, %Y') %></p>
       </div>
+
+      <p class="text-sm text-gray-500">
+        Share your profile: <%= link_to public_profile_url(current_user.username), public_profile_url(current_user.username), class: "text-blue-500 underline" %>
+      </p>
     </div>
   </div>
 </div>
