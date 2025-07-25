@@ -30,16 +30,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def update_avatar
-    if params[:user][:cropped_avatar].present?
-      current_user.avatar.purge if current_user.avatar.attached?
-      current_user.avatar.attach(params[:user][:cropped_avatar])
-      redirect_to edit_user_registration_path, notice: "Avatar updated!"
-    else
-      redirect_to edit_user_registration_path, alert: "Please select an image."
-    end
-  end
-
   def search
     @users = if params[:q].present?
       User.where("tag ILIKE ?", "%#{params[:q]}%")

@@ -49,44 +49,37 @@
             <%= f.password_field :password_confirmation, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500" %>
           </div>
 
-          <div class="mb-4">
-            <%= f.label :avatar, "Profile Image", class: "block text-sm font-bold mb-2" %>
-            <%= f.file_field :avatar, class: "w-full border border-gray-300 px-4 py-2 rounded" %>
-
-            <% if @user.avatar.attached? %>
-              <div class="mt-2">
-                <%= image_tag @user.avatar.variant(resize_to_limit: [100, 100]), class: "rounded-full" %>
-              </div>
-            <% else %>
-              <div class="mt-2">
-                <%= image_tag 'blank_avatar.jpg', class: "rounded-full w-8 h-8" %>
-              </div>
-            <% end %>
-          </div>
-
           <div class="flex justify-end space-x-4 mt-8">
             <%= link_to "Cancel", profile_path, class: "text-gray-500 px-4 py-2 rounded-lg hover:underline" %>
             <%= f.submit "Save Changes", class: "bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600" %>
           </div>
         <% end %>
+
+        <!-- Avatar Upload Form -->
+        <div class="mt-10">
+          <%= form_with model: current_user,
+                        url: avatar_profile_path(current_user),
+                        method: :patch,
+                        html: { data: { controller: "avatar-upload" } } do |f| %>
+            <label class="block text-sm font-medium text-gray-700">Upload Avatar</label>
+            <input type="file"
+                  accept="image/*"
+                  data-avatar-upload-target="input"
+                  data-action="change->avatar-upload#preview"
+                  class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100" />
+
+            <% if current_user.avatar.attached? %>
+              <div class="mt-4">
+                <%= image_tag current_user.avatar.variant(resize_to_limit: [200, 200]),
+                              class: "rounded-full w-32 h-32 object-cover",
+                              id: "current-avatar" %>
+              </div>
+            <% end %>
+          <% end %>
+
+          <%= render "shared/image_crop_modal", id: "avatar-cropper-modal" %>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-<%= form_with model: current_user, url: avatar_user_path(current_user), method: :patch, html: { data: { controller: "avatar-upload" } } do |f| %>
-  <div class="space-y-4">
-    <label class="block text-sm font-medium text-gray-700">Upload Avatar</label>
-    <input type="file"
-           accept="image/*"
-           data-avatar-upload-target="input"
-           data-action="change->avatar-upload#preview"
-           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"/>
-
-    <% if current_user.avatar.attached? %>
-      <%= image_tag current_user.avatar.variant(resize_to_limit: [200, 200]), class: "rounded-full w-32 h-32 object-cover", id: "current-avatar" %>
-    <% end %>
-  </div>
-<% end %>
-
-<%= render "shared/image_crop_modal", id: "avatar-cropper-modal" %>

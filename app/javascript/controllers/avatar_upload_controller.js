@@ -1,36 +1,46 @@
+// app/javascript/controllers/avatar_upload_controller.js
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["input"]
 
   connect() {
-    // Listen for cropped blob from modal
-    window.addEventListener("avatar:cropped", this.uploadCropped.bind(this))
+    // 👇 This is the missing piece
+    window.addEventListener("avatar:cropped", this.upload.bind(this))
+  }
+
+
+  choose(event) {
+    event.preventDefault()
+    this.inputTarget.click()
   }
 
   preview() {
     const file = this.inputTarget.files[0]
     if (!file) return
 
-    const modal = document.getElementById("avatar-cropper-modal")
-    const imageTag = modal.querySelector("[data-image-cropper-target='preview']")
-    imageTag.src = URL.createObjectURL(file)
-    modal.dataset.originalFile = file
-    modal.classList.remove("hidden")
+    const reader = new FileReader()
+    reader.onload = () => {
+      const url = reader.result
+      const event = new CustomEvent("avatar:fileSelected", { detail: { url } })
+      window.dispatchEvent(event)
+    }
+    reader.readAsDataURL(file)
   }
 
-  uploadCropped(event) {
-    const blob = event.detail.blob
-    const form = this.element
+  upload(e) {
+    const { blob } = e.detail
+    if (!blob) return
 
-    const formData = new FormData(form)
-    formData.set("user[cropped_avatar]", blob, "avatar.jpg")
+    const formData = new FormData()
+    formData.append("user[cropped_avatar]", blob)
 
-    fetch(form.action, {
-      method: form.method,
-      body: formData
-    }).then(() => {
-      Turbo.visit(window.location.href)
-    })
+    fetch("avatar", {
+      method: "PATCH",
+      body: formData,
+      headers: {
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
+      }
+    }).then(() => window.location.reload())
   }
 }

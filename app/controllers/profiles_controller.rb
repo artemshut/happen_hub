@@ -26,6 +26,12 @@ class ProfilesController < ApplicationController
       render :edit, status: :unprocessable_entity
     end
   end
+
+  def avatar
+    current_user.avatar.purge if current_user.avatar.attached?
+    current_user.avatar.attach(params[:user][:cropped_avatar])
+    redirect_to edit_profile_path(current_user), notice: "Avatar updated"
+  end
   
 
   private
