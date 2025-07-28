@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Devise authentication
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: %i[google_oauth2]
+         :omniauthable, :confirmable, omniauth_providers: %i[google_oauth2]
 
   # ActiveStorage
   has_one_attached :avatar
@@ -43,7 +43,7 @@ class User < ApplicationRecord
   # ------------------------
   before_validation :assign_unique_tag, on: :create
   before_validation :generate_username, on: :create
-  after_create :send_welcome_email
+  after_create :send_confirmation_instructions, unless: -> { confirmed? }
 
   # ------------------------
   # Instance Methods
@@ -51,6 +51,17 @@ class User < ApplicationRecord
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+  
+
+  def send_confirmation_instructions
+    # generate token
+    self.confirmation_token = Devise.friendly_token
+    self.confirmation_sent_at = Time.current
+    save(validate: false)
+
+    # send email via Envelop
+    UserMailer.send_confirmation_instructions(self).deliver_now
   end
 
   def friends
@@ -108,16 +119,13 @@ class User < ApplicationRecord
   def self.search_by_tag(query)
     where("tag ILIKE ?", "%#{query}%")
   end
+  
 
   # ------------------------
   # Private Helpers
   # ------------------------
 
   private
-
-  def send_welcome_email
-    UserMailer.welcome_email(self).deliver_later
-  end
 
   def assign_unique_tag
     self.tag ||= "#{first_name[0..2].downcase}-#{last_name[0..2].downcase}-#{SecureRandom.hex(2)}"

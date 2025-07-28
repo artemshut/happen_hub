@@ -4,6 +4,10 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
+  devise_scope :user do
+    get '/users/confirmation', to: 'confirmations#show', as: :user_confirmation
+  end
+
   authenticated :user do
     get '/dashboard', to: 'users#dashboard', as: :dashboard
     get 'users/search', to: 'users#search', as: :search_users, defaults: { format: :turbo_stream }
