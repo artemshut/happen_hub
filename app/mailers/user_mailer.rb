@@ -5,7 +5,7 @@ class UserMailer < ApplicationMailer
     send_enveloop_message(
       template: 'user-welcome',
       to: user.email,
-      from: 'pryhazun@proton.me',
+      from: 'no-reply@happenhub.co',
       subject: 'Welcome to HappenHub',
       template_variables: {
         account_url: 'https://myapp.com',
