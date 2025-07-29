@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     @friend_activities = Activity.for_friends(current_user).recent
     @upcoming_events = current_user.upcoming_events
     @pending_invitations = current_user.event_participations.where(rsvp_status: :pending)
-    @total_events = current_user.events.count
+    @total_events = current_user.upcoming_events.count
     @total_groups = current_user.groups.count
     @total_friends = current_user.friends.count
   end

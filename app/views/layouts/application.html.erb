@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HappenHub</title>
+    <link rel="icon" type="image/png" href="<%= asset_path('icon_white.png') %>">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -31,9 +32,12 @@
     <!-- Header -->
     <header class="bg-brand text-white py-4 shadow-md">
       <div class="container mx-auto px-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold">
-          <%= link_to "HappenHub", dashboard_path, class: "hover:opacity-80 transition" %>
-        </h1>
+      <div class="flex items-center space-x-2 text-2xl font-bold">
+        <%= link_to dashboard_path, class: "flex items-center hover:opacity-80 transition" do %>
+          <%= image_tag "icon_white.png", alt: "HappenHub Icon", class: "w-8 h-8" %>
+          <span>HappenHub</span>
+        <% end %>
+      </div>
 
         <%= render "layouts/navigation" %>
       </div>

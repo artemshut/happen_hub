@@ -22,7 +22,6 @@ class UserMailer < ApplicationMailer
       from: 'no-reply@happenhub.co',
       subject: 'Confirm your HappenHub account',
       template_variables: {
-        host: 'happenhub.co',
         confirmation_url: Rails.application.routes.url_helpers.user_confirmation_url(confirmation_token: user.confirmation_token, host: "happenhub.co")
       }
     )
