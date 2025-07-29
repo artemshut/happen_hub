@@ -1,25 +1,28 @@
-<div id="invitation_status" class="rounded-lg p-4 text-sm">
+<div id="invitation_status" class="rounded-lg p-4 text-sm bg-white shadow-sm border border-gray-100">
   <% if event.event_participations.any? %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       <% event.event_participations.includes(:user).each do |participant| %>
         <% user = participant.user %>
-        <% status_class = case participant.rsvp_status
-            when 'accepted' then 'border-green-500'
-            when 'maybe' then 'border-yellow-500'
-            when 'declined' then 'border-red-500'
-            else 'border-gray-500'
+        <% status_tag = case participant.rsvp_status
+            when 'accepted' then 'Going'
+            when 'maybe' then 'Maybe'
+            when 'declined' then 'Not Going'
+            else 'Pending'
           end
         %>
 
-        <div class="flex items-center space-x-2 bg-gray-50 text-gray-900 font-semibold px-4 py-3 rounded-lg shadow-sm border-l-4 <%= status_class %>">
-          <span class="inline-block w-full"><%= user.full_name %></span>
-          <% if user == event.user %>
-            <span class="text-xs text-gray-500 ml-2">(Owner)</span>
-          <% end %>
+        <div class="flex items-center justify-between gap-3 px-4 py-3 rounded-md bg-gray-50 border border-gray-200">
+          <div class="text-gray-800 font-medium">
+            <%= user.full_name %>
+            <% if user == event.user %>
+              <span class="text-xs text-accent-red ml-1">(Owner)</span>
+            <% end %>
+          </div>
+          <span class="text-[11px] text-gray-400 tracking-wide uppercase font-semibold"><%= status_tag %></span>
         </div>
       <% end %>
     </div>
   <% else %>
-    <p class="text-gray-500 text-lg">No participants yet.</p>
+    <p class="text-gray-500 text-center text-sm">No participants yet.</p>
   <% end %>
 </div>

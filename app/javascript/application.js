@@ -21,36 +21,53 @@ document.addEventListener("turbo:load", () => {
 
   if (calendarEl) {
     const calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [FullCalendar.globalPlugins[7], FullCalendar.globalPlugins[6]],
+      plugins: [
+        FullCalendar.globalPlugins[7], // dayGridPlugin
+        FullCalendar.globalPlugins[6], // interactionPlugin
+      ],
       initialView: "dayGridMonth",
       headerToolbar: {
         left: "prev,next today",
         center: "title",
         right: "dayGridMonth,dayGridWeek,dayGridDay",
       },
-      events: "/api/events", // Replace with your API endpoint
+      events: "/api/events", // Your API endpoint
+
       editable: true,
       selectable: true,
-      eventColor: "#f56565", // Default event color (red-ish)
-      eventTextColor: "#ffffff", // White text for events
+      eventDisplay: "block",
+      dayMaxEventRows: true,
+
+      // General styling
+      eventColor: "#E34717", // fallback color
+      eventTextColor: "#ffffff",
+
       eventClick: function (info) {
-        window.location.href = info.event.url; // Redirect to the event's page
+        window.location.href = info.event.url;
       },
+
       eventDidMount: function (info) {
-        // Add custom tooltip or style
-        info.el.style.borderRadius = "8px"; // Rounded corners for events
-        info.el.style.padding = "2px 5px"; // Smaller padding
-        info.el.style.border = "0px"; // No border
-        info.el.style.fontSize = "0.75rem"; // Smaller text
-        info.el.style.fontWeight = "600"; // Bold text for events
-        info.el.style.backgroundColor = info.event.extendedProps.color;
+        const el = info.el;
+        el.style.backgroundColor = info.event.extendedProps.color || "#E34717"; // brand.DEFAULT fallback
+        el.style.border = "none";
+        el.style.borderRadius = "0.5rem";
+        el.style.padding = "4px 6px";
+        el.style.fontSize = "0.75rem";
+        el.style.fontWeight = "600";
+        el.classList.add(
+          "hover:scale-[1.02]",
+          "hover:shadow-md",
+          "transition-all",
+          "duration-150",
+          "ease-in-out"
+        );
       },
+
       dayCellDidMount: function (info) {
-        // Hover effect for day cells
-        info.el.classList.add("hover:bg-gray-100", "transition");
+        info.el.classList.add("hover:bg-neutral-100", "transition-colors", "duration-200");
       },
+
       dateClick: function (info) {
-        // Redirect to create an event
         window.location.href = `/events/new?start_date=${info.dateStr}`;
       },
     });
@@ -58,6 +75,7 @@ document.addEventListener("turbo:load", () => {
     calendar.render();
   }
 });
+
 
 
 document.addEventListener("turbo:load", function () {

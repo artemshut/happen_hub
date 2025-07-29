@@ -1,21 +1,27 @@
-<div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
-  <h1 class="text-3xl font-bold text-gray-900 mb-6">Edit Group</h1>
+<div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md animate-fade-in">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">
+    <%= @group.persisted? ? "Edit Group" : "New Group" %>
+  </h1>
 
   <%= form_with model: @group, local: true do |form| %>
     <!-- Group Name -->
     <div class="mb-4">
       <%= form.label :name, "Group Name", class: "block text-lg font-semibold mb-2" %>
-      <%= form.text_field :name, class: "w-full border border-gray-300 rounded-lg px-4 py-2" %>
+      <%= form.text_field :name,
+            class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent-red focus:border-accent-red transition" %>
     </div>
 
     <!-- Description -->
     <div class="mb-4">
       <%= form.label :description, "Description", class: "block text-lg font-semibold mb-2" %>
-      <%= form.text_area :description, class: "w-full border border-gray-300 rounded-lg px-4 py-2" %>
+      <%= form.text_area :description,
+            class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent-red focus:border-accent-red transition" %>
     </div>
 
+    <!-- Friends -->
     <div class="mt-6">
       <h3 class="text-lg font-medium text-gray-800 mb-2">Add Friends to Group</h3>
+
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <%= hidden_field_tag "group[member_ids][]", "" %>
 
@@ -23,7 +29,7 @@
           <div
             data-controller="friend-select"
             data-action="click->friend-select#toggle"
-            class="border border-gray-300 rounded-xl p-4 cursor-pointer transition-all bg-white hover:shadow-md"
+            class="border border-gray-300 rounded-xl p-4 cursor-pointer transition-all bg-gray-50 hover:shadow-md hover:border-accent-red peer-checked:ring-2 peer-checked:ring-accent-red"
             data-friend-select-target="box"
           >
             <input
@@ -35,15 +41,16 @@
               data-friend-select-target="input"
             >
             <p class="font-semibold text-gray-800"><%= friend.full_name %></p>
-            <p class="text-sm text-gray-500"><%= friend.tag %></p>
+            <p class="text-sm text-gray-500 font-mono">@<%= friend.tag %></p>
           </div>
         <% end %>
       </div>
     </div>
 
     <!-- Submit -->
-    <div class="mt-6">
-      <%= form.submit "Save", class: "bg-accent-red text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-red-600 w-full" %>
+    <div class="mt-8">
+      <%= form.submit "Save Group",
+            class: "bg-accent-red hover:bg-red-600 text-white px-6 py-3 rounded-lg text-lg font-bold w-full transition" %>
     </div>
   <% end %>
 </div>

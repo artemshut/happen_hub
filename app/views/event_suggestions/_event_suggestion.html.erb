@@ -1,37 +1,44 @@
 <%= turbo_frame_tag dom_id(suggestion) do %>
-  <div class="rounded-xl shadow-sm border border-gray-200 p-4 transition hover:shadow-md bg-white relative overflow-hidden">
-    <div class="mb-2 text-gray-600 text-xs flex justify-between">
-      <span>Suggested by <strong><%= suggestion.user.full_name %></strong></span>
+  <div class="rounded-2xl border border-gray-200 p-4 bg-white shadow-sm hover:shadow-md transition relative overflow-hidden">
+    <!-- Header Info -->
+    <div class="mb-3 text-xs text-gray-500 flex justify-between items-center">
+      <span>
+        Suggested by <span class="font-semibold text-gray-800"><%= suggestion.user.full_name %></span>
+      </span>
       <span class="font-mono"><%= time_ago_in_words(suggestion.created_at) %> ago</span>
     </div>
 
-    <div class="text-sm">
+    <!-- Time Info -->
+    <div class="text-sm space-y-1 text-gray-700">
       <p><strong>Start:</strong> <%= formatted_event_date(suggestion.suggested_start_time) %></p>
       <p><strong>End:</strong> <%= formatted_event_date(suggestion.suggested_end_time) %></p>
     </div>
 
+    <!-- Status Badge -->
     <div class="mt-3">
       <% case suggestion.status %>
       <% when "pending" %>
-        <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-full">Pending</span>
+        <span class="inline-block bg-yellow-100 text-yellow-700 text-xs font-semibold px-2 py-1 rounded-full">Pending</span>
       <% when "approved" %>
-        <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">Approved</span>
+        <span class="inline-block bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded-full">Approved</span>
       <% when "rejected" %>
-        <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full">Rejected</span>
+        <span class="inline-block bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">Rejected</span>
       <% end %>
     </div>
 
+    <!-- Action Buttons -->
     <% if suggestion.pending? && current_user == @event.user %>
       <div class="flex gap-2 mt-4">
         <turbo-frame id="<%= dom_id(suggestion) %>">
           <%= link_to "Accept", event_event_suggestion_path(@event, suggestion, status: "approved"),
-                class: "bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600 transition",
-                data: { turbo_frame: dom_id(suggestion) },
-                method: :patch %>
-          <%= link_to "Reject", event_event_suggestion_path(@event, suggestion, status: "rejected"),
-                class: "bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition",
                 method: :patch,
-                data: { turbo_frame: dom_id(suggestion) } %>
+                data: { turbo_frame: dom_id(suggestion) },
+                class: "bg-[#72bda3]/90 hover:bg-[#65a893] text-white px-4 py-2 rounded-lg text-sm font-medium transition" %>
+
+          <%= link_to "Reject", event_event_suggestion_path(@event, suggestion, status: "rejected"),
+                method: :patch,
+                data: { turbo_frame: dom_id(suggestion) },
+                class: "bg-[#e8715f]/90 hover:bg-[#d65e4c] text-white px-4 py-2 rounded-lg text-sm font-medium transition" %>
         </turbo-frame>
       </div>
     <% end %>

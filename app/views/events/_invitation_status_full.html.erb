@@ -1,85 +1,52 @@
-<div id="invitation_status" class="bg-white shadow-md rounded-lg p-6">
-  <h2 class="text-2xl font-semibold mb-6 text-gray-900">Participants</h2>
+<div id="invitation_status" class="bg-neutral-surface shadow-xl rounded-2xl p-6 border border-neutral-border animate-fadeIn">
+  <h2 class="text-2xl font-bold mb-6 text-gray-900">Participants</h2>
 
   <% if event.event_participations.any? %>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      
-      <!-- Going -->
-      <div>
-        <h3 class="text-lg font-bold text-green-700 mb-2">Going</h3>
-        <ul class="space-y-2">
-          <% event.event_participations.accepted.each do |participant| %>
-            <li class="flex items-center space-x-2 bg-gray-50 text-gray-900 font-semibold px-4 py-3 rounded-lg shadow-sm border-l-4 border-green-500">
-              <span class="inline-block w-full text-center"><%= participant.user.full_name %></span>
-              <% if participant.user == event.user %>
-                <span class="text-xs text-gray-500">(Owner)</span>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
 
-      <!-- Maybe -->
-      <div>
-        <h3 class="text-lg font-bold text-yellow-700 mb-2">Maybe</h3>
-        <ul class="space-y-2">
-          <% event.event_participations.maybe.each do |participant| %>
-            <li class="flex items-center space-x-2 bg-gray-50 text-gray-900 font-semibold px-4 py-3 rounded-lg shadow-sm border-l-4 border-yellow-500">
-              <span class="inline-block w-full text-center"><%= participant.user.full_name %></span>
-              <% if participant.user == event.user %>
-                <span class="text-xs text-gray-500">(Owner)</span>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
+      <% { 
+        accepted: "Going", 
+        maybe: "Maybe", 
+        declined: "Not Going", 
+        pending: "Pending" 
+      }.each do |status, label| %>
+        <div>
+          <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3"><%= label %></h3>
+          <ul class="space-y-2">
+            <% event.event_participations.public_send(status).each do |participant| %>
+              <li class="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-md border border-gray-200 shadow-sm">
+                <div class="text-gray-800 text-sm font-medium">
+                  <%= participant.user.full_name %>
+                  <% if participant.user == event.user %>
+                    <span class="ml-1 text-xs text-accent-red">(Owner)</span>
+                  <% end %>
+                </div>
+                <div class="text-xs text-gray-400 tracking-tight">
+                  <%= label %>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-      <!-- Not Attending -->
-      <div>
-        <h3 class="text-lg font-bold text-red-700 mb-2">Not Attending</h3>
-        <ul class="space-y-2">
-          <% event.event_participations.declined.each do |participant| %>
-            <li class="flex items-center space-x-2 bg-gray-50 text-gray-900 font-semibold px-4 py-3 rounded-lg shadow-sm border-l-4 border-red-500">
-              <span class="inline-block w-full text-center"><%= participant.user.full_name %></span>
-              <% if participant.user == event.user %>
-                <span class="text-xs text-gray-500">(Owner)</span>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-
-      <!-- Pending -->
-      <div>
-        <h3 class="text-lg font-bold text-gray-700 mb-2">Pending</h3>
-        <ul class="space-y-2">
-          <% event.event_participations.pending.each do |participant| %>
-            <li class="flex items-center space-x-2 bg-gray-50 text-gray-900 font-semibold px-4 py-3 rounded-lg shadow-sm border-l-4 border-gray-500">
-              <span class="inline-block w-full text-center"><%= participant.user.full_name %></span>
-              <% if participant.user == event.user %>
-                <span class="text-xs text-gray-500">(Owner)</span>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
     </div>
   <% else %>
-    <p class="text-gray-500 text-lg">No participants yet.</p>
+    <p class="text-gray-500 text-center text-lg">No participants yet.</p>
   <% end %>
 
   <!-- RSVP Action Buttons -->
-  <div class="mt-6 flex flex-wrap justify-center gap-4">
-    <%= button_to "✔ Accept", update_rsvp_event_path(event, status: "accepted"),
+  <div class="mt-10 flex flex-wrap justify-center gap-4">
+    <%= button_to "✔ Going", update_rsvp_event_path(event, status: "accepted"),
       method: :patch,
-      class: "bg-green-700 hover:bg-green-800 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition-all" %>
+      class: "bg-accent-red text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition" %>
 
     <%= button_to "🤔 Maybe", update_rsvp_event_path(event, status: "maybe"),
       method: :patch,
-      class: "bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition-all" %>
+      class: "border border-gray-300 text-gray-700 px-5 py-2 rounded-md text-sm font-medium hover:bg-gray-100 transition" %>
 
-    <%= button_to "✖ Decline", update_rsvp_event_path(event, status: "declined"),
+    <%= button_to "✖ Not Going", update_rsvp_event_path(event, status: "declined"),
       method: :patch,
-      class: "bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition-all" %>
+      class: "border border-gray-200 text-gray-400 px-5 py-2 rounded-md text-sm font-medium hover:text-gray-600 transition" %>
   </div>
 </div>

@@ -1,13 +1,19 @@
-<div class="max-w-4xl mx-auto px-6 py-8">
-  <h1 class="text-3xl font-bold mb-6">Your Events</h1>
+<div class="max-w-5xl mx-auto px-6 py-10">
+  <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Your Events</h1>
 
   <% if @events.any? %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <% @events.each do |event| %>
         <%= render 'event_card', event: event %>
       <% end %>
     </div>
   <% else %>
-    <p class="text-gray-700">You have no events at the moment. <%= link_to 'Create an Event', new_event_path, class: "text-accent-red hover:underline" %>.</p>
+    <div class="bg-white rounded-xl shadow-md p-6 text-center animate-fade-in">
+      <p class="text-gray-600 text-lg">
+        You don’t have any events yet.
+      </p>
+      <%= link_to 'Create an Event', new_event_path,
+            class: "mt-4 inline-block bg-accent-red text-white font-semibold px-6 py-2 rounded-lg hover:bg-red-600 shadow-sm transition" %>
+    </div>
   <% end %>
 </div>

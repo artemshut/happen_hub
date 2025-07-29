@@ -1,17 +1,17 @@
-<div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-4xl w-full bg-white rounded-lg shadow-lg p-8">
+<div class="min-h-screen bg-neutral-bg flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl w-full bg-neutral-surface rounded-2xl shadow-2xl p-10">
     <!-- Header -->
-    <div class="mb-8">
-      <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Edit Your Profile</h1>
-      <p class="text-gray-600">Keep your profile information up-to-date to make the most of your account.</p>
+    <div class="mb-10">
+      <h1 class="text-3xl font-extrabold text-neutral-text mb-2">Edit Your Profile</h1>
+      <p class="text-neutral-muted">Keep your profile information up-to-date to make the most of your account.</p>
     </div>
 
     <!-- Form -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
       <!-- Sidebar -->
       <div class="col-span-4">
-        <h2 class="text-lg font-semibold text-gray-700 mb-4">Profile Details</h2>
-        <p class="text-gray-600 mb-2">Update your personal information here. Fields left blank will not overwrite existing data.</p>
+        <h2 class="text-lg font-semibold text-neutral-text mb-4">Profile Details</h2>
+        <p class="text-neutral-muted mb-2">Update your personal information here. Fields left blank will not overwrite existing data.</p>
       </div>
 
       <!-- Form Section -->
@@ -19,54 +19,54 @@
         <%= form_with(model: @user, url: profile_path, local: true, html: { multipart: true }) do |f| %>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <%= f.label :first_name, "First Name", class: "block text-gray-700 font-medium mb-2" %>
-              <%= f.text_field :first_name, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500" %>
+              <%= f.label :first_name, "First Name", class: "block text-neutral-text font-medium mb-2" %>
+              <%= f.text_field :first_name, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
             </div>
 
             <div>
-              <%= f.label :last_name, "Last Name", class: "block text-gray-700 font-medium mb-2" %>
-              <%= f.text_field :last_name, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500" %>
+              <%= f.label :last_name, "Last Name", class: "block text-neutral-text font-medium mb-2" %>
+              <%= f.text_field :last_name, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
             </div>
 
             <div>
-              <%= f.label :email, "Email", class: "block text-gray-700 font-medium mb-2" %>
-              <%= f.email_field :email, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500" %>
+              <%= f.label :email, "Email", class: "block text-neutral-text font-medium mb-2" %>
+              <%= f.email_field :email, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
             </div>
 
             <div>
-              <%= f.label :birthday, "Birthday", class: "block text-gray-700 font-medium mb-2" %>
-              <%= f.text_field :birthday, class: "datepicker-date w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500" %>
+              <%= f.label :birthday, "Birthday", class: "block text-neutral-text font-medium mb-2" %>
+              <%= f.text_field :birthday, class: "datepicker-date w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
             </div>
           </div>
 
           <div class="mt-6">
-            <%= f.label :password, "New Password (leave blank to keep current)", class: "block text-gray-700 font-medium mb-2" %>
-            <%= f.password_field :password, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500" %>
+            <%= f.label :password, "New Password (leave blank to keep current)", class: "block text-neutral-text font-medium mb-2" %>
+            <%= f.password_field :password, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
           </div>
 
           <div class="mt-6">
-            <%= f.label :password_confirmation, "Confirm Password", class: "block text-gray-700 font-medium mb-2" %>
-            <%= f.password_field :password_confirmation, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500" %>
+            <%= f.label :password_confirmation, "Confirm Password", class: "block text-neutral-text font-medium mb-2" %>
+            <%= f.password_field :password_confirmation, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
           </div>
 
           <div class="flex justify-end space-x-4 mt-8">
-            <%= link_to "Cancel", profile_path, class: "text-gray-500 px-4 py-2 rounded-lg hover:underline" %>
-            <%= f.submit "Save Changes", class: "bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600" %>
+            <%= link_to "Cancel", profile_path, class: "text-neutral-muted px-4 py-2 rounded-lg hover:underline" %>
+            <%= f.submit "Save Changes", class: "bg-brand text-white px-6 py-2 rounded-lg hover:bg-brand-dark transition-all" %>
           </div>
         <% end %>
 
         <!-- Avatar Upload Form -->
-        <div class="mt-10">
+        <div class="mt-12">
           <%= form_with model: current_user,
                         url: avatar_profile_path(current_user),
                         method: :patch,
                         html: { data: { controller: "avatar-upload" } } do |f| %>
-            <label class="block text-sm font-medium text-gray-700">Upload Avatar</label>
+            <label class="block text-sm font-medium text-neutral-text">Upload Avatar</label>
             <input type="file"
                   accept="image/*"
                   data-avatar-upload-target="input"
                   data-action="change->avatar-upload#preview"
-                  class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100" />
+                  class="block w-full text-sm text-neutral-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-light/10 file:text-brand hover:file:bg-brand-light/20" />
 
             <% if current_user.avatar.attached? %>
               <div class="mt-4">

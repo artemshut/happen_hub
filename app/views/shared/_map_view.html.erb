@@ -1,10 +1,17 @@
-<div class="bg-white shadow-md rounded-lg p-6">
-  <h2 class="text-xl font-semibold mb-4">Event Location</h2>
-  <div class="prose prose-lg max-w-none mb-4">
-    <%= render_rich_text_with_embeds(@event.location) %>
-  </div>
+<!-- app/views/events/_map_view.html.erb -->
+<div class="bg-neutral-surface shadow-xl rounded-2xl p-6 border border-neutral-border animate-fadeIn">
+  <h2 class="text-2xl font-bold text-neutral-text mb-4">Event Location</h2>
+
+  <% if @event.location.present? %>
+    <div class="prose max-w-none mb-6 text-neutral-muted">
+      <%= render_rich_text_with_embeds(@event.location) %>
+    </div>
+  <% end %>
+
   <div data-controller="google-map"
-  data-google-map-lat-value="<%= @event.latitude %>"
-  data-google-map-lng-value="<%= @event.longitude %>"
-  style="height: 400px; width: 100%;"></div>
+       data-google-map-lat-value="<%= @event.latitude %>"
+       data-google-map-lng-value="<%= @event.longitude %>"
+       class="rounded-xl border border-neutral-border shadow-inner"
+       style="height: 400px; width: 100%;">
+  </div>
 </div>

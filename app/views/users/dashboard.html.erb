@@ -1,19 +1,19 @@
-<div class="container mx-auto px-4 py-6">
+<div class="container mx-auto px-4 py-6 animate-fade-in">
   <!-- Welcome Header -->
-  <h1 class="text-3xl font-bold text-gray-800 mb-6">Welcome to Your Dashboard</h1>
+  <h1 class="text-3xl font-bold text-gray-800 mb-8">Welcome to Your Dashboard</h1>
 
-  <div class="flex flex-wrap lg:flex-nowrap">
+  <div class="flex flex-wrap lg:flex-nowrap gap-6">
     <!-- Main Content -->
-    <div class="w-full lg:w-7/12 p-4">
+    <div class="w-full lg:w-7/12 space-y-8">
       <!-- Upcoming Events -->
-      <div class="mb-8">
-        <h2 class="text-xl font-bold mb-4">Upcoming Events</h2>
+      <div class="bg-white shadow-md rounded-xl p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Upcoming Events</h2>
         <% if @upcoming_events.any? %>
-          <ul>
+          <ul class="space-y-4">
             <% @upcoming_events.each do |event| %>
-              <li class="mb-4 border border-gray-200 rounded-lg shadow-md p-4">
-                <h3 class="text-lg font-semibold">
-                  <%= link_to event.title, event_path(event), class: "text-accent-red" %>
+              <li class="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition">
+                <h3 class="text-lg font-semibold text-accent-red">
+                  <%= link_to event.title, event_path(event), class: "hover:underline" %>
                 </h3>
                 <p class="text-sm text-gray-600">
                   <%= formatted_event_date(event.start_time) %>
@@ -23,24 +23,33 @@
             <% end %>
           </ul>
         <% else %>
-          <p class="text-gray-600">No upcoming events. <%= link_to "Create one", new_event_path, class: "text-accent-red" %>.</p>
+          <p class="text-gray-600">No upcoming events. <%= link_to "Create one", new_event_path, class: "text-accent-red hover:underline" %>.</p>
         <% end %>
       </div>
 
       <!-- Pending Invitations -->
-      <div class="mb-8">
-        <h2 class="text-xl font-bold mb-4">Pending Invitations</h2>
+      <div class="bg-white shadow-md rounded-xl p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Pending Invitations</h2>
         <% if @pending_invitations.any? %>
-          <ul>
+          <ul class="space-y-4">
             <% @pending_invitations.each do |invite| %>
-              <li class="mb-4 border border-gray-200 rounded-lg shadow-md p-4">
-                <p class="text-gray-700">
-                  <strong><%= invite.event.title %></strong> - <%= invite.event.start_time.strftime('%B %d, %Y') %>
+              <li class="border border-gray-200 rounded-lg p-4">
+                <p class="text-gray-700 font-medium">
+                  <%= invite.event.title %>
                 </p>
-                <div class="flex space-x-2 mt-2">
-                  <%= link_to "Accept", update_rsvp_event_path(invite.event, status: "accepted"), method: :patch, class: "bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600" %>
-                  <%= link_to "Maybe", update_rsvp_event_path(invite.event, status: "maybe"), method: :patch, class: "bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600" %>
-                  <%= link_to "Decline", update_rsvp_event_path(invite.event, status: "declined"), method: :delete, class: "bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" %>
+                <p class="text-sm text-gray-500">
+                  <%= invite.event.start_time.strftime('%B %d, %Y') %>
+                </p>
+                <div class="flex flex-wrap gap-2 mt-3">
+                  <%= link_to "✔ Accept", update_rsvp_event_path(invite.event, status: "accepted"),
+                      method: :patch,
+                      class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition" %>
+                  <%= link_to "🤔 Maybe", update_rsvp_event_path(invite.event, status: "maybe"),
+                      method: :patch,
+                      class: "bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition" %>
+                  <%= link_to "✖ Decline", update_rsvp_event_path(invite.event, status: "declined"),
+                      method: :delete,
+                      class: "bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition" %>
                 </div>
               </li>
             <% end %>
@@ -51,13 +60,14 @@
       </div>
 
       <!-- Friend Activity -->
-      <div class="mb-8">
-        <h2 class="text-xl font-bold mb-4">Friend Activity</h2>
+      <div class="bg-white shadow-md rounded-xl p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Friend Activity</h2>
         <% if @friend_activities.any? %>
-          <ul>
+          <ul class="space-y-3">
             <% @friend_activities.each do |activity| %>
-              <li class="mb-4 text-gray-700">
-                <%= activity.user.full_name %> - <%= time_ago_in_words(activity.created_at) %> ago
+              <li class="text-sm text-gray-700">
+                <span class="font-medium"><%= activity.user.full_name %></span>
+                <span class="text-gray-500">· <%= time_ago_in_words(activity.created_at) %> ago</span>
               </li>
             <% end %>
           </ul>
@@ -68,7 +78,7 @@
     </div>
 
     <!-- Sidebar -->
-    <div class="w-full lg:w-5/12 p-4">
+    <div class="w-full lg:w-5/12 space-y-8">
       <!-- Calendar -->
       <%= render 'shared/calendar' %>
 
@@ -76,9 +86,7 @@
       <%= render 'quick_actions' %>
 
       <!-- Stats -->
-      <div>
-        <%= render 'stats', total_events: @total_events, total_groups: @total_groups, total_friends: @total_friends %></div>
-      </div>
+      <%= render 'stats', total_events: @total_events, total_groups: @total_groups, total_friends: @total_friends %>
     </div>
   </div>
 </div>

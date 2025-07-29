@@ -13,10 +13,27 @@ module.exports = {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: '#ffffff',
+        brand: {
+          DEFAULT: '#E34717',        // primary
+          dark: '#C03D14',           // hover / pressed
+          light: '#F87549',          // subtle accents
+          soft: '#FEEAE5',           // background or faded states
+        },
         accent: {
-          red: '#ff4d4d',
-          black: '#333333',
+          red: '#E34717',
+          coral: '#FF744D',          // CTA accents or tags
+          error: '#D72638',          // error states
+          success: '#2ECC71',        // success states
+          info: '#227C9D',           // info links
+          danger: '#FFE4E6',
+          warning: '#FEF3C7',
+        },
+        neutral: {
+          text: '#1F2937',           // main text
+          muted: '#6B7280',          // muted labels
+          bg: '#FAFAFA',             // app background
+          surface: '#FFFFFF',        // cards/panels
+          border: '#E5E7EB',         // dividers, outlines
         },
       },
 

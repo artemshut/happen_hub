@@ -1,51 +1,52 @@
 <div class="min-h-[80vh] flex items-center justify-center px-4">
-  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-xs">
-    <h1 class="text-xl font-bold text-center text-gray-800 mb-6">Create Your Account</h1>
-    <%= form_with model: resource, url: registration_path(resource_name), local: true, class: "space-y-4" do |f| %>
+  <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md">
+    <h1 class="text-2xl font-extrabold text-center text-neutral-text mb-6">Create Your Account</h1>
+
+    <%= form_with model: resource, url: registration_path(resource_name), local: true, class: "space-y-5" do |f| %>
       <div>
-        <%= f.label :email, "Email Address", class: "block text-gray-700 font-medium mb-2" %>
-        <%= f.email_field :email, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-accent-red focus:border-accent-red" %>
+        <%= f.label :email, "Email Address", class: "block text-sm font-medium text-neutral-text mb-1" %>
+        <%= f.email_field :email, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring-brand focus:border-brand" %>
       </div>
 
       <div>
-        <%= f.label :username, class: "block font-bold text-sm" %>
-        <%= f.text_field :username, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-accent-red focus:border-accent-red" %>
+        <%= f.label :username, "Username", class: "block text-sm font-medium text-neutral-text mb-1" %>
+        <%= f.text_field :username, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring-brand focus:border-brand" %>
       </div>
 
       <div>
-        <%= f.label :first_name, class: "block text-gray-700 font-medium mb-2" %>
-        <%= f.text_field :first_name, required: true, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+        <%= f.label :first_name, "First Name", class: "block text-sm font-medium text-neutral-text mb-1" %>
+        <%= f.text_field :first_name, required: true, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring-brand focus:border-brand" %>
       </div>
 
       <div>
-        <%= f.label :last_name, class: "block text-gray-700 font-medium mb-2" %>
-        <%= f.text_field :last_name, required: true, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+        <%= f.label :last_name, "Last Name", class: "block text-sm font-medium text-neutral-text mb-1" %>
+        <%= f.text_field :last_name, required: true, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring-brand focus:border-brand" %>
       </div>
 
       <div>
-        <%= f.label :birthday, class: "block text-gray-700 font-medium mb-2" %>
-        <%= f.text_field :birthday, required: true, class: "datepicker-date w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
+        <%= f.label :birthday, "Birthday", class: "block text-sm font-medium text-neutral-text mb-1" %>
+        <%= f.text_field :birthday, required: true, class: "datepicker-date w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring-brand focus:border-brand" %>
       </div>
 
       <div>
-        <%= f.label :password, "Password", class: "block text-gray-700 font-medium mb-2" %>
-        <%= f.password_field :password, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-accent-red focus:border-accent-red" %>
+        <%= f.label :password, "Password", class: "block text-sm font-medium text-neutral-text mb-1" %>
+        <%= f.password_field :password, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring-brand focus:border-brand" %>
       </div>
 
       <div>
-        <%= f.label :password_confirmation, "Confirm Password", class: "block text-gray-700 font-medium mb-2" %>
-        <%= f.password_field :password_confirmation, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-accent-red focus:border-accent-red" %>
+        <%= f.label :password_confirmation, "Confirm Password", class: "block text-sm font-medium text-neutral-text mb-1" %>
+        <%= f.password_field :password_confirmation, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring-brand focus:border-brand" %>
       </div>
 
       <div>
-        <%= f.submit "Sign Up", class: "w-full bg-accent-red text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600" %>
+        <%= f.submit "Sign Up", class: "w-full bg-brand text-white font-bold py-2 px-4 rounded-lg hover:bg-brand-dark transition" %>
       </div>
     <% end %>
 
     <div class="mt-6 text-center">
-      <p class="text-sm text-gray-600">
+      <p class="text-sm text-neutral-muted">
         Already have an account?
-        <%= link_to "Log In", new_user_session_path, class: "text-accent-red hover:underline font-medium" %>
+        <%= link_to "Log In", new_user_session_path, class: "text-brand hover:underline font-semibold" %>
       </p>
     </div>
   </div>

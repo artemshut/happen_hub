@@ -113,31 +113,22 @@ ol > li::marker {
   }
 }
 
-/* Adjust Toolbar Layout */
-/* .fc-toolbar { */
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
-} */
-
-/* Smaller Navigation Buttons (Prev, Next, Today) */
-/* .fc-toolbar .fc-button-group {
-  display: flex;
-  gap: 6px;
-} */
-
-/* .fc-toolbar .fc-button {
-  background-color: #1e293b;
-  color: white;
-  border-radius: 5px;
-  padding: 5px 8px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-} */
+/* In app/assets/stylesheets/app.css or imported manually */
+.fc .fc-button {
+  @apply bg-brand text-white font-semibold py-1 px-3 rounded shadow-sm transition;
+}
+.fc .fc-button:hover {
+  @apply bg-brand-light;
+}
+.fc .fc-button.fc-button-active {
+  @apply bg-brand-dark;
+}
+.fc .fc-toolbar-title {
+  @apply text-xl font-bold text-neutral-text;
+}
+.fc .fc-daygrid-day-number {
+  @apply text-sm text-neutral-muted hover:underline;
+}
 
 .fc-toolbar .fc-button:hover {
   background-color: #334155;

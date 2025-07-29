@@ -1,81 +1,80 @@
-<div class="container mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-  <!-- Left Column: Event Details (7/12) -->
-  <div class="lg:col-span-7 space-y-8">
-    <% if @event.cover_image.attached? %>
-      <div class="relative rounded-xl overflow-hidden shadow-lg h-64">
-        <%= image_tag @event.cover_image.variant(resize_to_fill: [1200, 400]), class: "w-full h-full object-cover" %>
-        <div class="absolute inset-0 bg-black/40 flex items-end p-6">
-          <h1 class="text-white text-3xl font-bold"><%= @event.title %></h1>
-        </div>
-      </div>
-    <% else %>
-      <div class="relative rounded-xl overflow-hidden shadow-lg h-64 bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
-        <%= image_tag "default_event.jpg", class: "w-full h-full object-cover" %>
-        <div class="absolute inset-0 bg-black/40 flex items-end p-6">
-          <h1 class="text-white text-3xl font-bold"><%= @event.title %></h1>
-        </div>
-      </div>
-    <% end %>
+<div class="container mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
+  <!-- Left Column: Event Details -->
+  <div class="lg:col-span-7 space-y-10">
+    <!-- Cover Image -->
+    <div class="relative rounded-xl overflow-hidden shadow-lg h-64">
+      <% if @event.cover_image.attached? %>
+        <%= link_to event_path(@event) do %>
+          <%= image_tag @event.cover_image.variant(resize_to_fill: [1200, 400]), class: "w-full h-full object-cover" %>
+          <div class="absolute inset-0 bg-black/40 flex items-end p-6">
+            <h1 class="text-white text-3xl font-bold"><%= @event.title %></h1>
+          </div>
+        <% end %>
+      <% else %>
+        <%= link_to event_path(@event) do %>
+          <div class="relative h-full w-full bg-gradient-to-br from-accent-red to-pink-500">
+            <%= image_tag "default_event.jpg", class: "w-full h-full object-cover opacity-60" %>
+            <div class="absolute inset-0 bg-black/40 flex items-end p-6">
+              <h1 class="text-white text-3xl font-bold"><%= @event.title %></h1>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
 
     <!-- About Section -->
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="bg-white shadow-md rounded-xl p-6">
       <h2 class="text-xl font-semibold mb-4">About</h2>
       <div class="prose prose-lg max-w-none">
         <%= render_rich_text_with_embeds(@event.description) %>
       </div>
     </div>
 
-    <!-- Event Location Section -->
+    <!-- Map -->
     <%= render 'shared/map_view', event: @event %>
 
-    <!-- Participants Section -->
+    <!-- Participants -->
     <%= render partial: "events/invitation_status_full", locals: { event: @event } %>
 
-    <!-- Tabs Section -->
-    <div class="bg-white shadow-md rounded-lg">
+    <!-- Tabs: Friends, Suggestions, Groups -->
+    <div class="bg-white shadow-md rounded-xl overflow-hidden">
       <div class="border-b">
-        <nav class="flex space-x-4 px-6 py-4 text-sm">
+        <nav class="flex space-x-4 px-6 py-4 text-sm font-medium text-gray-700">
           <button data-tab="tab-friends" class="tab-btn active">Add Friends</button>
           <button data-tab="tab-suggestions" class="tab-btn">Suggestions</button>
           <button data-tab="tab-groups" class="tab-btn">Invite Groups</button>
         </nav>
       </div>
-
-      <!-- Tab Contents -->
-      <div class="p-6 text-sm">
-        <!-- Add Friends to Event -->
+      <div class="p-6 text-sm space-y-6">
         <%= render 'events/add_friends_to_event', event: @event %>
-
-        <!-- Event Suggestions -->
         <%= render 'events/event_suggestions', event: @event %>
-
-        <!-- Invite Groups -->
-        <% render 'events/group_invitations', event: @event %>
+        <%= render 'events/group_invitations', event: @event %>
       </div>
     </div>
 
-    <div class="mt-4 flex gap-2">
-      <%= link_to "Back to Events", events_path,
-            class: "bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded border" %>
+    <!-- Navigation Buttons -->
+    <div class="mt-4 flex flex-wrap gap-2">
+      <%= link_to "← Back to Events", events_path,
+          class: "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 px-4 py-2 rounded-lg shadow-sm transition" %>
 
       <% if @event.owned_by?(current_user) %>
-        <%= link_to "Edit Event", edit_event_path(@event),
-              class: "bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded" %>
+        <%= link_to "✎ Edit Event", edit_event_path(@event),
+            class: "bg-accent-red hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-md transition" %>
       <% end %>
     </div>
   </div>
 
-  <!-- Right Column: Calendar & Comments (5/12) -->
-  <div class="lg:col-span-5 space-y-8 sticky top-8">
-    <!-- Calendar -->
+  <!-- Right Column -->
+  <div class="lg:col-span-5 space-y-8 sticky top-10 h-fit">
     <%= render 'shared/calendar' %>
 
     <!-- Comments -->
-    <div class="bg-white shadow-md rounded-lg p-5">
+    <div class="bg-white shadow-md rounded-xl p-6">
       <h2 class="text-lg font-bold mb-4">Comments</h2>
       <%= turbo_frame_tag "event_#{@event.id}_comments" do %>
         <%= render partial: "comments/comment", collection: @event.comments %>
       <% end %>
+
       <%= turbo_frame_tag "event_comment_form" do %>
         <%= render "comments/form", event: @event, comment: @comment %>
       <% end %>

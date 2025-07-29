@@ -1,5 +1,6 @@
 <%= turbo_frame_tag dom_id(@comment) do %>
-  <div class="p-6 bg-slate-50 rounded-xl mb-6">
+  <div class="p-6 bg-neutral-bg rounded-2xl border border-neutral-border shadow-md mb-6 animate-fadeIn">
+    <h2 class="text-lg font-semibold text-neutral-text mb-4">Edit your comment</h2>
     <%= render "comments/form", comment: @comment, event: @event %>
   </div>
 <% end %>

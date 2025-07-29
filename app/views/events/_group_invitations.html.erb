@@ -1,10 +1,13 @@
 <div class="tab-content hidden" id="tab-groups">
-  <h2 class="text-xl font-bold mb-4">Invite Groups</h2>
-  <ul class="list-none space-y-2">
+  <h2 class="text-xl font-bold mb-4 text-gray-800">Invite Groups</h2>
+  <ul class="list-none space-y-3">
     <% current_user.created_groups.each do |group| %>
-      <li class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm">
-        <span><%= group.name %></span>
-        <%= button_to "Invite Group", invite_group_event_path(@event, group_id: group.id), method: :post, class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" %>
+      <li class="flex justify-between items-center bg-neutral-bg p-4 rounded-lg shadow-sm border border-neutral-border">
+        <span class="text-gray-700 font-medium"><%= group.name %></span>
+        <%= button_to "Invite Group",
+              invite_group_event_path(@event, group_id: group.id),
+              method: :post,
+              class: "bg-brand text-white px-4 py-2 rounded-md hover:bg-brand-dark transition" %>
       </li>
     <% end %>
   </ul>

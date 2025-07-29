@@ -1,4 +1,4 @@
-<div class="max-w-4xl mx-auto px-6 py-8">
+<div class="max-w-4xl mx-auto px-6 py-8 animate-fade-in">
   <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">Your Friends</h1>
 
   <!-- Friends List -->
@@ -8,22 +8,24 @@
     <% if @friends.any? %>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <% @friends.each do |friend| %>
-          <div class="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-sm">
+          <div class="flex items-center justify-between bg-gray-50 hover:bg-gray-100 p-4 rounded-lg shadow-sm transition">
             <div class="flex items-center">
-              <div class="bg-blue-500 text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold">
+              <div class="bg-accent-red text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold ring-2 ring-white shadow">
                 <%= friend.first_name[0].upcase %>
               </div>
               <div class="ml-3">
                 <p class="font-semibold text-gray-900"><%= friend.full_name %></p>
-                <p class="text-sm text-gray-600">(@<%= friend.tag %>)</p>
+                <p class="text-xs text-gray-500 font-mono">@<%= friend.tag %></p>
               </div>
             </div>
-            <%= link_to "Remove", friendship_path(friend), method: :delete, class: "text-red-500 hover:text-red-700 text-sm" %>
+            <%= link_to "Remove", friendship_path(friend), method: :delete, class: "text-rose-600 hover:text-rose-800 text-sm font-medium transition" %>
           </div>
         <% end %>
       </div>
     <% else %>
-      <p class="text-gray-500 text-center">You have no friends yet.</p>
+      <div class="text-center text-gray-500">
+        <p>You haven’t added any friends yet.</p>
+      </div>
     <% end %>
   </div>
 
@@ -34,13 +36,11 @@
     <% if @pending_requests.any? %>
       <div class="space-y-4">
         <% @pending_requests.each do |request| %>
-          <div class="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm">
+          <div class="flex justify-between items-center bg-gray-50 hover:bg-gray-100 p-4 rounded-lg shadow-sm transition">
             <div>
               <p class="font-semibold text-gray-900"><%= request.friend.full_name %></p>
-              <p class="text-sm text-gray-600">(@<%= request.friend.tag %>)</p>
-              <p class="text-xs text-gray-500 mt-1">
-                Status: <span class="text-yellow-600 font-semibold">Pending</span>
-              </p>
+              <p class="text-xs text-gray-500 font-mono">@<%= request.friend.tag %></p>
+              <p class="text-xs text-yellow-600 mt-1 font-semibold">Pending</p>
             </div>
           </div>
         <% end %>
@@ -57,14 +57,18 @@
     <% if @invitations.any? %>
       <div class="space-y-4">
         <% @invitations.each do |request| %>
-          <div class="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm">
+          <div class="flex justify-between items-center bg-gray-50 hover:bg-gray-100 p-4 rounded-lg shadow-sm transition">
             <div>
               <p class="font-semibold text-gray-900"><%= request.user.full_name %></p>
-              <p class="text-sm text-gray-600">(@<%= request.user.tag %>)</p>
+              <p class="text-xs text-gray-500 font-mono">@<%= request.user.tag %></p>
             </div>
             <div class="flex space-x-2">
-              <%= button_to "Accept", friendship_path(request, status: :accepted), method: :patch, class: "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm" %>
-              <%= button_to "Decline", friendship_path(request, status: :declined), method: :patch, class: "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm" %>
+              <%= button_to "Accept", friendship_path(request, status: :accepted),
+                    method: :patch,
+                    class: "bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-lg text-sm transition" %>
+              <%= button_to "Decline", friendship_path(request, status: :declined),
+                    method: :patch,
+                    class: "bg-rose-500 hover:bg-rose-600 text-white px-3 py-1 rounded-lg text-sm transition" %>
             </div>
           </div>
         <% end %>
@@ -74,10 +78,10 @@
     <% end %>
   </div>
 
+  <!-- Find Friends by Tag -->
   <div class="bg-white shadow-md rounded-lg p-6 mt-8">
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Find Friends by Tag</h2>
 
-    <!-- 🔍 Form sends GET to /users/search -->
     <form
       action="<%= search_users_path %>"
       method="get"
@@ -89,20 +93,18 @@
         type="text"
         name="q"
         placeholder="Search by tag..."
-        class="flex-grow border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent-red"
+        class="flex-grow border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent-red focus:border-accent-red transition"
       >
       <button
         type="submit"
-        class="bg-accent-red text-white px-4 py-2 rounded-lg hover:bg-red-600"
+        class="bg-accent-red text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
       >
         Search
       </button>
     </form>
 
-    <!-- 🧠 This is where results will appear -->
     <turbo-frame id="search_results" class="mt-6">
       <p class="text-sm text-gray-500">Enter a tag above to find a friend.</p>
     </turbo-frame>
   </div>
-
 </div>

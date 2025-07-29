@@ -12,12 +12,13 @@
 
     <!-- FullCalendar CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.15/index.global.min.css" rel="stylesheet" />
-    
+
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
 
+    <!-- Cropper CSS -->
     <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css", media: "all" %>
-    
+
     <!-- Flatpickr JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
     <!-- FullCalendar JS -->
@@ -26,16 +27,14 @@
 
     <%= javascript_importmap_tags %>
   </head>
-  <body class="flex flex-col min-h-screen bg-primary text-accent-black font-sans">
+  <body class="flex flex-col min-h-screen bg-neutral-bg text-neutral-text font-sans">
     <!-- Header -->
-    <header class="bg-accent-red text-white py-4 shadow-md">
+    <header class="bg-brand text-white py-4 shadow-md">
       <div class="container mx-auto px-4 flex justify-between items-center">
-        <!-- Logo -->
         <h1 class="text-2xl font-bold">
-          <%= link_to "HappenHub", dashboard_path %>
+          <%= link_to "HappenHub", dashboard_path, class: "hover:opacity-80 transition" %>
         </h1>
 
-        <!-- Navigation -->
         <%= render "layouts/navigation" %>
       </div>
     </header>
@@ -45,9 +44,9 @@
       <!-- Flash Messages -->
       <div id="flash-messages" class="fixed bottom-6 left-4 space-y-2 z-50">
         <% flash.each do |type, message| %>
-          <div class="flash-message <%= flash_class(type) %> p-4 rounded-lg shadow-md">
+          <div class="flash-message <%= flash_class(type) %> p-4 rounded-lg shadow-lg text-white bg-accent-coral">
             <%= message %>
-            <button class="close-flash ml-4 text-sm font-bold text-white hover:opacity-75" onclick="this.parentElement.style.display='none';">×</button>
+            <button class="ml-4 text-sm font-bold hover:opacity-75" onclick="this.parentElement.remove();">×</button>
           </div>
         <% end %>
       </div>
@@ -55,9 +54,9 @@
       <%= yield %>
     </main>
 
-    <!-- Footer (Fixed at Bottom) -->
-    <footer class="bg-gray-800 text-white text-center py-4 mt-auto">
-      <p>© <%= Date.today.year %> HappenHub. All rights reserved.</p>
+    <!-- Footer -->
+    <footer class="bg-neutral-muted text-white text-center py-4 mt-auto">
+      <p class="text-sm">© <%= Date.today.year %> HappenHub. All rights reserved.</p>
     </footer>
   </body>
 </html>
