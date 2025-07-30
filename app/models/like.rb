@@ -1,6 +1,6 @@
 class Like < ApplicationRecord
   ALLOWED_LIKEABLE_TYPES = {
-    "EventSuggestion" => EventSuggestion,
+    "EventSuggestion" => EventSuggestion
   }.freeze
 
   belongs_to :user
