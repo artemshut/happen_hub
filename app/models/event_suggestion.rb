@@ -8,7 +8,6 @@ class EventSuggestion < ApplicationRecord
 
   validates :event, :user, presence: true
   validates :status, presence: true, inclusion: { in: statuses.keys }
-  validates :event_id, uniqueness: { scope: :user_id, message: "You have already suggested time for this event" }
   validate :event_not_in_past
   validate :suggested_end_time_after_start_time
   validate :suggested_start_time_before_event_end_time

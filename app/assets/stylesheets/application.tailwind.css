@@ -204,22 +204,6 @@ ol > li::marker {
 }
 
 
-/* Ensure Leaflet map does NOT get overridden by other translate3d styles */
-.leaflet-pane,
-.leaflet-marker-pane,
-.leaflet-tile-pane {
-  will-change: transform;
-  transform: none !important; /* Forces Leaflet to ignore global translate3d */
-}
-
-/* Ensure the Leaflet container is properly positioned */
-.leaflet-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden; /* Prevents extra tiles */
-}
-
 button[data-action="click->friend-search#removeMember"] {
   background: transparent;
   border: none;
