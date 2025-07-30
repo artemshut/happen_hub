@@ -52,8 +52,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = Event.new(event_params)
-    @event.user = current_user
+    @event = current_user.owned_events.new(event_params)
     if @event.save!
       Activity.create(
         user: current_user,

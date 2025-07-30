@@ -2,7 +2,7 @@ class Event < ApplicationRecord
   has_one_attached :cover_image
 
   belongs_to :group, optional: true
-  belongs_to :user
+  belongs_to :user, class_name: "User", foreign_key: "user_id", inverse_of: :owned_events
   has_many :rsvps, dependent: :destroy
   has_many :event_participations, dependent: :destroy
   has_many :users, through: :event_participations

@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     @user = current_user
     @friends = @user.friends
     @groups = @user.groups
-    @events = @user.events
+    @events = @user.owned_events
     @friend_activities = Activity.for_friends(current_user).recent
     @upcoming_events = current_user.upcoming_events
     @pending_invitations = current_user.event_participations.where(rsvp_status: :pending)

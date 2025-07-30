@@ -1,6 +1,19 @@
-<nav class="text-white px-6 py-4 flex items-center justify-between z-50 relative">
-  <% if user_signed_in? %>
-    <div class="flex space-x-6 items-center">
+<nav class="text-white px-6 py-4 flex items-center justify-between z-50 relative lg:static" data-controller="mobile-nav">
+  <!-- Mobile Toggle Button -->
+  <button data-action="click->mobile-nav#toggle" class="lg:hidden focus:outline-none">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+
+  <!-- Overlay -->
+  <div data-mobile-nav-target="overlay"
+       data-action="click->mobile-nav#close"
+       class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden"></div>
+
+  <!-- Desktop Navigation -->
+  <div class="hidden lg:flex space-x-6 items-center">
+    <% if user_signed_in? %>
       <!-- Events Dropdown -->
       <div class="relative" data-controller="dropdown">
         <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-brand-light">
@@ -60,29 +73,45 @@
           <%= link_to "Friend Requests", friendships_path, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
         </div>
       </div>
-    </div>
 
-    <!-- Profile Dropdown -->
-    <div class="relative ml-4" data-controller="dropdown">
-      <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-brand-light">
-        <%= current_user.full_name %>
-        <span data-dropdown-target="arrow" class="transition-transform duration-200">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M19 9l-7 7-7-7" />
-          </svg>
-        </span>
-      </button>
-      <div data-dropdown-target="menu"
-           class="absolute right-0 mt-2 w-44 bg-brand-dark/95 text-white shadow-2xl backdrop-blur-lg rounded-2xl py-2 hidden opacity-0 scale-y-95 origin-top transition-all duration-200 z-50">
-        <%= link_to "Profile", profile_path, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
-        <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
+      <!-- Profile Dropdown -->
+      <div class="relative ml-4" data-controller="dropdown">
+        <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-brand-light">
+          <%= current_user.full_name %>
+          <span data-dropdown-target="arrow" class="transition-transform duration-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </button>
+        <div data-dropdown-target="menu"
+             class="absolute right-0 mt-2 w-44 bg-brand-dark/95 text-white shadow-2xl backdrop-blur-lg rounded-2xl py-2 hidden opacity-0 scale-y-95 origin-top transition-all duration-200 z-50">
+          <%= link_to "Profile", profile_path, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
+          <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
+        </div>
       </div>
-    </div>
-  <% else %>
-    <!-- Guest Navigation -->
-    <div class="ml-auto flex space-x-4">
-      <%= link_to "Login", new_user_session_path, class: "hover:text-brand-light transition-colors duration-150" %>
-      <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-brand-light transition-colors duration-150" %>
-    </div>
-  <% end %>
+    <% else %>
+      <!-- Guest Navigation -->
+      <div class="ml-auto flex space-x-4">
+        <%= link_to "Login", new_user_session_path, class: "hover:text-brand-light transition-colors duration-150" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-brand-light transition-colors duration-150" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Mobile Drawer Menu -->
+  <div data-mobile-nav-target="menu" class="fixed top-0 left-0 h-full w-64 bg-brand-dark z-50 transform -translate-x-full transition-transform duration-300 lg:hidden p-6 space-y-4">
+    <% if user_signed_in? %>
+      <%= link_to "My Events", events_path, class: "block text-white hover:text-brand-light" %>
+      <%= link_to "Create Event", new_event_path, class: "block text-white hover:text-brand-light" %>
+      <%= link_to "All Groups", groups_path, class: "block text-white hover:text-brand-light" %>
+      <%= link_to "Create Group", new_group_path, class: "block text-white hover:text-brand-light" %>
+      <%= link_to "Friend Requests", friendships_path, class: "block text-white hover:text-brand-light" %>
+      <%= link_to "Profile", profile_path, class: "block text-white hover:text-brand-light" %>
+      <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "block text-white hover:text-brand-light" %>
+    <% else %>
+      <%= link_to "Login", new_user_session_path, class: "block text-white hover:text-brand-light" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "block text-white hover:text-brand-light" %>
+    <% end %>
+  </div>
 </nav>

@@ -11,7 +11,9 @@ class User < ApplicationRecord
   has_many :group_memberships, dependent: :destroy
   has_many :created_groups, class_name: "Group", foreign_key: "user_id", inverse_of: :creator
   has_many :groups, through: :group_memberships
-  has_many :events, through: :groups
+  # has_many :events, through: :groups #why???
+  # has_many :events, through: :created_groups
+  has_many :owned_events, class_name: "Event", foreign_key: "user_id", inverse_of: :user
   has_many :likes, dependent: :destroy
 
   # Friendships (outgoing)
