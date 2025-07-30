@@ -15,6 +15,9 @@ class LikesController < ApplicationController
   private
 
   def find_likeable
-    params[:likeable_type].constantize.find(params[:likeable_id])
+    likeable_class = Like::ALLOWED_LIKEABLE_TYPES[params[:likeable_type]]
+    return head :bad_request unless likeable_class
+
+    likeable_class.find(params[:likeable_id])
   end
 end
