@@ -6,7 +6,6 @@ class EventSuggestionsController < ApplicationController
     @suggestion.user = current_user
     @suggestion.status = :pending
 
-    binding.pry
     if @suggestion.save
       respond_to do |format|
         format.turbo_stream
