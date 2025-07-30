@@ -9,10 +9,20 @@ class EventSuggestion < ApplicationRecord
   validates :event, :user, presence: true
   validates :status, presence: true, inclusion: { in: statuses.keys }
   validate :event_not_in_past
+  validate :suggestion_not_in_past
   validate :suggested_end_time_after_start_time
   validate :suggested_start_time_before_event_end_time
 
   private
+
+  def suggestion_not_in_past
+    if suggested_start_time && suggested_start_time < Time.current
+      errors.add(:suggested_start_time, "cannot be in the past")
+    end
+    if suggested_end_time && suggested_end_time < Time.current
+      errors.add(:suggested_end_time, "cannot be in the past")
+    end
+  end
 
   def event_not_in_past
     if event.start_time < Time.current
