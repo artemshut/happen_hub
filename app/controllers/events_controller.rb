@@ -1,5 +1,4 @@
 class EventsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group]
   before_action :authorize_user!, only: %i[edit update destroy add_friend update_rsvp invite_group]
 

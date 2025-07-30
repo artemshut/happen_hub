@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   get "public_profiles/show"
+  match "/500", to: "errors#server_error", via: :all
+
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
@@ -17,6 +19,8 @@ Rails.application.routes.draw do
     resource :profile do
       patch :avatar
     end
+
+    resources :likes, only: [:create, :destroy]
 
     resources :groups do
       member do

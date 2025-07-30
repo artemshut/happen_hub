@@ -1,7 +1,4 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!
-
-  # GET /dashboard
   def dashboard
     @user = current_user
     @friends = @user.friends

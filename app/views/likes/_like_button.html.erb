@@ -1,0 +1,18 @@
+<% liked = likeable.likes.exists?(user: current_user) %>
+<% like = current_user.likes.find_by(likeable: likeable) %>
+
+<%= turbo_frame_tag dom_id(likeable, :likes) do %>
+  <% if liked %>
+    <%= button_to like_path(like, likeable_type: likeable.class.name, likeable_id: likeable.id), method: :delete, form: { data: { turbo_method: :delete } },
+          class: "w-full border-t border-gray-200 bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2 flex justify-center items-center gap-2 transition" do %>
+      <i class="fa-notdog fa-solid fa-thumbs-up"></i>
+       <%= likeable.likes.count %>
+    <% end %>
+  <% else %>
+    <%= button_to likes_path, method: :post, params: { likeable_type: likeable.class.name, likeable_id: likeable.id },
+          class: "w-full border-t border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-600 font-medium py-2 flex justify-center items-center gap-2 transition" do %>
+      <i class="fa-notdog fa-solid fa-thumbs-up"></i> 
+      <%= likeable.likes.count %>
+    <% end %>
+  <% end %>
+<% end %>

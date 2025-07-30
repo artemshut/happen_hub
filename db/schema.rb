@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_28_151024) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_29_171446) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -137,6 +137,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_28_151024) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "likes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "likeable_type", null: false
+    t.bigint "likeable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["likeable_type", "likeable_id"], name: "index_likes_on_likeable"
+    t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
   create_table "rsvps", force: :cascade do |t|
     t.integer "event_id"
     t.integer "user_id"
@@ -180,4 +190,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_28_151024) do
   add_foreign_key "event_suggestions", "users"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
+  add_foreign_key "likes", "users"
 end

@@ -1,6 +1,5 @@
 class EventSuggestionsController < ApplicationController
   before_action :set_event
-  before_action :authenticate_user!
 
   def create
     @suggestion = @event.event_suggestions.build(suggestion_params)
