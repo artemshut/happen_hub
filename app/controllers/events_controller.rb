@@ -29,9 +29,9 @@ class EventsController < ApplicationController
   def add_friend
     friend = User.find(params[:friend_id])
     if @event.add_friend_with_rsvp(friend, params[:rsvp_status])
-      redirect_to event_path(@event), notice: 'Friend added to the event with RSVP.'
+      redirect_to event_path(@event), notice: "Friend added to the event with RSVP."
     else
-      redirect_to event_path(@event), alert: 'Unable to add friend to the event.'
+      redirect_to event_path(@event), alert: "Unable to add friend to the event."
     end
   end
 
@@ -60,7 +60,7 @@ class EventsController < ApplicationController
         target: @event,
         metadata: { event_name: @event.title }
       )
-      redirect_to event_path(@event), notice: 'Event created successfully.'
+      redirect_to event_path(@event), notice: "Event created successfully."
     else
       render :new, status: :unprocessable_entity
     end
@@ -73,7 +73,7 @@ class EventsController < ApplicationController
   # PATCH/PUT /groups/:group_id/events/:id
   def update
     if @event.update(event_params)
-      redirect_to event_path(@event), notice: 'Event updated successfully.'
+      redirect_to event_path(@event), notice: "Event updated successfully."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -82,7 +82,7 @@ class EventsController < ApplicationController
   # DELETE /groups/:group_id/events/:id
   def destroy
     @event.destroy
-    redirect_to events_path, notice: 'Event deleted successfully.'
+    redirect_to events_path, notice: "Event deleted successfully."
   end
 
   def invite_group
@@ -106,7 +106,7 @@ class EventsController < ApplicationController
 
   def authorize_user!
     unless @event.user == current_user || @event.users.include?(current_user) || Event.visible_for_friend(current_user).include?(@event)
-      redirect_to events_path, alert: 'Not authorized.' 
+      redirect_to events_path, alert: "Not authorized."
     end
   end
 

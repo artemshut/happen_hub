@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   def update
     @user = current_user
     if @user.update(user_params)
-      redirect_to dashboard_path, notice: 'Profile updated successfully.'
+      redirect_to dashboard_path, notice: "Profile updated successfully."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class UsersController < ApplicationController
     else
       []
     end
-  
+
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: turbo_stream.replace(
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
           locals: { users: @users }
         )
       end
-  
+
       format.html do
         # Fallback (needed if accessed directly)
         render partial: "users/search_results", locals: { users: @users }, layout: false

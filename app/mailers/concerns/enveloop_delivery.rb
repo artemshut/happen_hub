@@ -1,8 +1,8 @@
 # app/mailers/concerns/enveloop_delivery.rb
 module EnveloopDelivery
-  include Rails.application.routes.url_helpers 
+  include Rails.application.routes.url_helpers
 
-  
+
   private
 
   def enveloop

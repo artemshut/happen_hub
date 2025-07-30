@@ -11,8 +11,8 @@ class Event < ApplicationRecord
 
   validates :title, :start_time, :end_time, presence: true
 
-  scope :upcoming, -> { where('start_time >= ?', Time.now) }
-  scope :past, -> { where('start_time < ?', Time.now) }
+  scope :upcoming, -> { where("start_time >= ?", Time.now) }
+  scope :past, -> { where("start_time < ?", Time.now) }
 
   enum :visibility, { private: "private", friends: "friends" }, prefix: true
 
@@ -30,7 +30,7 @@ class Event < ApplicationRecord
       .where("friendships.user_id = :id OR friendships.friend_id = :id", id: user.id)
   end
 
-  def add_friend_with_rsvp(user, rsvp_status = 'pending')
+  def add_friend_with_rsvp(user, rsvp_status = "pending")
     event_participations.create(user: user, rsvp_status: rsvp_status)
   end
 

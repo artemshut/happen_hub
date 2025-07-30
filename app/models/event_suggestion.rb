@@ -4,7 +4,7 @@ class EventSuggestion < ApplicationRecord
   belongs_to :event
   belongs_to :user
 
-  enum :status, { pending: 'pending', approved: 'approved', rejected: 'rejected' }
+  enum :status, { pending: "pending", approved: "approved", rejected: "rejected" }
 
   validates :event, :user, presence: true
   validates :status, presence: true, inclusion: { in: statuses.keys }
@@ -14,8 +14,8 @@ class EventSuggestion < ApplicationRecord
   validate :suggested_start_time_before_event_end_time
   validate :user_not_participating
 
-  private 
-  
+  private
+
   def event_not_in_past
     if event.start_time < Time.current
       errors.add(:event, "cannot be suggested for an event in the past")

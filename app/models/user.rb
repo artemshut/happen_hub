@@ -55,7 +55,7 @@ class User < ApplicationRecord
   def full_name
     "#{first_name} #{last_name}"
   end
-  
+
 
   def send_confirmation_instructions
     # generate token
@@ -122,7 +122,7 @@ class User < ApplicationRecord
   def self.search_by_tag(query)
     where("tag ILIKE ?", "%#{query}%")
   end
-  
+
 
   # ------------------------
   # Private Helpers
@@ -137,7 +137,7 @@ class User < ApplicationRecord
   def generate_username
     return if username.present?
 
-    base = full_name.parameterize.underscore.gsub(/[^a-z0-9_]/, '')
+    base = full_name.parameterize.underscore.gsub(/[^a-z0-9_]/, "")
     candidate = base
     suffix = 1
 

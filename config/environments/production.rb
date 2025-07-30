@@ -67,8 +67,8 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :enveloop
 
-  config.action_mailer.enveloop_settings = { 
-    api_key: Rails.application.credentials.dig(:enveloop, :live_api_key),
+  config.action_mailer.enveloop_settings = {
+    api_key: Rails.application.credentials.dig(:enveloop, :live_api_key)
   }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.

@@ -2,7 +2,7 @@ class EventParticipation < ApplicationRecord
   belongs_to :event
   belongs_to :user
 
-  enum :rsvp_status, { accepted: "accepted" , declined: "declined", maybe: "maybe", pending: "pending" }, prefix: true
+  enum :rsvp_status, { accepted: "accepted", declined: "declined", maybe: "maybe", pending: "pending" }, prefix: true
 
   scope :accepted, -> { where(rsvp_status: :accepted) }
   scope :declined, -> { where(rsvp_status: :declined) }

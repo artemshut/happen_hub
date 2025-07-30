@@ -35,14 +35,14 @@ class EventSuggestionsController < ApplicationController
       head :unprocessable_entity
       return
     end
-  
+
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to @event, notice: "Updated" }
     end
   end
-  
-  
+
+
 
   private
 

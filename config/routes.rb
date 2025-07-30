@@ -3,12 +3,12 @@ Rails.application.routes.draw do
   match "/500", to: "errors#server_error", via: :all
 
   devise_for :users, controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks'
+    omniauth_callbacks: "users/omniauth_callbacks"
   }
 
   authenticated :user do
-    get '/dashboard', to: 'users#dashboard', as: :dashboard
-    get 'users/search', to: 'users#search', as: :search_users, defaults: { format: :turbo_stream }
+    get "/dashboard", to: "users#dashboard", as: :dashboard
+    get "users/search", to: "users#search", as: :search_users, defaults: { format: :turbo_stream }
 
     resources :friendships, only: %i[index create update destroy] do
       collection do
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       patch :avatar
     end
 
-    resources :likes, only: [:create, :destroy]
+    resources :likes, only: [ :create, :destroy ]
 
     resources :groups do
       member do
@@ -28,26 +28,26 @@ Rails.application.routes.draw do
       end
     end
 
-    resource :profile, only: [:show, :edit, :update]
+    resource :profile, only: [ :show, :edit, :update ]
 
     resources :events do
-      resources :event_suggestions, only: [:create, :update]
-      resources :comments, only: [:create, :update, :destroy, :edit]
-      
+      resources :event_suggestions, only: [ :create, :update ]
+      resources :comments, only: [ :create, :update, :destroy, :edit ]
+
       member do
         post :add_friend
         patch :update_rsvp
-        post 'invite_group/:group_id', to: 'events#invite_group', as: 'invite_group'
+        post "invite_group/:group_id", to: "events#invite_group", as: "invite_group"
       end
     end
   end
 
   namespace :api do
-    resources :events, only: [:index]
+    resources :events, only: [ :index ]
   end
 
   # Root route
-  root 'home#index'
+  root "home#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -59,6 +59,6 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # config/routes.rb
-  get '/u/:username', to: 'public_profiles#show', as: :public_profile
-  post '/u/:username/friend_request', to: 'public_profiles#add_friend', as: :send_friend_request
+  get "/u/:username", to: "public_profiles#show", as: :public_profile
+  post "/u/:username/friend_request", to: "public_profiles#add_friend", as: :send_friend_request
 end

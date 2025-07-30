@@ -22,7 +22,7 @@ class GroupsController < ApplicationController
   def create
     @group = current_user.created_groups.build(group_params)
     if @group.save
-      redirect_to @group, notice: 'Group created successfully.'
+      redirect_to @group, notice: "Group created successfully."
     else
       @friends = current_user.friends
       render :new, status: :unprocessable_entity
@@ -37,7 +37,7 @@ class GroupsController < ApplicationController
   # PATCH/PUT /groups/:id
   def update
     if @group.update(group_params)
-      redirect_to group_path(@group), notice: 'Group updated successfully.'
+      redirect_to group_path(@group), notice: "Group updated successfully."
     else
       @friends = current_user.friends
       render :edit, status: :unprocessable_entity
@@ -47,15 +47,15 @@ class GroupsController < ApplicationController
   # DELETE /groups/:id
   def destroy
     @group.destroy
-    redirect_to groups_path, notice: 'Group deleted successfully.'
+    redirect_to groups_path, notice: "Group deleted successfully."
   end
 
   def add_friend
     friend = User.find(params[:friend_id])
     if group.add_friend(friend)
-      redirect_to group_path(group), notice: 'Friend added to the group.'
+      redirect_to group_path(group), notice: "Friend added to the group."
     else
-      redirect_to group_path(group), alert: 'Unable to add friend to the group.'
+      redirect_to group_path(group), alert: "Unable to add friend to the group."
     end
   end
 
@@ -66,7 +66,7 @@ class GroupsController < ApplicationController
   end
 
   def authorize_user!
-    redirect_to groups_path, alert: 'Not authorized.' unless @group.creator == current_user
+    redirect_to groups_path, alert: "Not authorized." unless @group.creator == current_user
   end
 
   def group_params

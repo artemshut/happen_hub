@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
 
   def create
     @comment = @event.comments.new(comment_params.merge(user: current_user))
-  
+
     respond_to do |format|
       if @comment.save
         format.turbo_stream

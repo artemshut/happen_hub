@@ -28,19 +28,19 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
-gem 'hotwire-rails' # For Hotwire integration
-gem 'stimulus-rails' # For Stimulus integration
+gem "hotwire-rails" # For Hotwire integration
+gem "stimulus-rails" # For Stimulus integration
 gem "tailwindcss-rails", "~> 3.3.1"
-gem 'devise' # For user authentication
-gem 'omniauth'
-gem 'omniauth-google-oauth2' # For Google authentication
-gem 'fullcalendar-rails'
-gem 'sidekiq' # For background jobs
-gem 'enveloop'
+gem "devise" # For user authentication
+gem "omniauth"
+gem "omniauth-google-oauth2" # For Google authentication
+gem "fullcalendar-rails"
+gem "sidekiq" # For background jobs
+gem "enveloop"
 
 # For QR code generation
-gem 'rqrcode'
-gem 'chunky_png' # required by rqrcode
+gem "rqrcode"
+gem "chunky_png" # required by rqrcode
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -68,7 +68,7 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-  gem 'pry-rails'
+  gem "pry-rails"
   gem "letter_opener"
   gem "letter_opener_web"
 end
@@ -79,8 +79,8 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "dockerfile-rails", ">= 1.7", :group => :development
+gem "dockerfile-rails", ">= 1.7", group: :development
 
-gem "aws-sdk-s3", "~> 1.178", :require => false
+gem "aws-sdk-s3", "~> 1.178", require: false
 
 gem "redis", "~> 5.4"

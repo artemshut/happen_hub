@@ -3,7 +3,7 @@ namespace :users do
   desc "Generate usernames for users without one"
   task backfill_usernames: :environment do
     User.where(username: nil).find_each do |user|
-      base = user.full_name.to_s.parameterize.underscore.gsub(/[^a-z0-9_]/, '')
+      base = user.full_name.to_s.parameterize.underscore.gsub(/[^a-z0-9_]/, "")
       base = "user" if base.blank?
 
       candidate = base

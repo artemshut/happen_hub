@@ -3,12 +3,12 @@ class UserMailer < ApplicationMailer
 
   def welcome_email(user)
     send_enveloop_message(
-      template: 'user-welcome',
+      template: "user-welcome",
       to: user.email,
-      from: 'no-reply@happenhub.co',
-      subject: 'Welcome to HappenHub',
+      from: "no-reply@happenhub.co",
+      subject: "Welcome to HappenHub",
       template_variables: {
-        account_url: 'https://myapp.com',
+        account_url: "https://myapp.com",
         username: user.full_name,
         user_tag: user.tag
       }
@@ -17,10 +17,10 @@ class UserMailer < ApplicationMailer
 
   def send_confirmation_instructions(user)
     send_enveloop_message(
-      template: 'confirm-account',
+      template: "confirm-account",
       to: user.email,
-      from: 'no-reply@happenhub.co',
-      subject: 'Confirm your HappenHub account',
+      from: "no-reply@happenhub.co",
+      subject: "Confirm your HappenHub account",
       template_variables: {
         confirmation_url: Rails.application.routes.url_helpers.user_confirmation_url(confirmation_token: user.confirmation_token, host: "happenhub.co")
       }

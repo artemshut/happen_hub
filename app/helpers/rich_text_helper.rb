@@ -14,13 +14,13 @@ module RichTextHelper
   def youtube_embed_tag(video_id)
     <<~HTML
       <div class="youtube-embed">
-        <iframe 
-          width="560" 
-          height="315" 
-          src="https://www.youtube.com/embed/#{video_id}" 
-          title="YouTube video player" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        <iframe#{' '}
+          width="560"#{' '}
+          height="315"#{' '}
+          src="https://www.youtube.com/embed/#{video_id}"#{' '}
+          title="YouTube video player"#{' '}
+          frameborder="0"#{' '}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"#{' '}
           allowfullscreen>
         </iframe>
       </div>

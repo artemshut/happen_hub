@@ -1,5 +1,4 @@
 class LikesController < ApplicationController
-  
   def create
     @likeable = find_likeable
     current_user.likes.create(likeable: @likeable)

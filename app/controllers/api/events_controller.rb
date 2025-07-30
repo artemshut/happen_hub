@@ -1,11 +1,10 @@
 class Api::EventsController < ApplicationController
-
   def index
     events = Event.includes(:users)
     .where("events.user_id = ? OR event_participations.user_id = ?", current_user.id, current_user.id)
     .references(:event_participations)
     .select("events.*, event_participations.rsvp_status as status")
-    
+
     render json: events.map { |event| format_event(event) }
   end
 
@@ -27,10 +26,10 @@ class Api::EventsController < ApplicationController
 
   def event_color(status)
     case status
-    when 'accepted' then '#4caf50' # Green
-    when 'maybe' then '#ffeb3b' # Yellow
-    when 'declined' then '#f44336' # Red
-    else '#9e9e9e' # Gray for no status
+    when "accepted" then "#4caf50" # Green
+    when "maybe" then "#ffeb3b" # Yellow
+    when "declined" then "#f44336" # Red
+    else "#9e9e9e" # Gray for no status
     end
   end
 end
