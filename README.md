@@ -1,6 +1,6 @@
 # HappenHub
 
-[![CI](https://github.com/yourusername/happenhub/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/happenhub/actions)
+[![CI](https://github.com/artemshut/happenhub/actions/workflows/ci.yml/badge.svg)](https://github.com/artemshut/happenhub/actions)
 [![Deploy on Fly.io](https://img.shields.io/badge/deployed%20on-Fly.io-purple?logo=fly.io)](https://fly.io/apps/your-fly-app-name)
 [![Ruby](https://img.shields.io/badge/Ruby-3.2.2-red.svg?logo=ruby)](https://www.ruby-lang.org/en/)
 
