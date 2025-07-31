@@ -117,7 +117,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_124453) do
     t.string "visibility"
     t.float "latitude"
     t.float "longitude"
-    t.bigint "event_category_id", null: false
+    t.bigint "event_category_id"
     t.index ["event_category_id"], name: "index_events_on_event_category_id"
     t.index ["user_id"], name: "index_events_on_user_id"
   end
