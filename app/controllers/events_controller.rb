@@ -2,20 +2,26 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group]
   before_action :authorize_user!, only: %i[edit update destroy add_friend update_rsvp invite_group]
 
-  # GET /groups/:group_id/events
   def index
-    @events = Event.upcoming(current_user)
+    @event_categories = EventCategory.all
+    @events = Event.upcoming(current_user).includes(:event_category).order(start_time: :asc)
+    @events = @events.where(event_category_id: params[:category_id]) if params[:category_id].present?
+    @events = @events.order(start_time: :asc).page(params[:page])
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream { render partial: "events/list", locals: { events: @events } }
+    end
   end
 
-  # GET /groups/:group_id/events/:id
   def show
     @comment = Comment.new
     @friends = current_user.friends - @event.users
   end
 
-  # GET /groups/:group_id/events/new
   def new
     @event = Event.new
+    @event_categories = EventCategory.all
     @event.start_time = params[:date] if params[:date].present?
   end
 
@@ -61,6 +67,7 @@ class EventsController < ApplicationController
 
   # GET /groups/:group_id/events/:id/edit
   def edit
+    @event_categories = EventCategory.all
   end
 
   # PATCH/PUT /groups/:group_id/events/:id
@@ -104,6 +111,6 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:title, :description, :rsvp_status, :start_time, :end_time, :location, :latitude, :longitude, :visibility, :cover_image)
+    params.require(:event).permit(:title, :description, :rsvp_status, :start_time, :end_time, :location, :latitude, :longitude, :visibility, :cover_image, :event_category_id)
   end
 end

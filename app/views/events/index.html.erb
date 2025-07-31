@@ -1,19 +1,25 @@
-<div class="max-w-5xl mx-auto px-6 py-10">
-  <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Your Events</h1>
+<turbo-frame id="events_list">
+  <!-- Filters -->
+  <div class="flex flex-wrap gap-2 mb-6">
+    <% selected_category_id = params[:category_id].presence&.to_i %>
 
-  <% if @events.any? %>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <% @events.each do |event| %>
-        <%= render 'event_card', event: event %>
+    <%= link_to events_path,
+                data: { turbo_frame: "events_list" },
+                class: "px-3 py-1 text-sm rounded-full shadow-sm transition
+                       #{selected_category_id.nil? ? 'bg-accent-red text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}" do %>
+      All
+    <% end %>
+
+    <% @event_categories.each do |category| %>
+      <%= link_to events_path(category_id: category.id),
+                  data: { turbo_frame: "events_list" },
+                  class: "px-3 py-1 text-sm rounded-full shadow-sm transition
+                         #{selected_category_id == category.id ? 'bg-accent-red text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}" do %>
+        <%= "#{category.emoji} #{category.name}" %>
       <% end %>
-    </div>
-  <% else %>
-    <div class="bg-white rounded-xl shadow-md p-6 text-center animate-fade-in">
-      <p class="text-gray-600 text-lg">
-        You don’t have any events yet.
-      </p>
-      <%= link_to 'Create an Event', new_event_path,
-            class: "mt-4 inline-block bg-accent-red text-white font-semibold px-6 py-2 rounded-lg hover:bg-red-600 shadow-sm transition" %>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
+
+  <!-- Events List -->
+  <%= render partial: "events/events_list", locals: { events: @events } %>
+</turbo-frame>

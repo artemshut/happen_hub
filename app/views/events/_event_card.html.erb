@@ -1,5 +1,5 @@
 <div class="border border-gray-200 rounded-lg shadow-sm bg-white overflow-hidden hover:shadow-md transition duration-200">
-  <%= link_to event_path(event), class: "block" do %>
+  <%= link_to event_path(event), data: { turbo: false }, class: "block" do %>
     <% if event.cover_image.attached? %>
       <%= image_tag event.cover_image.variant(resize_to_fill: [600, 200]), class: "w-full h-48 object-cover" %>
     <% else %>
@@ -9,18 +9,18 @@
 
   <div class="p-4">
     <h2 class="text-xl font-semibold text-accent-red mb-1">
-      <%= link_to event.title, event_path(event), class: "hover:underline" %>
+      <%= link_to event.title, event_path(event), data: { turbo: false }, class: "hover:underline" %>
     </h2>
 
     <p class="text-gray-600 text-sm"><strong>Date:</strong> <%= formatted_event_date(event.start_time) %></p>
     <p class="text-gray-600 text-sm mb-4"><strong>Location:</strong> <%= event.location %></p>
 
     <div class="flex gap-2 flex-wrap">
-      <%= link_to "View Details", event_path(event),
+      <%= link_to "View Details", event_path(event), data: { turbo: false },
             class: "bg-sky-100 text-sky-700 hover:bg-sky-200 px-4 py-2 rounded-lg text-sm font-semibold transition" %>
 
       <% if event.owned_by?(current_user) %>
-        <%= link_to "Edit", edit_event_path(event),
+        <%= link_to "Edit", edit_event_path(event), data: { turbo: false },
               class: "bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition" %>
       <% end %>
     </div>

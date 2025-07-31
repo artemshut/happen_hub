@@ -2,12 +2,14 @@ class Event < ApplicationRecord
   has_one_attached :cover_image
 
   belongs_to :group, optional: true
+  belongs_to :event_category
   belongs_to :user, class_name: "User", foreign_key: "user_id", inverse_of: :owned_events
-  has_many :rsvps, dependent: :destroy
   has_many :event_participations, dependent: :destroy
   has_many :users, through: :event_participations
   has_many :event_suggestions, dependent: :destroy
   has_many :comments, dependent: :destroy
+
+  before_validation :assign_default_category
 
   validates :title, :start_time, :end_time, presence: true
 
@@ -31,10 +33,10 @@ class Event < ApplicationRecord
   end
 
   def self.upcoming(user)
-    own_or_participating = left_joins(:event_participations).where("event_participations.user_id = ? OR events.user_id = ?", user.id, user.id)
-    friends_visible = visible_for_friend(user)
+    own_or_participating = left_joins(:event_participations).where("event_participations.user_id = ? OR events.user_id = ?", user.id, user.id).to_sql
+    friends_visible = visible_for_friend(user).to_sql
 
-    (own_or_participating + friends_visible).uniq
+    Event.from("(#{own_or_participating} UNION #{friends_visible}) AS events")
   end
 
   def add_friend_with_rsvp(user, rsvp_status = "pending")
@@ -43,5 +45,11 @@ class Event < ApplicationRecord
 
   def owned_by?(current_user)
     user == current_user
+  end
+
+  private
+
+  def assign_default_category
+    self.event_category ||= EventCategory.find_by(name: "Other") || EventCategory.create(name: "Other", emoji: "📅", description: "General events")
   end
 end

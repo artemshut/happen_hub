@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_29_171446) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_31_124453) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -74,6 +74,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_171446) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "event_categories", force: :cascade do |t|
+    t.string "name"
+    t.string "emoji"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "event_participations", force: :cascade do |t|
     t.bigint "event_id", null: false
     t.bigint "user_id", null: false
@@ -109,6 +117,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_171446) do
     t.string "visibility"
     t.float "latitude"
     t.float "longitude"
+    t.bigint "event_category_id", null: false
+    t.index ["event_category_id"], name: "index_events_on_event_category_id"
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
@@ -188,6 +198,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_29_171446) do
   add_foreign_key "event_participations", "users"
   add_foreign_key "event_suggestions", "events"
   add_foreign_key "event_suggestions", "users"
+  add_foreign_key "events", "event_categories"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
   add_foreign_key "likes", "users"
