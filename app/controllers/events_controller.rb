@@ -4,14 +4,7 @@ class EventsController < ApplicationController
 
   # GET /groups/:group_id/events
   def index
-    # Events the user owns or participates in
-    own_or_participating = Event.left_joins(:event_participations)
-                                .where("event_participations.user_id = ? OR events.user_id = ?", current_user.id, current_user.id)
-
-    # Events visible to the user's friends
-    friends_visible = Event.visible_for_friend(current_user)
-
-    @events = (own_or_participating + friends_visible).uniq
+    @events = Event.upcoming(current_user)
   end
 
   # GET /groups/:group_id/events/:id

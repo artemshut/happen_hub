@@ -1,23 +1,24 @@
+<!-- app/views/users/_quick_actions.html.erb -->
 <div class="mb-10 bg-white p-6 rounded-xl shadow-sm animate-fade-in">
   <h2 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
 
-  <div class="flex flex-col space-y-4">
+  <div class="flex flex-col space-y-4" data-controller="availability">
     <%= link_to new_event_path,
           class: "bg-accent-red text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-red-600 transition shadow-sm" do %>
-      <!-- <i class="lucide lucide-calendar-plus mr-2"></i> -->
       Create Event
     <% end %>
 
     <%= link_to new_group_path,
           class: "bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition shadow-sm" do %>
-      <!-- <i class="lucide lucide-users mr-2"></i> -->
       Create Group
     <% end %>
 
-    <%= link_to friendships_path,
-          class: "bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-600 transition shadow-sm" do %>
-      <!-- <i class="lucide lucide-check-circle mr-2"></i> -->
+    <button
+      type="button"
+      data-action="click->availability#open"
+      class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-blue-600 transition shadow-sm"
+    >
       Check Availability
-    <% end %>
+    </button>
   </div>
 </div>

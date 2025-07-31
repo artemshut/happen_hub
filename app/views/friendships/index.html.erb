@@ -8,9 +8,14 @@
         <% @friends.each do |friend| %>
           <div class="flex items-center justify-between bg-gray-50 hover:bg-gray-100 p-4 rounded-lg shadow-sm transition">
             <div class="flex items-center">
-              <div class="bg-accent-red text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold ring-2 ring-white shadow">
-                <%= friend.first_name[0].upcase %>
-              </div>
+              <% if friend.avatar.attached? %>
+                <%= image_tag friend.avatar.variant(resize_to_fill: [40, 40]),
+                      class: "w-10 h-10 rounded-full object-cover ring-2 ring-white shadow" %>
+              <% else %>
+                <div class="bg-accent-red text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold ring-2 ring-white shadow">
+                  <%= friend.first_name[0].upcase %>
+                </div>
+              <% end %>
               <div class="ml-3">
                 <p class="font-semibold text-gray-900"><%= friend.full_name %></p>
                 <p class="text-xs text-gray-500 font-mono">@<%= friend.tag %></p>

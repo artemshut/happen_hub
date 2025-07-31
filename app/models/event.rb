@@ -11,7 +11,7 @@ class Event < ApplicationRecord
 
   validates :title, :start_time, :end_time, presence: true
 
-  scope :upcoming, -> { where("start_time >= ?", Time.now) }
+  # scope :upcoming, -> { where("start_time >= ?", Time.now) }
   scope :past, -> { where("start_time < ?", Time.now) }
 
   enum :visibility, { private: "private", friends: "friends" }, prefix: true
@@ -28,6 +28,13 @@ class Event < ApplicationRecord
     where(visibility: "friends")
       .joins("INNER JOIN friendships ON (friendships.user_id = events.user_id OR friendships.friend_id = events.user_id)")
       .where("friendships.user_id = :id OR friendships.friend_id = :id", id: user.id)
+  end
+
+  def self.upcoming(user)
+    own_or_participating = left_joins(:event_participations).where("event_participations.user_id = ? OR events.user_id = ?", user.id, user.id)
+    friends_visible = visible_for_friend(user)
+
+    (own_or_participating + friends_visible).uniq
   end
 
   def add_friend_with_rsvp(user, rsvp_status = "pending")

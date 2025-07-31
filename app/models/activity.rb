@@ -1,4 +1,7 @@
 class Activity < ApplicationRecord
+  ACTIVITIES = {
+    created_event: "Event Created",
+  }
   belongs_to :user
   belongs_to :target, polymorphic: true, optional: true
 
