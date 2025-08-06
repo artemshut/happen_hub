@@ -26,4 +26,33 @@ class UserMailer < ApplicationMailer
       }
     )
   end
+
+  def send_event_participation_notification(user, event)
+    send_enveloop_message(
+      template: "participation-notification",
+      to: user.email,
+      from: "no-reply@happenhub.co",
+      subject: "You are invited to an event",
+      template_variables: {
+        event_url: Rails.application.routes.url_helpers.event_url(event, host: "happenhub.co"),
+        event_name: event.title,
+        event_date: event.start_time.strftime("%B %d, %Y at %I:%M %p"),
+        user_name: user.full_name,
+      }
+    )
+  end
+
+  def send_friend_request_notification(friend, user)
+    send_enveloop_message(
+      template: "friend-request",
+      to: friend.email,
+      from: "no-reply@happenhub.co",
+      subject: "Friend Request from #{user.full_name}",
+      template_variables: {
+        friendships_url: Rails.application.routes.url_helpers.friendships_url(host: "happenhub.co"),
+        friend_name: friend.full_name,
+        user_name: user.full_name,
+      }
+    )
+  end
 end

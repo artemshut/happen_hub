@@ -10,4 +10,13 @@ class EventParticipation < ApplicationRecord
   scope :pending, -> { where(rsvp_status: :pending) }
 
   validates :rsvp_status, presence: true
+
+  after_create :notify_invitee
+
+  def notify_invitee
+    return if rsvp_status_declined?
+
+    # Notify the user about the event participation
+    UserMailer.send_event_participation_notification(user, event).deliver_now
+  end
 end
