@@ -1,4 +1,4 @@
-class PagesController < ApplicationController
+class PagesController < ActionController::Base
   def accept_cookies
     cookies[:consent_given] = { value: "1", expires: 1.year.from_now }
     redirect_back fallback_location: root_path

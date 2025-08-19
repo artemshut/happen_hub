@@ -1,3 +1,5 @@
+require "open-uri"
+
 class User < ApplicationRecord
   # Devise authentication
   devise :database_authenticatable, :registerable,
@@ -65,6 +67,11 @@ class User < ApplicationRecord
     user.uid = auth.uid
     user.first_name ||= auth.info.first_name
     user.last_name ||= auth.info.last_name
+    if auth.info.image.present?
+      # Download and attach profile picture
+      downloaded_image = URI.open(auth.info.image)
+      user.avatar.attach(io: downloaded_image, filename: "avatar-#{user.email}.jpg")
+    end
     user.password = Devise.friendly_token[0, 20] if user.encrypted_password.blank?
     user.skip_confirmation! if user.respond_to?(:skip_confirmation)
     user.save!
