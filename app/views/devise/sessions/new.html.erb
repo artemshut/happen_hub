@@ -32,5 +32,12 @@
         <%= link_to "Sign Up", new_user_registration_path, class: "text-brand hover:underline font-semibold" %>
       </p>
     </div>
+
+    <div class="mt-6 text-center">
+      <p class="text-sm text-neutral-muted">
+      <%= button_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: 'false' },
+      class: "btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" %>
+      </p>
+    </div>
   </div>
 </div>

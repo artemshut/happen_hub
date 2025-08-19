@@ -38,6 +38,7 @@ gem "omniauth-google-oauth2" # For Google authentication
 gem "fullcalendar-rails"
 gem "sidekiq" # For background jobs
 gem "enveloop"
+gem "omniauth-rails_csrf_protection"
 
 # For QR code generation
 gem "rqrcode"

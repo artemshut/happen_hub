@@ -1,17 +1,19 @@
-class Users::OmniauthCallbacksController < ApplicationController
+class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def google_oauth2
     @user = User.from_omniauth(request.env["omniauth.auth"])
 
     if @user.persisted?
+      @user.skip_confirmation_notification!
+      @user.update(confirmed_at: Time.current) if @user.respond_to?(:confirmed_at) && @user.confirmed_at.nil?
+      flash[:notice] = "Signed in successfully via Google."
       sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :success, kind: "Google") if is_navigational_format?
     else
-      session["devise.google_data"] = request.env["omniauth.auth"].except("extra")
-      redirect_to new_user_registration_url, alert: "Error authenticating with Google."
+      session["devise.google_data"] = request.env["omniauth.auth"].except(:extra)
+      redirect_to new_user_registration_url, alert: "Google sign-in failed."
     end
   end
 
   def failure
-    redirect_to root_path
+    redirect_to root_path, alert: "Google sign-in failed."
   end
 end

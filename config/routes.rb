@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   match "/500", to: "errors#server_error", via: :all
   post "accept-cookies", to: "pages#accept_cookies"
   get "privacy-policy", to: "pages#privacy_policy", as: :privacy_policy
+  get "terms-of-service", to: "pages#terms_of_service", as: :terms_of_service
   
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks"

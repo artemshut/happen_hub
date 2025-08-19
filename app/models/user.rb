@@ -44,7 +44,9 @@ class User < ApplicationRecord
   # ------------------------
   # Callbacks
   # ------------------------
+  before_validation :assign_first_name_and_last_name, on: :create
   before_validation :assign_unique_tag, on: :create
+  before_validation :assign_birthday, on: :create
   before_validation :generate_username, on: :create
   after_create :send_confirmation_instructions, unless: -> { confirmed? }
 
@@ -56,6 +58,18 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def self.from_omniauth(auth)
+    user = where(email: auth.info.email).first_or_initialize
+  
+    user.provider = auth.provider
+    user.uid = auth.uid
+    user.first_name ||= auth.info.first_name
+    user.last_name ||= auth.info.last_name
+    user.password = Devise.friendly_token[0, 20] if user.encrypted_password.blank?
+    user.skip_confirmation! if user.respond_to?(:skip_confirmation)
+    user.save!
+    user
+  end
 
   def send_confirmation_instructions
     # generate token
@@ -64,7 +78,7 @@ class User < ApplicationRecord
     save(validate: false)
 
     # send email via Envelop
-    UserMailer.send_confirmation_instructions(self).deliver_now
+    UserMailer.send_confirmation_instructions(self).deliver_now unless provider == "google_oauth2"
   end
 
   def friends
@@ -132,6 +146,19 @@ class User < ApplicationRecord
 
   def assign_unique_tag
     self.tag ||= "#{first_name[0..2].downcase}-#{last_name[0..2].downcase}-#{SecureRandom.hex(2)}"
+  end
+
+  def assign_first_name_and_last_name
+    return if first_name.present? && last_name.present?
+
+    self.first_name = "User"
+    self.last_name = "Default"
+  end
+
+  def assign_birthday
+    if birthday.blank?
+      self.birthday = Date.new(2000, 1, 1) # Default to a placeholder date if birthday is missing
+    end
   end
 
   def generate_username
