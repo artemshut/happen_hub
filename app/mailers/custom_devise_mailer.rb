@@ -4,7 +4,7 @@ class CustomDeviseMailer < Devise::Mailer
   default from: 'no-reply@happenhub.co'
 
   def reset_password_instructions(record, token, opts = {})
-    reset_link = edit_password_url(record, reset_password_token: token)
+    reset_link = edit_user_password_url(reset_password_token: token, host: "happenhub.co")
     
     send_enveloop_message(
       template: "forgot-password",
