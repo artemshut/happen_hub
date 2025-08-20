@@ -8,7 +8,7 @@ class CustomDeviseMailer < Devise::Mailer
     
     send_enveloop_message(
       template: "forgot-password",
-      to: user.email,
+      to: record.email,
       from: "no-reply@happenhub.co",
       subject: "Reset your password",
       template_variables: {

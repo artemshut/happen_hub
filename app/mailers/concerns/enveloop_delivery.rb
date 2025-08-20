@@ -2,7 +2,6 @@
 module EnveloopDelivery
   include Rails.application.routes.url_helpers
 
-
   private
 
   def enveloop
