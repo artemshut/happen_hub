@@ -8,7 +8,7 @@ class UserMailer < ApplicationMailer
       from: "no-reply@happenhub.co",
       subject: "Welcome to HappenHub",
       template_variables: {
-        account_url: "https://myapp.com",
+        account_url: "https://happenhub.co/profile",
         username: user.full_name,
         user_tag: user.tag
       }
