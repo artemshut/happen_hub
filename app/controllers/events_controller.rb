@@ -10,7 +10,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.turbo_stream { render partial: "events/list", locals: { events: @events } }
+      format.turbo_stream { render partial: "events/events_list", locals: { events: @events } }
     end
   end
 

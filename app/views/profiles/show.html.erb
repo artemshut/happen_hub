@@ -46,6 +46,8 @@
       <%= link_to current_user.username, public_profile_url(current_user.username), class: "text-accent-info hover:underline" %>
     </div>
 
+    <div class="mt-10"></div>
+
     <%= button_to "Delete My Account", user_registration_path, method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600" %>
   </div>
 </div>
