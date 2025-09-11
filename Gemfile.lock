@@ -185,6 +185,8 @@ GEM
       mime-types (~> 3.4)
       rack (~> 3.1)
     ffi (1.17.2)
+    friendly_id (5.5.1)
+      activerecord (>= 4.0.0)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
@@ -553,6 +555,7 @@ DEPENDENCIES
   devise
   dockerfile-rails (>= 1.7)
   enveloop
+  friendly_id (~> 5.5.0)
   fullcalendar-rails
   hotwire-rails
   image_processing (~> 1.2)

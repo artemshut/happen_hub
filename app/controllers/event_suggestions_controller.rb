@@ -20,7 +20,7 @@ class EventSuggestionsController < ApplicationController
   end
 
   def update
-    @event = Event.find(params[:event_id])
+    @event = Event.friendly.find(params[:event_id])
     @suggestion = @event.event_suggestions.find(params[:id])
 
     params[:status] = params[:status].presence || "approved"
@@ -47,7 +47,7 @@ class EventSuggestionsController < ApplicationController
   private
 
   def set_event
-    @event = Event.find(params[:event_id])
+    @event = Event.friendly.find(params[:event_id])
   end
 
   def suggestion_params

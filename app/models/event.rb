@@ -1,4 +1,7 @@
 class Event < ApplicationRecord
+  extend FriendlyId
+  friendly_id :title, use: :slugged
+
   has_one_attached :cover_image
 
   belongs_to :group, optional: true
@@ -24,6 +27,11 @@ class Event < ApplicationRecord
     includes(:users)
       .where("events.user_id = ? OR event_participations.user_id = ?", user.id, user.id)
       .references(:event_participations)
+  end
+
+  # Force regenerate slug if title changes
+  def should_generate_new_friendly_id?
+    slug.blank? || title_changed?
   end
 
   def self.visible_for_friend(user)
