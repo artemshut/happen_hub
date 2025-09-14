@@ -10,7 +10,10 @@ Rails.application.routes.draw do
   }
 
   get "/dashboard", to: "users#dashboard", as: :dashboard
-  resources :events, only: [ :index, :show ]
+  
+  unauthenticated :user do
+    resources :events, only: [ :index, :show ]
+  end
 
   authenticated :user do
     get "users/search", to: "users#search", as: :search_users, defaults: { format: :turbo_stream }
