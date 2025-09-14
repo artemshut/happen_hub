@@ -29,6 +29,29 @@
         <% end %>
       </div>
 
+      <div class="bg-white shadow-md rounded-xl p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Past Events</h2>
+        <% if @past_events.any? %>
+          <% grouped = @past_events.includes(:event_category).group_by(&:event_category) %>
+          <% grouped.each do |category, events| %>
+            <div class="mb-6">
+              <h3 class="text-lg font-bold text-gray-700 mb-3"><%= category.emoji %> <%= category.name %></h3>
+              <ul class="space-y-3">
+                <% events.each do |event| %>
+                  <li class="bg-white rounded-lg shadow p-4 hover:shadow-md transition">
+                    <h4 class="text-accent-red font-semibold text-lg"><%= link_to event.title, event_path(event) %></h4>
+                    <p class="text-sm text-gray-500"><%= formatted_event_date(event.start_time) %></p>
+                    <%= render partial: "events/invitation_status_small", locals: { event: event } %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-gray-600">No past events.</p>
+        <% end %>
+      </div>
+
       <!-- Pending Invitations -->
       <div class="bg-white shadow-md rounded-xl p-6">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Pending Invitations</h2>
