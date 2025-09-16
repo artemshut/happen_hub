@@ -98,6 +98,11 @@
         <%= render 'shared/calendar' %>
       </div>
 
+      <!-- Past Events -->
+      <div class="bg-white rounded-3xl shadow-sm p-6">
+        <%= render 'past_events_widget', past_events: @past_events %>
+      </div>
+
       <!-- Quick Actions -->
       <div class="bg-white rounded-3xl shadow-sm p-6">
         <%= render 'quick_actions' %>
