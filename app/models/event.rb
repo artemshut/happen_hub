@@ -26,6 +26,10 @@ class Event < ApplicationRecord
       .references(:event_participations)
   end
 
+  def past?
+    end_time < Time.current
+  end
+
   # Force regenerate slug if title changes
   def should_generate_new_friendly_id?
     slug.blank? || title_changed?

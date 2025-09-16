@@ -12,17 +12,47 @@
       }.each do |status, label| %>
         <div>
           <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3"><%= label %></h3>
-          <ul class="space-y-2">
+          <ul class="flex flex-wrap gap-3">
             <% event.event_participations.public_send(status).each do |participant| %>
-              <li class="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-md border border-gray-200 shadow-sm">
-                <div class="text-gray-800 text-sm font-medium">
-                  <%= participant.user.full_name %>
-                  <% if participant.user == event.user %>
-                    <span class="ml-1 text-xs text-accent-red">(Owner)</span>
-                  <% end %>
-                </div>
-                <div class="text-xs text-gray-400 tracking-tight">
-                  <%= label %>
+              <li class="relative group">
+                <!-- Avatar or Initial -->
+                <% if participant.user.avatar.attached? %>
+                  <%= image_tag participant.user.avatar.variant(resize_to_fill: [48, 48]),
+                        class: "w-12 h-12 rounded-full object-cover ring-2 ring-white shadow cursor-pointer" %>
+                <% else %>
+                  <div class="bg-brand text-white w-12 h-12 flex items-center justify-center rounded-full text-lg font-bold ring-2 ring-white shadow cursor-pointer">
+                    <%= participant.user.first_name[0].upcase %>
+                  </div>
+                <% end %>
+
+                <!-- Hover Card -->
+                <div class="absolute left-1/2 -translate-x-1/2 mt-3 w-64 bg-white rounded-xl shadow-lg border border-gray-200 p-4 z-50 
+                            hidden group-hover:block">
+                  <div class="flex items-center gap-3">
+                    <% if participant.user.avatar.attached? %>
+                      <%= image_tag participant.user.avatar.variant(resize_to_fill: [50, 50]),
+                            class: "w-12 h-12 rounded-full object-cover ring-2 ring-gray-100" %>
+                    <% else %>
+                      <div class="bg-brand text-white w-12 h-12 flex items-center justify-center rounded-full text-xl font-bold ring-2 ring-gray-100">
+                        <%= participant.user.first_name[0].upcase %>
+                      </div>
+                    <% end %>
+                    <div>
+                      <p class="text-gray-900 font-semibold"><%= participant.user.full_name %></p>
+                      <p class="text-sm text-gray-500"><%= participant.user.username %></p>
+                      <% if participant.user == event.user %>
+                        <span class="text-xs text-accent-pink font-semibold">(Owner)</span>
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="mt-3 text-sm text-gray-600">
+                    <p><span class="font-medium">Joined:</span> <%= participant.user.created_at.strftime("%B %Y") %></p>
+                    <p><span class="font-medium">Events:</span> <%= participant.user.event_participations.count %></p>
+                  </div>
+                  <div class="mt-4">
+                    <%= link_to "View Profile", profile_path(participant.user),
+                          class: "text-accent-pink text-sm font-semibold hover:underline" %>
+                  </div>
                 </div>
               </li>
             <% end %>
@@ -35,18 +65,20 @@
     <p class="text-gray-500 text-center text-lg">No participants yet.</p>
   <% end %>
 
-  <!-- RSVP Action Buttons -->
-  <div class="mt-10 flex flex-wrap justify-center gap-4">
-    <%= button_to "✔ Going", update_rsvp_event_path(event, status: "accepted"),
-      method: :patch,
-      class: "bg-accent-pink text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-pink-600 transition" %>
+  <% unless event.past? %>
+    <!-- RSVP Action Buttons -->
+    <div class="mt-10 flex flex-wrap justify-center gap-4">
+      <%= button_to "✔ Going", update_rsvp_event_path(event, status: "accepted"),
+        method: :patch,
+        class: "bg-accent-pink text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-pink-600 transition" %>
 
-    <%= button_to "🤔 Maybe", update_rsvp_event_path(event, status: "maybe"),
-      method: :patch,
-      class: "border border-gray-300 text-gray-700 px-5 py-2 rounded-md text-sm font-medium hover:bg-gray-100 transition" %>
+      <%= button_to "🤔 Maybe", update_rsvp_event_path(event, status: "maybe"),
+        method: :patch,
+        class: "border border-gray-300 text-gray-700 px-5 py-2 rounded-md text-sm font-medium hover:bg-gray-100 transition" %>
 
-    <%= button_to "✖ Not Going", update_rsvp_event_path(event, status: "declined"),
-      method: :patch,
-      class: "border border-gray-200 text-gray-400 px-5 py-2 rounded-md text-sm font-medium hover:text-gray-600 transition" %>
-  </div>
+      <%= button_to "✖ Not Going", update_rsvp_event_path(event, status: "declined"),
+        method: :patch,
+        class: "border border-gray-200 text-gray-400 px-5 py-2 rounded-md text-sm font-medium hover:text-gray-600 transition" %>
+    </div>
+  <% end %>
 </div>

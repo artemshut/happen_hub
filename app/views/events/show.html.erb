@@ -44,21 +44,23 @@
     <!-- Participants -->
     <%= render partial: "events/invitation_status_full", locals: { event: @event } %>
 
-    <!-- Tabs: Friends, Suggestions, Groups -->
-    <div class="bg-white shadow-md rounded-xl overflow-hidden">
-      <div class="border-b">
-        <nav class="flex space-x-4 px-6 py-4 text-sm font-medium text-gray-700">
-          <button data-tab="tab-friends" class="tab-btn active">Add Friends</button>
-          <button data-tab="tab-suggestions" class="tab-btn">Suggestions</button>
-          <button data-tab="tab-groups" class="tab-btn">Invite Groups</button>
-        </nav>
+    <% unless @event.past? %>
+      <!-- Tabs: Friends, Suggestions, Groups -->
+      <div class="bg-white shadow-md rounded-xl overflow-hidden">
+        <div class="border-b">
+          <nav class="flex space-x-4 px-6 py-4 text-sm font-medium text-gray-700">
+            <button data-tab="tab-friends" class="tab-btn active">Add Friends</button>
+            <button data-tab="tab-suggestions" class="tab-btn">Suggestions</button>
+            <button data-tab="tab-groups" class="tab-btn">Invite Groups</button>
+          </nav>
+        </div>
+        <div class="p-6 text-sm space-y-6">
+          <%= render 'events/add_friends_to_event', event: @event %>
+          <%= render 'events/event_suggestions', event: @event %>
+          <%= render 'events/group_invitations', event: @event %>
+        </div>
       </div>
-      <div class="p-6 text-sm space-y-6">
-        <%= render 'events/add_friends_to_event', event: @event %>
-        <%= render 'events/event_suggestions', event: @event %>
-        <%= render 'events/group_invitations', event: @event %>
-      </div>
-    </div>
+    <% end %>
 
     <!-- Navigation Buttons -->
     <div class="mt-4 flex flex-wrap gap-2">
