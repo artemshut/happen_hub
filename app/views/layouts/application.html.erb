@@ -29,18 +29,23 @@
 
     <%= javascript_importmap_tags %>
   </head>
+
   <%= render "shared/cookie_banner" %>
-  <body class="flex flex-col min-h-screen bg-neutral-bg text-neutral-text font-sans">
+
+  <body class="flex flex-col min-h-screen font-sans text-neutral-text 
+               bg-gradient-to-b from-brand-soft via-neutral-bg to-neutral-bg">
     <!-- Header -->
     <header class="bg-gradient-to-r from-brand-gradientFrom via-brand-gradientVia to-brand-gradientTo text-white py-4 shadow-md">
       <div class="container mx-auto px-4 flex justify-between items-center">
-      <div class="flex items-center space-x-2 text-2xl font-bold">
-        <%= link_to (user_signed_in? ? dashboard_path : new_user_session_path), class: "flex items-center hover:opacity-80 transition" do %>
-          <%= image_tag "icon_white.png", alt: "HappenHub Icon", class: "w-8 h-8" %>
-          <span>HappenHub</span>
-        <% end %>
-      </div>
+        <!-- Logo -->
+        <div class="flex items-center space-x-2 text-2xl font-bold">
+          <%= link_to (user_signed_in? ? dashboard_path : new_user_session_path), class: "flex items-center hover:opacity-80 transition" do %>
+            <%= image_tag "icon_white.png", alt: "HappenHub Icon", class: "w-8 h-8" %>
+            <span>HappenHub</span>
+          <% end %>
+        </div>
 
+        <!-- Navigation -->
         <div data-controller="mobile-nav" class="relative">
           <%= render "layouts/navigation" %>
         </div>
@@ -63,7 +68,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-neutral-muted text-white text-center py-4 mt-auto">
+    <footer class="bg-neutral-bg text-neutral-muted text-center py-4 mt-auto border-t border-neutral-border">
       <p class="text-sm">© <%= Date.today.year %> HappenHub. All rights reserved.</p>
     </footer>
   </body>
