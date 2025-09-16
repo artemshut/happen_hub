@@ -4,7 +4,7 @@ class EventsController < ApplicationController
 
   def index
     @event_categories = EventCategory.all
-    @events = Event.upcoming(current_user).includes(:event_category).order(start_time: :asc)
+    @events = Event.upcoming(current_user).includes(:event_category)
     @events = @events.where(event_category_id: params[:category_id]) if params[:category_id].present?
     @events = @events.order(start_time: :asc).page(params[:page])
 
