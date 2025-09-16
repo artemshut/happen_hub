@@ -52,7 +52,7 @@ document.addEventListener("turbo:load", () => {
         el.style.border = "none";
         el.style.borderRadius = "0.5rem";
         el.style.padding = "4px 6px";
-        el.style.fontSize = "0.75rem";
+        el.style.fontSize = "0.4rem";
         el.style.fontWeight = "600";
         el.classList.add(
           "hover:scale-[1.02]",
