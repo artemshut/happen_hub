@@ -6,7 +6,7 @@
       <% past_events.limit(3).each do |event| %>
         <li class="flex items-start justify-between group">
           <div>
-            <h3 class="text-sm font-medium text-gray-700 group-hover:text-accent-red transition">
+            <h3 class="text-sm font-medium text-gray-700 group-hover:text-accent-pink transition">
               <%= link_to event.title, event_path(event) %>
             </h3>
             <p class="text-xs text-gray-500">
