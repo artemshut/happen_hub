@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HappenHub</title>
+    <title>HappenHub - Event Hub for Everyone</title>
     <link rel="icon" type="image/png" href="<%= asset_path('icon_white.png') %>">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -32,7 +32,7 @@
   <%= render "shared/cookie_banner" %>
   <body class="flex flex-col min-h-screen bg-neutral-bg text-neutral-text font-sans">
     <!-- Header -->
-    <header class="bg-brand text-white py-4 shadow-md">
+    <header class="bg-gradient-to-r from-brand-gradientFrom via-brand-gradientVia to-brand-gradientTo text-white py-4 shadow-md">
       <div class="container mx-auto px-4 flex justify-between items-center">
       <div class="flex items-center space-x-2 text-2xl font-bold">
         <%= link_to (user_signed_in? ? dashboard_path : new_user_session_path), class: "flex items-center hover:opacity-80 transition" do %>
@@ -52,7 +52,7 @@
       <!-- Flash Messages -->
       <div id="flash-messages" class="fixed bottom-6 left-4 space-y-2 z-50">
         <% flash.each do |type, message| %>
-          <div class="flash-message <%= flash_class(type) %> p-4 rounded-lg shadow-lg text-white bg-accent-coral">
+          <div class="flash-message <%= flash_class(type) %> p-4 rounded-lg shadow-lg text-white bg-accent-fuchsia">
             <%= message %>
             <button class="ml-4 text-sm font-bold hover:opacity-75" onclick="this.parentElement.remove();">×</button>
           </div>

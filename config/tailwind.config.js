@@ -14,29 +14,33 @@ module.exports = {
       },
       colors: {
         brand: {
-          DEFAULT: '#E34717',        // primary
-          dark: '#C03D14',           // hover / pressed
-          light: '#F87549',          // subtle accents
-          soft: '#FEEAE5',           // background or faded states
+          DEFAULT: '#7C3AED',      // primary violet
+          dark: '#6D28D9',         // hover / pressed violet
+          light: '#A78BFA',        // subtle violet accents
+          soft: '#F3E8FF',         // backgrounds or faded states
+          gradientFrom: '#7C3AED', // violet-600
+          gradientVia: '#C026D3',  // fuchsia-600
+          gradientTo: '#EC4899',   // pink-500
         },
         accent: {
-          red: '#E34717',
-          coral: '#FF744D',          // CTA accents or tags
-          error: '#D72638',          // error states
-          success: '#2ECC71',        // success states
-          info: '#227C9D',           // info links
-          danger: '#FFE4E6',
-          warning: '#FEF3C7',
+          pink: '#EC4899',         // vibrant pink for CTAs
+          fuchsia: '#C026D3',      // strong accent for tags
+          violet: '#8B5CF6',       // secondary accent, softer violet
+          error: '#EF4444',        // red-500 for errors
+          success: '#22C55E',      // green-500 for success
+          info: '#3B82F6',         // blue-500 for info links
+          warning: '#FACC15',      // yellow-400 for warnings
+          danger: '#FEE2E2',       // soft red background
         },
         neutral: {
-          text: '#1F2937',           // main text
-          muted: '#6B7280',          // muted labels
-          bg: '#FAFAFA',             // app background
-          surface: '#FFFFFF',        // cards/panels
-          border: '#E5E7EB',         // dividers, outlines
+          text: '#1F2937',         // main text (gray-800)
+          muted: '#6B7280',        // muted labels (gray-500)
+          bg: '#FAFAFA',           // app background
+          surface: '#FFFFFF',      // cards/panels
+          border: '#E5E7EB',       // dividers, outlines
         },
       },
-
+      
       animation: {
         fadeIn: "fadeIn 1s ease-in-out",
         slideUp: "slideUp 1s ease-in-out",

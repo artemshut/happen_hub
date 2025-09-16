@@ -6,7 +6,7 @@
     <%= link_to events_path,
                 data: { turbo_frame: "events_list" },
                 class: "px-3 py-1 text-sm rounded-full shadow-sm transition
-                       #{selected_category_id.nil? ? 'bg-accent-red text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}" do %>
+                       #{selected_category_id.nil? ? 'bg-accent-violet text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}" do %>
       All
     <% end %>
 
@@ -14,7 +14,7 @@
       <%= link_to events_path(category_id: category.id),
                   data: { turbo_frame: "events_list" },
                   class: "px-3 py-1 text-sm rounded-full shadow-sm transition
-                         #{selected_category_id == category.id ? 'bg-accent-red text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}" do %>
+                         #{selected_category_id == category.id ? 'bg-accent-violet text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}" do %>
         <%= "#{category.emoji} #{category.name}" %>
       <% end %>
     <% end %>
