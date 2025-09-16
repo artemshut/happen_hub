@@ -3,8 +3,13 @@ class EventsController < ApplicationController
   before_action :authorize_user!, only: %i[edit update destroy add_friend update_rsvp invite_group]
 
   def index
-    @event_categories = EventCategory.all
-    @events = Event.upcoming(current_user).includes(:event_category)
+    if params[:past] == "true"
+      @events = Event.past(current_user).includes(:event_category)
+      @event_categories = EventCategory.joins(:events).where(events: { id: @events.pluck(:id) }).distinct
+    else
+      @events = Event.upcoming(current_user).includes(:event_category)
+      @event_categories = EventCategory.joins(:events).where(events: { id: @events.pluck(:id) }).distinct
+    end
     @events = @events.where(event_category_id: params[:category_id]) if params[:category_id].present?
     @events = @events.order(start_time: :asc).page(params[:page])
 

@@ -5,8 +5,8 @@ class UsersController < ApplicationController
     @groups = @user.groups
     @events = @user.owned_events
     @friend_activities = Activity.for_friends(current_user).recent
-    @upcoming_events = Event.upcoming(current_user)
-    @past_events = Event.for_user(current_user).past.order(start_time: :desc).limit(5)
+    @upcoming_events = Event.all#.upcoming(current_user)
+    @past_events = Event.past(current_user).limit(5)
     @pending_invitations = current_user.event_participations.where(rsvp_status: :pending)
     @total_events = @upcoming_events.count
     @total_groups = current_user.groups.count

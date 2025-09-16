@@ -16,9 +16,6 @@ class Event < ApplicationRecord
 
   validates :title, :start_time, :end_time, presence: true
 
-  # scope :upcoming, -> { where("start_time >= ?", Time.now) }
-  scope :past, -> { where("start_time < ?", Time.now) }
-
   enum :visibility, { private: "private", friends: "friends" }, prefix: true
 
   has_rich_text :description
@@ -40,6 +37,16 @@ class Event < ApplicationRecord
       .where("friendships.user_id = :id OR friendships.friend_id = :id", id: user.id)
   end
 
+  def self.past(user)
+    own_or_participating = left_joins(:event_participations)
+                             .where("event_participations.user_id = ? OR events.user_id = ?", user.id, user.id)
+                             .where("event_participations.rsvp_status IN (?)", ["accepted", "maybe"])
+                             .to_sql
+    friends_visible = visible_for_friend(user).to_sql
+
+    Event.where("start_time < ?", Date.today).from("(#{own_or_participating} UNION #{friends_visible}) AS events").order("start_time DESC")
+  end
+
   def self.upcoming(user)
     ### Events that the user owns or is participating in with status accepted or maybe
     own_or_participating = left_joins(:event_participations)
@@ -48,7 +55,7 @@ class Event < ApplicationRecord
                              .to_sql
     friends_visible = visible_for_friend(user).to_sql
 
-    Event.where("start_time > ?", Date.today).from("(#{own_or_participating} UNION #{friends_visible}) AS events").order("start_time ASC")
+    Event.where("start_time >= ?", Date.today).from("(#{own_or_participating} UNION #{friends_visible}) AS events").order("start_time ASC")
   end
 
   def add_friend_with_rsvp(user, rsvp_status = "pending")
