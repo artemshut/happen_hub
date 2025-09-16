@@ -41,7 +41,11 @@ class Event < ApplicationRecord
   end
 
   def self.upcoming(user)
-    own_or_participating = left_joins(:event_participations).where("event_participations.user_id = ? OR events.user_id = ?", user.id, user.id).to_sql
+    ### Events that the user owns or is participating in with status accepted or maybe
+    own_or_participating = left_joins(:event_participations)
+                             .where("event_participations.user_id = ? OR events.user_id = ?", user.id, user.id)
+                             .where("event_participations.rsvp_status IN (?)", ["accepted", "maybe"])
+                             .to_sql
     friends_visible = visible_for_friend(user).to_sql
 
     Event.where("start_time > ?", Date.today).from("(#{own_or_participating} UNION #{friends_visible}) AS events").order("start_time ASC")
