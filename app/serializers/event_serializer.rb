@@ -1,7 +1,7 @@
 class EventSerializer
   include JSONAPI::Serializer
 
-  attributes :id, :title, :description, :start_time, :end_time, :location, :slug
+  attributes :id, :title, :description, :start_time, :end_time, :location, :slug, :latitude, :longitude
 
   belongs_to :user, serializer: UserSerializer
   belongs_to :event_category, serializer: EventCategorySerializer, if: Proc.new { |event| event.event_category.present? }
