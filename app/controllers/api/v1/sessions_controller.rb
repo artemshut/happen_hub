@@ -1,6 +1,7 @@
 class Api::V1::SessionsController < ApplicationController
+  skip_before_action :verify_authenticity_token
   skip_before_action :authenticate_user!
-
+  
   def create
     user = User.find_by(email: params[:email])
 
@@ -9,12 +10,26 @@ class Api::V1::SessionsController < ApplicationController
       refresh_token = JwtService.encode(user_id: user.id, exp: 7.days.from_now)
 
       render json: {
-        token: access_token,
-        refresh_token: refresh_token,
-        user: EventSerializer.new(user).serializable_hash
+        data: {
+          type: "session",
+          attributes: {
+            token: access_token,
+            refresh_token: refresh_token
+          },
+          relationships: {
+            user: {
+              data: { id: user.id.to_s, type: "user" }
+            }
+          }
+        },
+        included: [
+          UserSerializer.new(user).serializable_hash[:data]
+        ]
       }, status: :ok
     else
-      render json: { error: 'Invalid email or password' }, status: :unauthorized
+      render json: {
+        errors: [{ detail: "Invalid email or password" }]
+      }, status: :unauthorized
     end
   end
 end
