@@ -1,6 +1,5 @@
 class EventCategorySerializer
   include JSONAPI::Serializer
 
-  set_type :event_category
-  attributes :name, :emoji, :description
+  attributes :id, :name, :emoji, :description
 end
