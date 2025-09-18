@@ -1,3 +1,4 @@
+# app/serializers/user_serializer.rb
 class UserSerializer
   include JSONAPI::Serializer
 
@@ -5,7 +6,10 @@ class UserSerializer
 
   attribute :avatar_url do |user|
     if user.avatar.attached?
-      Rails.application.routes.url_helpers.url_for(user.avatar)
+      Rails.application.routes.url_helpers.rails_blob_url(
+        user.avatar, 
+        host: Rails.application.config.default_url_options[:host]
+      )
     end
   end
 end
