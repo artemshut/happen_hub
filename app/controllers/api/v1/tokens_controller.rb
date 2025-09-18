@@ -1,15 +1,27 @@
 class Api::V1::TokensController < ApplicationController
+  skip_before_action :verify_authenticity_token
   skip_before_action :authenticate_user!
 
   def refresh
     refresh_token = params[:refresh_token]
-    payload = JwtService.decode(refresh_token)
+    decoded = JwtService.decode(refresh_token)
 
-    if payload && (user = User.find_by(id: payload[:user_id]))
-      new_token = JwtService.encode({ user_id: user.id }, 24.hours.from_now)
-      render json: { token: new_token }, status: :ok
+    if decoded && decoded[:user_id]
+      user = User.find_by(id: decoded[:user_id])
+      if user
+        access_token = JwtService.encode(user_id: user.id, exp: 24.hours.from_now)
+
+        render json: {
+          data: {
+            type: "session",
+            attributes: { token: access_token }
+          }
+        }, status: :ok
+      else
+        render json: { errors: [{ detail: "User not found" }] }, status: :unauthorized
+      end
     else
-      render json: { error: 'Invalid refresh token' }, status: :unauthorized
+      render json: { errors: [{ detail: "Invalid refresh token" }] }, status: :unauthorized
     end
   end
 end
