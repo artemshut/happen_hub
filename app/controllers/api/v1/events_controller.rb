@@ -1,6 +1,5 @@
 # app/controllers/api/v1/events_controller.rb
 class Api::V1::EventsController < Api::V1::BaseController
-  before_action :authenticate_api_user!
   before_action :set_event, only: [:show]
 
   # GET /api/v1/events
