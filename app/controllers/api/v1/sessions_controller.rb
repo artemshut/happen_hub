@@ -11,7 +11,7 @@ class Api::V1::SessionsController < ApplicationController
       render json: {
         token: access_token,
         refresh_token: refresh_token,
-        user: UserSerializer.new(user)
+        user: EventSerializer.new(user).serializable_hash
       }, status: :ok
     else
       render json: { error: 'Invalid email or password' }, status: :unauthorized

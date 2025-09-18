@@ -2,6 +2,6 @@ class Api::V1::UsersController < ApplicationController
   before_action :authenticate_user!
 
   def me
-    render json: UserSerializer.new(current_user), status: :ok
+    render json: UserSerializer.new(current_user).serializable_hash, status: :ok
   end
 end

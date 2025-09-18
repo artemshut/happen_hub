@@ -40,6 +40,7 @@ gem "sidekiq" # For background jobs
 gem "enveloop"
 gem "omniauth-rails_csrf_protection"
 gem 'friendly_id', '~> 5.5.0'
+gem 'jsonapi-serializer'
 
 # For QR code generation
 gem "rqrcode"
