@@ -54,7 +54,7 @@ Rails.application.routes.draw do
     resources :events, only: [ :index ]
 
     namespace :v1 do
-      post 'sign_in', to: 'sessions#create'
+      resources :sessions, only: [:create, :destroy]
       resources :events, only: [:index, :show]
       resources :users, only: [:show]
 

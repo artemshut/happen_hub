@@ -1,7 +1,6 @@
-class Api::V1::SessionsController < ApplicationController
-  skip_before_action :verify_authenticity_token
-  skip_before_action :authenticate_user!
-  
+class Api::V1::SessionsController < Api::V1::BaseController
+  skip_before_action :authenticate_api_user!, only: [:create]
+
   def create
     user = User.find_by(email: params[:email])
 
@@ -31,5 +30,14 @@ class Api::V1::SessionsController < ApplicationController
         errors: [{ detail: "Invalid email or password" }]
       }, status: :unauthorized
     end
+  end
+
+  def destroy
+    # ⚡ With JWT, logout is client-side only (just delete token)
+    render json: {
+      meta: {
+        message: "Logged out successfully"
+      }
+    }, status: :ok
   end
 end
