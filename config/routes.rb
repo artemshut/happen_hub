@@ -52,6 +52,15 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :events, only: [ :index ]
+
+    namespace :v1 do
+      post 'sign_in', to: 'sessions#create'
+      resources :events, only: [:index, :show]
+      resources :users, only: [:show]
+
+      post "tokens/refresh", to: "tokens#refresh"
+      get "me", to: "users#me"
+    end
   end
 
   # Root route
