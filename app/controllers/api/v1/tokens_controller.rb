@@ -1,6 +1,5 @@
-class Api::V1::TokensController < ApplicationController
+class Api::V1::TokensController < Api::V1::BaseController
   skip_before_action :verify_authenticity_token
-  skip_before_action :authenticate_user!
 
   def refresh
     refresh_token = params[:refresh_token]
