@@ -1,6 +1,4 @@
 class Api::V1::EventsController < Api::V1::BaseController
-  before_action :authenticate_api_user!
-
   def index
     events = current_api_user.events
     render json: EventSerializer.new(events).serializable_hash

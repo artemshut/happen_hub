@@ -1,6 +1,4 @@
 class Api::V1::TokensController < Api::V1::BaseController
-  skip_before_action :verify_authenticity_token
-
   def refresh
     refresh_token = params[:refresh_token]
     decoded = JwtService.decode(refresh_token)
