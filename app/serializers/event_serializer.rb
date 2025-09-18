@@ -7,6 +7,7 @@ class EventSerializer
   belongs_to :event_category, serializer: EventCategorySerializer, if: Proc.new { |event| event.event_category.present? }
 
   has_many :comments, serializer: CommentSerializer
+  has_many :likes, serializer: LikeSerializer
   has_many :participants, serializer: UserSerializer do |event|
     event.users
   end

@@ -11,6 +11,7 @@ class Event < ApplicationRecord
   has_many :users, through: :event_participations
   has_many :event_suggestions, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :likes, as: :likeable, dependent: :destroy
 
   before_validation :assign_default_category
 
