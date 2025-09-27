@@ -24,9 +24,52 @@ class Api::V1::EventsController < Api::V1::BaseController
     ).serializable_hash
   end
 
+  def create
+    @event = current_api_user.events.new(event_params)
+
+    if @event.save
+      attach_files
+      attach_cover_image
+      render json: EventSerializer.new(
+        @event,
+        include: [:user, :event_category, :comments, :likes, :event_participations, :comments, :"comments.user", :participants]
+      ).serializable_hash, status: :created
+    else
+      render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_event
     @event = Event.friendly.find(params[:id])
+  end
+
+  def event_params
+    params.require(:event).permit(
+      :title,
+      :description,
+      :start_time,
+      :end_time,
+      :location,
+      :latitude,
+      :longitude,
+      :event_category_id,
+      :visibility,
+    )
+  end
+
+  def attach_files
+    return unless params[:files].present?
+
+    params[:files].each do |file|
+      @event.files.attach(file)
+    end
+  end
+
+  def attach_cover_image
+    return unless params[:cover_image].present?
+
+    @event.cover_image.attach(params[:cover_image])
   end
 end

@@ -56,7 +56,7 @@ Rails.application.routes.draw do
 
     namespace :v1 do
       resources :sessions, only: [:create, :destroy]
-      resources :events, only: [:index, :show]
+      resources :events, only: [:index, :show, :create, :update, :destroy]
       resources :users, only: [:show]
 
       post "tokens/refresh", to: "tokens#refresh"
