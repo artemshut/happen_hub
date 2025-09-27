@@ -25,7 +25,7 @@ class Api::V1::EventsController < Api::V1::BaseController
   end
 
   def create
-    @event = current_api_user.events.new(event_params)
+    @event = current_api_user.owned_events.new(event_params)
 
     if @event.save
       attach_files
@@ -56,6 +56,8 @@ class Api::V1::EventsController < Api::V1::BaseController
       :longitude,
       :event_category_id,
       :visibility,
+      :cover_image,
+      files: [],
     )
   end
 
