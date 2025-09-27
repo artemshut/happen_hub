@@ -27,7 +27,7 @@ class EventSerializer
         filename: file.filename.to_s,
         content_type: file.content_type,
         byte_size: file.byte_size,
-        url: Rails.application.routes.url_helpers.url_for(file, host: 'happenhub.co')
+        url: Rails.application.routes.url_helpers.rails_blob_url(file, host: 'happenhub.co')
       }
     end
   end
