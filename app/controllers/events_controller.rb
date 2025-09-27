@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group]
-  before_action :authorize_user!, only: %i[edit update destroy add_friend update_rsvp invite_group]
+  before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group remove_file]
+  before_action :authorize_user!, only: %i[edit update destroy add_friend update_rsvp invite_group remove_file]
 
   def index
     if params[:past] == "true"
@@ -103,6 +103,17 @@ class EventsController < ApplicationController
     redirect_to event_path(@event), notice: "Invitations sent to all members of #{@group.name}."
   end
 
+  def remove_file
+    file = @event.files.find(params[:file_id])
+    file.purge
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace("files_panel", partial: "events/files_panel", locals: { event: @event })
+      end
+      format.html { redirect_to @event, notice: "File removed." }
+    end
+  end
+
   private
 
   def set_event
@@ -116,6 +127,10 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:title, :description, :rsvp_status, :start_time, :end_time, :location, :latitude, :longitude, :visibility, :cover_image, :event_category_id)
+    params.require(:event).permit(
+      :title, :description, :rsvp_status, :start_time, :end_time, 
+      :location, :latitude, :longitude, :visibility, :cover_image, 
+      :event_category_id, files: [],
+    )
   end
 end

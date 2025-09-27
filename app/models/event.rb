@@ -3,6 +3,7 @@ class Event < ApplicationRecord
   friendly_id :title, use: :slugged
 
   has_one_attached :cover_image
+  has_many_attached :files
 
   belongs_to :group, optional: true
   belongs_to :event_category
@@ -16,6 +17,7 @@ class Event < ApplicationRecord
   before_validation :assign_default_category
 
   validates :title, :start_time, :end_time, presence: true
+  validate :validate_file_sizes
 
   enum :visibility, { private: "private", friends: "friends" }, prefix: true
 
@@ -75,5 +77,13 @@ class Event < ApplicationRecord
 
   def assign_default_category
     self.event_category ||= EventCategory.find_by(name: "Other") || EventCategory.create(name: "Other", emoji: "📅", description: "General events")
+  end
+
+  def validate_file_sizes
+    files.each do |file|
+      if file.byte_size > 10.megabytes
+        errors.add(:files, "#{file.filename} is too large. Each file must be under 10 MB.")
+      end
+    end
   end
 end

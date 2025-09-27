@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       member do
         post :add_friend
         patch :update_rsvp
+        delete :file, to: "events#remove_file"
         post "invite_group/:group_id", to: "events#invite_group", as: "invite_group"
       end
     end
