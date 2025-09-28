@@ -1,14 +1,14 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: [:google_oauth2]
-  
+
   def google_oauth2
     if params[:id_token].present?
       # Mobile login flow
       validator = GoogleIDToken::Validator.new
       valid_client_ids = [
-        "521400701362-a05bte3iqb85ii4mr2k6cod0e4cht8ro.apps.googleusercontent.com",     # happenhub client
+        "521400701362-a05bte3iqb85ii4mr2k6cod0e4cht8ro.apps.googleusercontent.com", # happenhub client
         "521400701362-gilsbm87mrf4b500qafaalq7arsrapc5.apps.googleusercontent.com", # HappenHub Android
-        "521400701362-9bj6galln7ff2g4l6oho1cdl54oh959n.apps.googleusercontent.com"      # HappenHub iOS
+        "521400701362-9bj6galln7ff2g4l6oho1cdl54oh959n.apps.googleusercontent.com"  # HappenHub iOS
       ]
 
       payload = validator.check(params[:id_token], valid_client_ids)
