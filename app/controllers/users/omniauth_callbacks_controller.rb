@@ -1,29 +1,35 @@
+require 'google-id-token'
+
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  # Skip CSRF for mobile JSON endpoint
-  skip_before_action :verify_authenticity_token, only: [:google_mobile]
+  skip_before_action :verify_authenticity_token, only: [:google_mobile, :failure]
 
-  # ✅ Mobile login (id_token only, no OmniAuth middleware, no CSRF)
   def google_mobile
-    if params[:id_token].blank?
-      render json: { error: "Missing id_token" }, status: :bad_request
-      return
-    end
+    if params[:id_token].present?
+      validator = GoogleIDToken::Validator.new
 
-    validator = GoogleIDToken::Validator.new
-    valid_client_ids = [
-      "521400701362-a05bte3iqb85ii4mr2k6cod0e4cht8ro.apps.googleusercontent.com", # happenhub client
-      "521400701362-gilsbm87mrf4b500qafaalq7arsrapc5.apps.googleusercontent.com", # Android
-      "521400701362-9bj6galln7ff2g4l6oho1cdl54oh959n.apps.googleusercontent.com"  # iOS
-    ]
+      valid_client_ids = [
+        "521400701362-a05bte3iqb85ii4mr2k6cod0e4cht8ro.apps.googleusercontent.com", # happenhub client
+        "521400701362-gilsbm87mrf4b500qafaalq7arsrapc5.apps.googleusercontent.com", # Android
+        "521400701362-9bj6galln7ff2g4l6oho1cdl54oh959n.apps.googleusercontent.com"  # iOS
+      ]
 
-    payload = validator.check(params[:id_token], valid_client_ids)
-    user = User.from_omniauth(payload)
+      begin
+        payload = validator.check(params[:id_token], valid_client_ids)
 
-    if user.persisted?
-      token = JwtService.encode(user_id: user.id)
-      render json: { token: token, user: UserSerializer.new(user) }, status: :ok
+        user = User.from_omniauth(payload)
+
+        if user.persisted?
+          token = JwtService.encode(user_id: user.id)
+          render json: { token: token, user: UserSerializer.new(user) }, status: :ok
+        else
+          render json: { error: "Google login failed" }, status: :unauthorized
+        end
+      rescue GoogleIDToken::ValidationError => e
+        Rails.logger.error "GoogleIDToken validation failed: #{e}"
+        render json: { error: "Invalid Google ID token" }, status: :unauthorized
+      end
     else
-      render json: { error: "Google login failed" }, status: :unauthorized
+      render json: { error: "Missing id_token" }, status: :bad_request
     end
   end
 

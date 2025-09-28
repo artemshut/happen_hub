@@ -41,6 +41,7 @@ gem "enveloop"
 gem "omniauth-rails_csrf_protection"
 gem 'friendly_id', '~> 5.5.0'
 gem 'jsonapi-serializer'
+gem 'google-id-token'
 
 # For QR code generation
 gem "rqrcode"

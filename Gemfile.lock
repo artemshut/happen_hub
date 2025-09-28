@@ -196,6 +196,8 @@ GEM
       momentjs-rails (>= 2.9.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-id-token (1.4.2)
+      jwt (>= 1)
     hashie (5.0.0)
     hotwire-rails (0.1.3)
       rails (>= 6.0.0)
@@ -559,6 +561,7 @@ DEPENDENCIES
   enveloop
   friendly_id (~> 5.5.0)
   fullcalendar-rails
+  google-id-token
   hotwire-rails
   image_processing (~> 1.2)
   importmap-rails
