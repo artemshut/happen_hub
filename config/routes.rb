@@ -9,6 +9,9 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
+  # optionally add alias route for mobile
+  post '/users/auth/google_oauth2', to: 'users/omniauth_callbacks#google_oauth2'
+
   get "/dashboard", to: "users#dashboard", as: :dashboard
   
   unauthenticated :user do
