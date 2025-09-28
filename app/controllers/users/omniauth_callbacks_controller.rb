@@ -4,7 +4,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       # Mobile login flow
       validator = GoogleIDToken::Validator.new
       valid_client_ids = [
-        "WEB_CLIENT_ID.apps.googleusercontent.com",     # happenhub client
+        "521400701362-a05bte3iqb85ii4mr2k6cod0e4cht8ro.apps.googleusercontent.com",     # happenhub client
         "521400701362-gilsbm87mrf4b500qafaalq7arsrapc5.apps.googleusercontent.com", # HappenHub Android
         "521400701362-9bj6galln7ff2g4l6oho1cdl54oh959n.apps.googleusercontent.com"      # HappenHub iOS
       ]
