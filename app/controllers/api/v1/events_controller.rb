@@ -7,7 +7,7 @@ class Api::V1::EventsController < Api::V1::BaseController
     events = if params[:past] == "true"
                Event.past(current_api_user).includes(:event_category, :user)
              else
-               Event.upcoming(current_api_user).includes(:event_category, :user)
+               Event.for_user(current_api_user).includes(:event_category, :user)
              end
 
     events = events.where(event_category_id: params[:category_id]) if params[:category_id].present?
@@ -28,7 +28,7 @@ class Api::V1::EventsController < Api::V1::BaseController
     @event = current_api_user.owned_events.new(event_params)
 
     if @event.save
-      @event.event_participations.build(user: current_api_user, rsvp_status: "maybe")
+      @event.event_participations.create(user: current_api_user, rsvp_status: "maybe")
       Activity.create(
         user: current_api_user,
         action: "created_event",
