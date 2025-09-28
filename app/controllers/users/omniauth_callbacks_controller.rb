@@ -3,7 +3,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if params[:id_token].present?
       # Mobile login flow
       validator = GoogleIDToken::Validator.new
-      payload = validator.check(params[:id_token], "521400701362-gilsbm87mrf4b500qafaalq7arsrapc5.apps.googleusercontent.com")
+      valid_client_ids = [
+        "WEB_CLIENT_ID.apps.googleusercontent.com",     # happenhub client
+        "521400701362-gilsbm87mrf4b500qafaalq7arsrapc5.apps.googleusercontent.com", # HappenHub Android
+        "521400701362-9bj6galln7ff2g4l6oho1cdl54oh959n.apps.googleusercontent.com"      # HappenHub iOS
+      ]
+
+      payload = validator.check(params[:id_token], valid_client_ids)
 
       user = User.from_omniauth(payload)
 
@@ -14,6 +20,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         render json: { error: "Google login failed" }, status: :unauthorized
       end
     else
+      # Web browser flow
       @user = User.from_omniauth(request.env["omniauth.auth"])
 
       if @user.persisted?
