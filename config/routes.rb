@@ -6,11 +6,13 @@ Rails.application.routes.draw do
   get "terms-of-service", to: "pages#terms_of_service", as: :terms_of_service
   
   devise_for :users, controllers: {
-  omniauth_callbacks: 'users/omniauth_callbacks'
+    omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
   # Mobile-specific endpoint
-  post "/users/google_mobile_login", to: "users/omniauth_callbacks#google_mobile"
+  devise_scope :user do
+    post "/users/google_mobile_login", to: "users/omniauth_callbacks#google_mobile"
+  end
 
   get "/dashboard", to: "users#dashboard", as: :dashboard
   
