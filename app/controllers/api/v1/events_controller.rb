@@ -28,6 +28,13 @@ class Api::V1::EventsController < Api::V1::BaseController
     @event = current_api_user.owned_events.new(event_params)
 
     if @event.save
+      @event.event_participations.build(user: current_api_user, rsvp_status: "maybe")
+      Activity.create(
+        user: current_api_user,
+        action: "created_event",
+        target: @event,
+        metadata: { event_name: @event.title }
+      )
       attach_files
       attach_cover_image
       render json: EventSerializer.new(

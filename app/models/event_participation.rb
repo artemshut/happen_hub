@@ -14,7 +14,7 @@ class EventParticipation < ApplicationRecord
   after_create :notify_invitee
 
   def notify_invitee
-    return if rsvp_status_declined?
+    return if rsvp_status_declined? || rsvp_status_pending?
 
     # Notify the user about the event participation
     UserMailer.send_event_participation_notification(user, event).deliver_now
