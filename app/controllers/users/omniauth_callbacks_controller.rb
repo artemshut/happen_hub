@@ -25,7 +25,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       end
 
       if payload
-        user = User.from_omniauth(payload)
+        user = User.from_mobile_omniauth(payload)
 
         if user.persisted?
           token = JwtService.encode(user_id: user.id)

@@ -60,6 +60,24 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def self.from_mobile_omniauth(payload)
+    user = where(email: payload["email"]).first_or_initialize
+
+    user.provider = "google_oauth2"
+    user.uid = payload["sub"]
+    user.first_name ||= payload["given_name"]
+    user.last_name ||= payload["family_name"]
+    if payload["picture"].present?
+      # Download and attach profile picture
+      downloaded_image = URI.open(payload["picture"])
+      user.avatar.attach(io: downloaded_image, filename: "avatar-#{user.email}.jpg")
+    end
+    user.password = Devise.friendly_token[0, 20] if user.encrypted_password.blank?
+    user.skip_confirmation! if user.respond_to?(:skip_confirmation)
+    user.save!
+    user
+  end
+
   def self.from_omniauth(auth)
     user = where(email: auth.info.email).first_or_initialize
   
