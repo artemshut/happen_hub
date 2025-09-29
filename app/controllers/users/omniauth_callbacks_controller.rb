@@ -13,6 +13,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         "521400701362-9bj6galln7ff2g4l6oho1cdl54oh959n.apps.googleusercontent.com"  # iOS
       ]
 
+      Rails.logger.info "Validating Google ID token for client IDs: #{valid_client_ids.join(', ')}"
+      Rails.logger.info "Validating Google ID token for client IDs: #{params[:id_token]}"
       begin
         payload = validator.check(params[:id_token], valid_client_ids)
 
