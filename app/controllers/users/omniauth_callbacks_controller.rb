@@ -8,26 +8,36 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       validator = GoogleIDToken::Validator.new
 
       valid_client_ids = [
-        "521400701362-a05bte3iqb85ii4mr2k6cod0e4cht8ro.apps.googleusercontent.com", # happenhub client
+        "521400701362-a05bte3iqb85ii4mr2k6cod0e4cht8ro.apps.googleusercontent.com", # Web
         "521400701362-gilsbm87mrf4b500qafaalq7arsrapc5.apps.googleusercontent.com", # Android
         "521400701362-9bj6galln7ff2g4l6oho1cdl54oh959n.apps.googleusercontent.com"  # iOS
       ]
 
-      Rails.logger.info "Validating Google ID token for client IDs: #{valid_client_ids.join(', ')}"
-      Rails.logger.info "Validating Google ID token for client IDs: #{params[:id_token]}"
-      begin
-        payload = validator.check(params[:id_token], valid_client_ids)
+      payload = nil
+      valid_client_ids.each do |client_id|
+        begin
+          payload = validator.check(params[:id_token], client_id)
+          break if payload
+        rescue GoogleIDToken::ValidationError => e
+          Rails.logger.debug "GoogleIDToken validation failed for client_id=#{client_id}: #{e.message}"
+          next
+        end
+      end
 
+      if payload
         user = User.from_omniauth(payload)
 
         if user.persisted?
           token = JwtService.encode(user_id: user.id)
-          render json: { token: token, user: UserSerializer.new(user) }, status: :ok
+          render json: {
+            token: token,
+            user: UserSerializer.new(user)
+          }, status: :ok
         else
           render json: { error: "Google login failed" }, status: :unauthorized
         end
-      rescue GoogleIDToken::ValidationError => e
-        Rails.logger.error "GoogleIDToken validation failed: #{e}"
+      else
+        Rails.logger.error "❌ GoogleIDToken validation failed: no matching audience"
         render json: { error: "Invalid Google ID token" }, status: :unauthorized
       end
     else
