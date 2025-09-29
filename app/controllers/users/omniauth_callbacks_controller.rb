@@ -7,11 +7,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if params[:id_token].present?
       validator = GoogleIDToken::Validator.new
 
-      valid_client_ids = [
-        "521400701362-a05bte3iqb85ii4mr2k6cod0e4cht8ro.apps.googleusercontent.com", # Web
-        "521400701362-gilsbm87mrf4b500qafaalq7arsrapc5.apps.googleusercontent.com", # Android
-        "521400701362-9bj6galln7ff2g4l6oho1cdl54oh959n.apps.googleusercontent.com"  # iOS
-      ]
+      valid_client_ids = Rails.application.credentials.dig(:google, :valid_client_ids) || []
 
       payload = nil
       valid_client_ids.each do |client_id|
