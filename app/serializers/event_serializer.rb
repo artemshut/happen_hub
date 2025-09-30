@@ -9,6 +9,7 @@ class EventSerializer
   has_many :comments, serializer: CommentSerializer
   has_many :likes, serializer: LikeSerializer
   has_many :event_participations, serializer: EventParticipationSerializer
+  has_many :users, through: :event_participations, serializer: UserSerializer
 
   attribute :cover_image_url do |event|
     if event.cover_image.attached?
