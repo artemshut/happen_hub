@@ -4,7 +4,7 @@ class EventSerializer
   attributes :id, :title, :description, :start_time, :end_time, :location, :slug, :latitude, :longitude
 
   belongs_to :user, serializer: UserSerializer
-  belongs_to :event_category, serializer: EventCategorySerializer, if: Proc.new { |event| event.event_category.present? }
+  belongs_to :event_category, serializer: EventCategorySerializer, if: proc { |event| event.event_category.present? }
 
   has_many :comments, serializer: CommentSerializer
   has_many :likes, serializer: LikeSerializer
@@ -14,7 +14,7 @@ class EventSerializer
   attribute :cover_image_url do |event|
     if event.cover_image.attached?
       Rails.application.routes.url_helpers.rails_blob_url(
-        event.cover_image, only_path: false, host: 'happenhub.co'
+        event.cover_image, only_path: false, host: "happenhub.co"
       )
     end
   end
@@ -25,7 +25,8 @@ class EventSerializer
         filename: file.filename.to_s,
         content_type: file.content_type,
         byte_size: file.byte_size,
-        url: Rails.application.routes.url_helpers.rails_blob_url(file, host: 'happenhub.co')
+        url: Rails.application.routes.url_helpers.rails_blob_url(file, host: "happenhub.co"),
+        signed_id: file.blob.signed_id
       }
     end
   end
