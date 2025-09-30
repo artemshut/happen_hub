@@ -1,5 +1,5 @@
 class Api::V1::EventsController < Api::V1::BaseController
-  before_action :set_event, only: [:show, :update, :destroy]
+  before_action :set_event, only: [:show, :update]
 
   # GET /api/v1/events
   def index
@@ -49,10 +49,10 @@ class Api::V1::EventsController < Api::V1::BaseController
     end
   end
 
-  # PUT/PATCH /api/v1/events/:id
+  # PUT /api/v1/events/:id
   def update
-    if @event.user_id != current_api_user.id
-      return render json: { error: "Not authorized" }, status: :forbidden
+    if @event.user != current_api_user
+      return render json: { error: "Unauthorized" }, status: :unauthorized
     end
 
     if @event.update(event_params)
@@ -93,27 +93,24 @@ class Api::V1::EventsController < Api::V1::BaseController
   end
 
   def attach_files
-    return unless params[:files].present?
+    return unless params[:event][:files].present?
 
-    params[:files].each do |file|
+    params[:event][:files].each do |file|
       @event.files.attach(file)
     end
   end
 
   def attach_cover_image
-    return unless params[:cover_image].present?
+    return unless params[:event][:cover_image].present?
 
-    @event.cover_image.purge if @event.cover_image.attached? # replace old
-    @event.cover_image.attach(params[:cover_image])
+    @event.cover_image.attach(params[:event][:cover_image])
   end
 
   def remove_files
-    return unless params[:removed_files].present?
+    return unless params[:event][:removed_files].present?
 
-    params[:removed_files].each do |file_id|
-      blob = ActiveStorage::Blob.find_signed(file_id) rescue nil
-      next unless blob
-
+    params[:event][:removed_files].each do |signed_id|
+      blob = ActiveStorage::Blob.find_signed(signed_id)
       attachment = @event.files.find_by(blob_id: blob.id)
       attachment&.purge
     end
