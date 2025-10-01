@@ -42,6 +42,9 @@ gem "omniauth-rails_csrf_protection"
 gem 'friendly_id', '~> 5.5.0'
 gem 'jsonapi-serializer'
 gem 'google-id-token'
+gem "fcm"
+gem "googleauth", "~> 1.8"
+gem "faraday"
 
 # For QR code generation
 gem "rqrcode"

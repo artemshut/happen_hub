@@ -62,7 +62,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :sessions, only: [:create, :destroy]
       resources :events, only: [:index, :show, :create, :update, :destroy]
-      resources :users, only: [:show]
+      resources :users, only: [:show] do
+        collection do
+          post :fcm_token, to: "users#update_fcm_token"
+        end
+      end
 
       post "tokens/refresh", to: "tokens#refresh"
       get "me", to: "users#me"
