@@ -54,8 +54,14 @@ class Api::V1::EventsController < Api::V1::BaseController
       return render json: { error: "Unauthorized" }, status: :unauthorized
     end
 
-    if @event.update(event_params)
-      remove_files # ✅ manual cleanup
+    if @event.update(event_params.except(:files))
+      if params[:event][:files].present?
+        params[:event][:files].each do |file|
+          @event.files.attach(file)
+        end
+      end
+
+      remove_files
 
       render json: EventSerializer.new(
         @event,
