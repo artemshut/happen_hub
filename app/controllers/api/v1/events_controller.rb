@@ -31,10 +31,7 @@ class Api::V1::EventsController < Api::V1::BaseController
     @event = current_api_user.owned_events.new(event_params)
 
     if @event.save
-      # Add participation for creator
       @event.event_participations.create(user: current_api_user, rsvp_status: "maybe")
-
-      # Track activity
       Activity.create(
         user: current_api_user,
         action: "created_event",
@@ -58,7 +55,7 @@ class Api::V1::EventsController < Api::V1::BaseController
     end
 
     if @event.update(event_params)
-      remove_files # ✅ still handle removed files manually
+      remove_files # ✅ manual cleanup
 
       render json: EventSerializer.new(
         @event,
@@ -87,8 +84,7 @@ class Api::V1::EventsController < Api::V1::BaseController
       :event_category_id,
       :visibility,
       :cover_image,
-      files: [],
-      removed_files: []
+      files: []
     )
   end
 
