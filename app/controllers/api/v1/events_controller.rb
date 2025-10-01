@@ -99,6 +99,8 @@ class Api::V1::EventsController < Api::V1::BaseController
 
     params[:event][:removed_files].each do |signed_id|
       blob = ActiveStorage::Blob.find_signed(signed_id)
+      next unless blob
+
       attachment = @event.files.find_by(blob_id: blob.id)
       attachment&.purge
     end

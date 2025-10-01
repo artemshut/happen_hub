@@ -26,7 +26,7 @@ class EventSerializer
         content_type: file.content_type,
         byte_size: file.byte_size,
         url: Rails.application.routes.url_helpers.rails_blob_url(file, host: "happenhub.co"),
-        signed_id: file.blob.signed_id
+        signed_id: file.signed_id
       }
     end
   end
