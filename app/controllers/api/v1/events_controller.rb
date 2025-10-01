@@ -31,15 +31,17 @@ class Api::V1::EventsController < Api::V1::BaseController
     @event = current_api_user.owned_events.new(event_params)
 
     if @event.save
+      # Add participation for creator
       @event.event_participations.create(user: current_api_user, rsvp_status: "maybe")
+
+      # Track activity
       Activity.create(
         user: current_api_user,
         action: "created_event",
         target: @event,
         metadata: { event_name: @event.title }
       )
-      attach_files
-      attach_cover_image
+
       render json: EventSerializer.new(
         @event,
         include: [:user, :event_category, :users, :comments, :likes, :event_participations, :"comments.user"]
@@ -56,9 +58,7 @@ class Api::V1::EventsController < Api::V1::BaseController
     end
 
     if @event.update(event_params)
-      attach_files
-      attach_cover_image
-      remove_files
+      remove_files # ✅ still handle removed files manually
 
       render json: EventSerializer.new(
         @event,
@@ -90,20 +90,6 @@ class Api::V1::EventsController < Api::V1::BaseController
       files: [],
       removed_files: []
     )
-  end
-
-  def attach_files
-    return unless params[:event][:files].present?
-
-    params[:event][:files].each do |file|
-      @event.files.attach(file)
-    end
-  end
-
-  def attach_cover_image
-    return unless params[:event][:cover_image].present?
-
-    @event.cover_image.attach(params[:event][:cover_image])
   end
 
   def remove_files
