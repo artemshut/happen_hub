@@ -1,5 +1,5 @@
 class Api::V1::EventsController < Api::V1::BaseController
-  before_action :set_event, only: [:show, :update]
+  before_action :set_event, only: [:show, :update, :update_rsvp]
 
   # GET /api/v1/events
   def index
@@ -72,6 +72,30 @@ class Api::V1::EventsController < Api::V1::BaseController
       ).serializable_hash, status: :ok
     else
       render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  # POST /api/v1/events/:id/rsvp
+  def update_rsvp
+    authorize @event, :update_rsvp?
+
+    status = params[:status].to_s.downcase
+    unless EventParticipation.rsvp_statuses.key?(status)
+      return render json: { error: "Invalid RSVP status" }, status: :unprocessable_entity
+    end
+
+    participation = @event.event_participations.find_or_initialize_by(user: current_api_user)
+
+    if participation.update(rsvp_status: status)
+      render json: {
+        event: EventSerializer.new(
+          @event,
+          include: [:user, :event_category, :users, :event_participations]
+        ).serializable_hash,
+        rsvp_status: participation.rsvp_status
+      }, status: :ok
+    else
+      render json: { errors: participation.errors.full_messages }, status: :unprocessable_entity
     end
   end
 

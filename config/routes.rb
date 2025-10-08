@@ -61,7 +61,11 @@ Rails.application.routes.draw do
 
     namespace :v1 do
       resources :sessions, only: [:create, :destroy]
-      resources :events, only: [:index, :show, :create, :update, :destroy]
+      resources :events, only: [:index, :show, :create, :update, :destroy] do
+        member do
+          post :rsvp, to: "events#update_rsvp"
+        end
+      end
       resources :users, only: [:show] do
         collection do
           post :fcm_token, to: "users#update_fcm_token"
