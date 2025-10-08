@@ -105,14 +105,34 @@ class Event < ApplicationRecord
     run_at = Time.current + 1.minute if run_at <= Time.current
 
     if Rails.env.production?
-      # De-dupe any previously scheduled job for this event & offset
-      SolidQueue::ScheduledExecution
-        .where(job_class: "EventReminderJob", arguments: [id, minutes_before])
-        .delete_all
-
+      remove_duplicate_reminders!(minutes_before)
       EventReminderJob.set(wait_until: run_at).perform_later(id, minutes_before)
 
       Rails.logger.info "🗓 Scheduled reminder (#{minutes_before}min) for event ##{id} at #{run_at}"
     end
+  end
+
+  def remove_duplicate_reminders!(minutes_before)
+    SolidQueue::ScheduledExecution
+      .joins(:job)
+      .where(solid_queue_jobs: { class_name: "EventReminderJob" })
+      .find_each do |execution|
+        next unless reminder_arguments?(execution.job.arguments, minutes_before)
+
+        execution.destroy
+      end
+  rescue StandardError => e
+    Rails.logger.warn "⚠️ Failed to clean up existing reminders for event ##{id}: #{e.message}"
+  end
+
+  def reminder_arguments?(raw_arguments, minutes_before)
+    decoded = decode_arguments(raw_arguments)
+    decoded == [id, minutes_before]
+  end
+
+  def decode_arguments(raw_arguments)
+    JSON.parse(raw_arguments)
+  rescue JSON::ParserError, TypeError
+    YAML.safe_load(raw_arguments, permitted_classes: [Symbol, Time, Date, ActiveSupport::TimeWithZone])
   end
 end
