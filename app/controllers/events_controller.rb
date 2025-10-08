@@ -6,15 +6,17 @@ class EventsController < ApplicationController
   def index
     authorize Event
 
-    if params[:past] == "true"
-      @events = Event.past(current_user).includes(:event_category)
-      @event_categories = EventCategory.joins(:events).where(events: { id: @events.pluck(:id) }).distinct
-    else
-      @events = Event.upcoming(current_user).includes(:event_category)
-      @event_categories = EventCategory.joins(:events).where(events: { id: @events.pluck(:id) }).distinct
-    end
+    @events = if params[:past] == "true"
+                Event.past_for(current_user)
+              else
+                Event.upcoming_for(current_user)
+              end
+
+    @events = @events.includes(:event_category)
     @events = @events.where(event_category_id: params[:category_id]) if params[:category_id].present?
-    @events = @events.order(start_time: :asc).page(params[:page])
+    @events = @events.page(params[:page])
+
+    @event_categories = EventCategory.joins(:events).where(events: { id: @events.pluck(:id) }).distinct
 
     respond_to do |format|
       format.html

@@ -6,13 +6,13 @@ class Api::V1::EventsController < Api::V1::BaseController
     authorize Event
 
     events = if params[:past] == "true"
-               Event.past(current_api_user).includes(:event_category, :user)
+               Event.past_for(current_api_user)
              else
-               Event.for_user(current_api_user).includes(:event_category, :user)
+               Event.upcoming_for(current_api_user)
              end
 
+    events = events.includes(:event_category, :user)
     events = events.where(event_category_id: params[:category_id]) if params[:category_id].present?
-    events = events.order(start_time: :asc)
 
     render json: EventSerializer.new(
       events,

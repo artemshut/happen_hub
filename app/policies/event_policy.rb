@@ -39,12 +39,12 @@ class EventPolicy < ApplicationPolicy
     user.present? && (manage? || participant? || friend_can_view?)
   end
 
-  class Scope < Scope
+  class Scope < ApplicationPolicy::Scope
     def resolve
       return scope.all if admin?
       return scope.none unless user
 
-      scope.for_user(user)
+      scope.merge(Event.visible_to(user))
     end
   end
 

@@ -24,15 +24,11 @@ class Event < ApplicationRecord
 
   has_rich_text :description
 
-  def self.for_user(user)
-    own_or_participating = left_joins(:event_participations)
-                             .where("event_participations.user_id = ? OR events.user_id = ?", user.id, user.id)
-                             .where("event_participations.rsvp_status IN (?)", ["accepted", "maybe"])
-                             .to_sql
-    friends_visible = visible_for_friend(user).to_sql
+  VISIBLE_PARTICIPATION_STATUSES = %w[accepted maybe].freeze
 
-    Event.from("(#{own_or_participating} UNION #{friends_visible}) AS events").order("start_time DESC")
-  end
+  scope :ordered_by_start, -> { order(start_time: :asc) }
+  scope :past, -> { where(arel_table[:start_time].lt(Time.current)) }
+  scope :upcoming, -> { where(arel_table[:start_time].gteq(Time.current)) }
 
   def past?
     end_time < Time.current
@@ -43,25 +39,36 @@ class Event < ApplicationRecord
     slug.blank? || title_changed?
   end
 
-  def self.visible_for_friend(user)
-    where(visibility: "friends")
-      .joins("INNER JOIN friendships ON (friendships.user_id = events.user_id OR friendships.friend_id = events.user_id)")
-      .where("friendships.user_id = :id OR friendships.friend_id = :id", id: user.id)
+  def self.visible_to(user)
+    return none unless user
+
+    event_table = arel_table
+    participation_subquery = EventParticipation
+                              .where(user_id: user.id, rsvp_status: VISIBLE_PARTICIPATION_STATUSES)
+                              .select(:event_id)
+                              .arel
+
+    condition = event_table[:user_id].eq(user.id)
+    condition = condition.or(event_table[:id].in(participation_subquery))
+
+    # Include friends-only events hosted by accepted friends
+    friend_ids = user.friend_ids
+    if friend_ids.any?
+      friends_condition =
+        event_table[:user_id].in(friend_ids)
+                   .and(event_table[:visibility].eq(Event.visibilities[:friends]))
+      condition = condition.or(friends_condition)
+    end
+
+    where(condition)
   end
 
-  def self.past(user)
-    own_or_participating = left_joins(:event_participations)
-                             .where("event_participations.user_id = ? OR events.user_id = ?", user.id, user.id)
-                             .where("event_participations.rsvp_status IN (?)", ["accepted", "maybe"])
-                             .to_sql
-    friends_visible = visible_for_friend(user).to_sql
-
-    Event.where("start_time < ?", Date.today).from("(#{own_or_participating} UNION #{friends_visible}) AS events").order("start_time DESC")
+  def self.past_for(user)
+    visible_to(user).past.order(start_time: :desc)
   end
 
-  def self.upcoming(user)
-    ### Events that the user owns or is participating in with status accepted or maybe
-    Event.for_user(user).where("start_time >= ?", Date.today)
+  def self.upcoming_for(user)
+    visible_to(user).upcoming.ordered_by_start
   end
 
   def add_friend_with_rsvp(user, rsvp_status = "pending")

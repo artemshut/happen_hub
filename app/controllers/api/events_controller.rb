@@ -2,10 +2,7 @@ class Api::EventsController < ApplicationController
   def index
     authorize Event
 
-    events = Event.includes(:users)
-    .where("events.user_id = ? OR event_participations.user_id = ?", current_user.id, current_user.id)
-    .references(:event_participations)
-    .select("events.*, event_participations.rsvp_status as status")
+    events = Event.visible_to(current_user).includes(:event_participations, :users)
 
     render json: events.map { |event| format_event(event) }
   end
@@ -20,10 +17,15 @@ class Api::EventsController < ApplicationController
       end: event.end_time.iso8601,
       url: event_path(event),
       extendedProps: {
-        status: event.status,
-        color: event_color(event.status) # Include the color here
+        status: rsvp_status_for(event),
+        color: event_color(rsvp_status_for(event)) # Include the color here
       }
     }
+  end
+
+  def rsvp_status_for(event)
+    participation = event.event_participations.find { |part| part.user_id == current_user.id }
+    participation&.rsvp_status
   end
 
   def event_color(status)

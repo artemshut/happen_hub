@@ -102,9 +102,12 @@ class User < ApplicationRecord
   end
 
   def friends
-    friend_ids = friendships.where(status: "accepted").pluck(:friend_id) +
-                 inverse_friendships.where(status: "accepted").pluck(:user_id)
     User.where(id: friend_ids)
+  end
+
+  def friend_ids
+    (friendships.where(status: "accepted").pluck(:friend_id) +
+      inverse_friendships.where(status: "accepted").pluck(:user_id)).uniq
   end
 
   def friends_with?(other_user)
@@ -155,16 +158,7 @@ class User < ApplicationRecord
   end
 
   def upcoming_events
-    Event
-      .left_joins(:event_participations)
-      .where(
-        "events.user_id = :user_id OR (event_participations.user_id = :user_id AND event_participations.rsvp_status = :accepted)",
-        user_id: id,
-        accepted: "accepted",
-      )
-      .where("start_time > ?", Time.current)
-      .distinct
-      .order(:start_time)
+    Event.upcoming_for(self)
   end
 
   def self.search_by_tag(query)
