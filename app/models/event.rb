@@ -15,12 +15,12 @@ class Event < ApplicationRecord
   has_many :likes, as: :likeable, dependent: :destroy
 
   before_validation :assign_default_category
-  after_commit :schedule_24h_reminder!, on: %i[create update]
+  after_commit :schedule_reminders!, on: %i[create update]
 
   validates :title, :start_time, :end_time, presence: true
   validate :validate_file_sizes
 
-  enum :visibility, { private: "private", friends: "friends" }, prefix: true
+  enum :visibility, { private: "private", friends: "friends", public: "public" }, prefix: true
 
   has_rich_text :description
 
@@ -86,21 +86,24 @@ class Event < ApplicationRecord
     end
   end
 
-  def schedule_24h_reminder!
+  def schedule_reminders!
     return if start_time.blank?
 
-    run_at = start_time - 24.hours
-    # If start_time is less than 24h away, schedule soon
+    schedule_at_offset!(1440) # 24 hours
+    schedule_at_offset!(60)   # 1 hour
+  end
+
+  def schedule_at_offset!(minutes_before)
+    run_at = start_time - minutes_before.minutes
     run_at = Time.current + 1.minute if run_at <= Time.current
 
-    # Cancel any existing scheduled jobs for this event
+    # De-dupe any previously scheduled job for this event & offset
     SolidQueue::ScheduledExecution
-      .where(job_class: "EventReminderJob", arguments: [id])
+      .where(job_class: "EventReminderJob", arguments: [id, minutes_before])
       .delete_all
 
-    # Schedule a new reminder
-    EventReminderJob.set(wait_until: run_at).perform_later(id)
+    EventReminderJob.set(wait_until: run_at).perform_later(id, minutes_before)
 
-    Rails.logger.info("🗓 Scheduled 24h reminder for event ##{id} at #{run_at}")
+    Rails.logger.info "🗓 Scheduled reminder (#{minutes_before}min) for event ##{id} at #{run_at}"
   end
 end
