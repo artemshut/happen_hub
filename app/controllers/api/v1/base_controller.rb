@@ -1,5 +1,8 @@
 class Api::V1::BaseController < ActionController::API
+  include Pundit::Authorization
+
   before_action :authenticate_api_user!
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   private
 
@@ -14,5 +17,13 @@ class Api::V1::BaseController < ActionController::API
 
   def current_api_user
     @current_api_user
+  end
+
+  def pundit_user
+    current_api_user
+  end
+
+  def user_not_authorized
+    render json: { error: "forbidden" }, status: :forbidden
   end
 end

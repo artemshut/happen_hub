@@ -1,5 +1,7 @@
 class Api::EventsController < ApplicationController
   def index
+    authorize Event
+
     events = Event.includes(:users)
     .where("events.user_id = ? OR event_participations.user_id = ?", current_user.id, current_user.id)
     .references(:event_participations)

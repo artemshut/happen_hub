@@ -97,13 +97,15 @@ class Event < ApplicationRecord
     run_at = start_time - minutes_before.minutes
     run_at = Time.current + 1.minute if run_at <= Time.current
 
-    # De-dupe any previously scheduled job for this event & offset
-    SolidQueue::ScheduledExecution
-      .where(job_class: "EventReminderJob", arguments: [id, minutes_before])
-      .delete_all
+    if Rails.env.production?
+      # De-dupe any previously scheduled job for this event & offset
+      SolidQueue::ScheduledExecution
+        .where(job_class: "EventReminderJob", arguments: [id, minutes_before])
+        .delete_all
 
-    EventReminderJob.set(wait_until: run_at).perform_later(id, minutes_before)
+      EventReminderJob.set(wait_until: run_at).perform_later(id, minutes_before)
 
-    Rails.logger.info "🗓 Scheduled reminder (#{minutes_before}min) for event ##{id} at #{run_at}"
+      Rails.logger.info "🗓 Scheduled reminder (#{minutes_before}min) for event ##{id} at #{run_at}"
+    end
   end
 end

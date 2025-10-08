@@ -1,8 +1,11 @@
 class EventsController < ApplicationController
   before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group remove_file]
-  before_action :authorize_user!, only: %i[edit update destroy add_friend update_rsvp invite_group remove_file]
+  before_action :authorize_event, only: %i[show edit update destroy add_friend invite_group remove_file]
+  before_action :authorize_event_rsvp, only: %i[update_rsvp]
 
   def index
+    authorize Event
+
     if params[:past] == "true"
       @events = Event.past(current_user).includes(:event_category)
       @event_categories = EventCategory.joins(:events).where(events: { id: @events.pluck(:id) }).distinct
@@ -26,6 +29,8 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
+    authorize @event
+
     @event_categories = EventCategory.all
     @event.start_time = params[:date] if params[:date].present?
   end
@@ -57,6 +62,8 @@ class EventsController < ApplicationController
 
   def create
     @event = current_user.owned_events.new(event_params)
+    authorize @event
+
     if @event.save!
       @event.event_participations.create(user: current_user, rsvp_status: "maybe")
       Activity.create(
@@ -121,10 +128,12 @@ class EventsController < ApplicationController
     @event = Event.friendly.find(params[:id])
   end
 
-  def authorize_user!
-    unless @event.user == current_user || @event.users.include?(current_user) || Event.visible_for_friend(current_user).include?(@event)
-      redirect_to events_path, alert: "Not authorized."
-    end
+  def authorize_event
+    authorize @event
+  end
+
+  def authorize_event_rsvp
+    authorize @event, :update_rsvp?
   end
 
   def event_params

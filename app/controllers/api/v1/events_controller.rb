@@ -3,6 +3,8 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   # GET /api/v1/events
   def index
+    authorize Event
+
     events = if params[:past] == "true"
                Event.past(current_api_user).includes(:event_category, :user)
              else
@@ -20,6 +22,8 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   # GET /api/v1/events/:id
   def show
+    authorize @event
+
     render json: EventSerializer.new(
       @event,
       include: [:user, :users, :event_category, :comments, :likes, :event_participations, :"comments.user"]
@@ -29,6 +33,7 @@ class Api::V1::EventsController < Api::V1::BaseController
   # POST /api/v1/events
   def create
     @event = current_api_user.owned_events.new(event_params)
+    authorize @event
 
     if @event.save
       @event.event_participations.create(user: current_api_user, rsvp_status: "maybe")
@@ -50,9 +55,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   # PUT /api/v1/events/:id
   def update
-    if @event.user != current_api_user
-      return render json: { error: "Unauthorized" }, status: :unauthorized
-    end
+    authorize @event
 
     if @event.update(event_params.except(:files))
       if params[:event][:files].present?

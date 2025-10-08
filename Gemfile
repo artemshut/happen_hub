@@ -45,6 +45,7 @@ gem 'google-id-token'
 gem "fcm"
 gem "googleauth", "~> 1.8"
 gem "faraday"
+gem "pundit"
 
 # For QR code generation
 gem "rqrcode"
@@ -71,13 +72,15 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  gem "rspec-rails", "~> 6.1"
+  gem "factory_bot_rails", "~> 6.4"
+  gem "pry-rails"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
   gem "tidewave"
-  gem "pry-rails"
   gem "letter_opener"
   gem "letter_opener_web"
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_01_150608) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_09_152021) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -170,6 +170,28 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_150608) do
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
+  create_table "role_assignments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "role_id", null: false
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["resource_type", "resource_id"], name: "index_role_assignments_on_resource"
+    t.index ["role_id"], name: "index_role_assignments_on_role_id"
+    t.index ["user_id", "role_id", "resource_type", "resource_id"], name: "idx_role_assignments_unique", unique: true
+    t.index ["user_id"], name: "index_role_assignments_on_user_id"
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "key", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_roles_on_key", unique: true
+  end
+
   create_table "rsvps", force: :cascade do |t|
     t.integer "event_id"
     t.integer "user_id"
@@ -219,4 +241,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_150608) do
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
   add_foreign_key "likes", "users"
+  add_foreign_key "role_assignments", "roles"
+  add_foreign_key "role_assignments", "users"
 end

@@ -31,6 +31,8 @@ class User < ApplicationRecord
 
   # Event Participations
   has_many :event_participations, dependent: :destroy
+  has_many :role_assignments, dependent: :destroy
+  has_many :roles, through: :role_assignments
 
   # ------------------------
   # Validations
@@ -43,18 +45,12 @@ class User < ApplicationRecord
   validates :password, presence: true, if: -> { password.present? }
   validates :username, presence: true, uniqueness: true, format: { with: /\A[a-zA-Z0-9_]+\z/ }
 
-  # ------------------------
-  # Callbacks
-  # ------------------------
   before_validation :assign_first_name_and_last_name, on: :create
   before_validation :assign_unique_tag, on: :create
   before_validation :assign_birthday, on: :create
   before_validation :generate_username, on: :create
   after_create :send_confirmation_instructions, unless: -> { confirmed? }
-
-  # ------------------------
-  # Instance Methods
-  # ------------------------
+  after_create :assign_default_role
 
   def full_name
     "#{first_name} #{last_name}"
@@ -97,7 +93,6 @@ class User < ApplicationRecord
   end
 
   def send_confirmation_instructions
-    # generate token
     self.confirmation_token = Devise.friendly_token
     self.confirmation_sent_at = Time.current
     save(validate: false)
@@ -141,6 +136,24 @@ class User < ApplicationRecord
     inverse_friendships.where(status: :pending)
   end
 
+  def has_role?(key, resource: nil)
+    scope = role_assignments.joins(:role).where(roles: { key: key.to_s })
+    scope = scope.for_resource(resource) if resource.present?
+    scope.exists?
+  end
+
+  def grant_role!(key, resource: nil)
+    role = Role.find_by!(key: key.to_s)
+    role_assignments.find_or_create_by!(role:, resource:)
+  end
+
+  def revoke_role!(key, resource: nil)
+    role = Role.find_by!(key: key.to_s)
+    assignments = role_assignments.where(role:)
+    assignments = assignments.for_resource(resource) if resource.present?
+    assignments.destroy_all
+  end
+
   def upcoming_events
     Event
       .left_joins(:event_participations)
@@ -154,18 +167,10 @@ class User < ApplicationRecord
       .order(:start_time)
   end
 
-  # ------------------------
-  # Class Methods
-  # ------------------------
-
   def self.search_by_tag(query)
     where("tag ILIKE ?", "%#{query}%")
   end
 
-
-  # ------------------------
-  # Private Helpers
-  # ------------------------
 
   private
 
@@ -199,5 +204,12 @@ class User < ApplicationRecord
     end
 
     self.username = candidate
+  end
+
+  def assign_default_role
+    member_role = Role.find_by(key: "member")
+    return unless member_role
+
+    role_assignments.find_or_create_by(role: member_role)
   end
 end
