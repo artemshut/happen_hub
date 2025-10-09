@@ -30,12 +30,14 @@ class GroupPolicy < ApplicationPolicy
   private
 
   def manage?
-    record.respond_to?(:user_id) && user && record.user_id == user.id
+    user.present? &&
+      record.respond_to?(:user_id) &&
+      record.user_id == user.id
   end
 
   def member?
-    return false unless user && record.respond_to?(:members)
-
-    record.members.exists?(id: user.id)
+    user.present? &&
+      record.respond_to?(:members) &&
+      record.members.exists?(id: user.id)
   end
 end
