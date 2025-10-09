@@ -30,7 +30,7 @@ Devise.setup do |config|
   Rails.application.credentials.dig(:google, :client_secret),
  {
     scope: "userinfo.email,userinfo.profile",
-    redirect_uri: 'https://happenhub.co/users/auth/google_oauth2/callback'
+    redirect_uri: "https://happenhub.co/users/auth/google_oauth2/callback"
   }
 
   # Configure the class responsible to send e-mails.

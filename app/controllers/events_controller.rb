@@ -8,9 +8,9 @@ class EventsController < ApplicationController
 
     @events = if params[:past] == "true"
                 Event.past_for(current_user)
-              else
+    else
                 Event.upcoming_for(current_user)
-              end
+    end
 
     @events = @events.includes(:event_category)
     @events = @events.where(event_category_id: params[:category_id]) if params[:category_id].present?
@@ -140,8 +140,8 @@ class EventsController < ApplicationController
 
   def event_params
     params.require(:event).permit(
-      :title, :description, :rsvp_status, :start_time, :end_time, 
-      :location, :latitude, :longitude, :visibility, :cover_image, 
+      :title, :description, :rsvp_status, :start_time, :end_time,
+      :location, :latitude, :longitude, :visibility, :cover_image,
       :event_category_id, files: [],
     )
   end

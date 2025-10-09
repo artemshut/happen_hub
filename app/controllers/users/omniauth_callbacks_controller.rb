@@ -1,7 +1,7 @@
-require 'google-id-token'
+require "google-id-token"
 
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  skip_before_action :verify_authenticity_token, only: [:google_mobile, :failure]
+  skip_before_action :verify_authenticity_token, only: [ :google_mobile, :failure ]
 
   def google_mobile
     if params[:id_token].present?

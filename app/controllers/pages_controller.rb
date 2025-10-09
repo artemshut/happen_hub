@@ -11,4 +11,4 @@ class PagesController < ActionController::Base
     @title = "Terms of Service"
     render layout: "static"
   end
-end  
+end

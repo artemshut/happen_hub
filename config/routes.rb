@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   post "accept-cookies", to: "pages#accept_cookies"
   get "privacy-policy", to: "pages#privacy_policy", as: :privacy_policy
   get "terms-of-service", to: "pages#terms_of_service", as: :terms_of_service
-  
+
   devise_for :users, controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks'
+    omniauth_callbacks: "users/omniauth_callbacks"
   }
 
   # Mobile-specific endpoint
@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   end
 
   get "/dashboard", to: "users#dashboard", as: :dashboard
-  
+
   unauthenticated :user do
     resources :events, only: [ :index, :show ]
   end
@@ -60,14 +60,14 @@ Rails.application.routes.draw do
     resources :events, only: [ :index ]
 
     namespace :v1 do
-      resources :sessions, only: [:create, :destroy]
-      resources :events, only: [:index, :show, :create, :update, :destroy] do
+      resources :sessions, only: [ :create, :destroy ]
+      resources :events, only: [ :index, :show, :create, :update, :destroy ] do
         member do
           post :rsvp, to: "events#update_rsvp"
         end
       end
-      resources :groups, only: [:index, :show, :create, :update, :destroy]
-      resources :users, only: [:show] do
+      resources :groups, only: [ :index, :show, :create, :update, :destroy ]
+      resources :users, only: [ :show ] do
         collection do
           post :fcm_token, to: "users#update_fcm_token"
         end

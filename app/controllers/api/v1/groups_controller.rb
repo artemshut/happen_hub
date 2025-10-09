@@ -1,16 +1,16 @@
 class Api::V1::GroupsController < Api::V1::BaseController
-  before_action :set_group, only: [:show, :update, :destroy]
+  before_action :set_group, only: [ :show, :update, :destroy ]
 
   def index
     groups = policy_scope(Group).includes(:members)
 
-    render json: GroupSerializer.new(groups, include: [:members]).serializable_hash
+    render json: GroupSerializer.new(groups, include: [ :members ]).serializable_hash
   end
 
   def show
     authorize @group
 
-    render json: GroupSerializer.new(@group, include: [:members]).serializable_hash
+    render json: GroupSerializer.new(@group, include: [ :members ]).serializable_hash
   end
 
   def create
@@ -18,7 +18,7 @@ class Api::V1::GroupsController < Api::V1::BaseController
     authorize group
 
     if group.save
-      render json: GroupSerializer.new(group, include: [:members]).serializable_hash, status: :created
+      render json: GroupSerializer.new(group, include: [ :members ]).serializable_hash, status: :created
     else
       render json: { errors: group.errors.full_messages }, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class Api::V1::GroupsController < Api::V1::BaseController
     authorize @group
 
     if @group.update(group_params)
-      render json: GroupSerializer.new(@group, include: [:members]).serializable_hash, status: :ok
+      render json: GroupSerializer.new(@group, include: [ :members ]).serializable_hash, status: :ok
     else
       render json: { errors: @group.errors.full_messages }, status: :unprocessable_entity
     end

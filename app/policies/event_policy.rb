@@ -51,7 +51,7 @@ class EventPolicy < ApplicationPolicy
   private
 
   def manage?
-    admin? || owns_event? || organizer_for_record? || (participant? && record.visibility_friends?) 
+    admin? || owns_event? || organizer_for_record? || (participant? && record.visibility_friends?)
   end
 
   def owns_event?

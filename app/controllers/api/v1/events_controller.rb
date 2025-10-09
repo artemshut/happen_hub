@@ -1,5 +1,5 @@
 class Api::V1::EventsController < Api::V1::BaseController
-  before_action :set_event, only: [:show, :update, :update_rsvp]
+  before_action :set_event, only: [ :show, :update, :update_rsvp ]
 
   # GET /api/v1/events
   def index
@@ -7,16 +7,16 @@ class Api::V1::EventsController < Api::V1::BaseController
 
     events = if params[:past] == "true"
                Event.past_for(current_api_user)
-             else
+    else
                Event.upcoming_for(current_api_user)
-             end
+    end
 
     events = events.includes(:event_category, :user)
     events = events.where(event_category_id: params[:category_id]) if params[:category_id].present?
 
     render json: EventSerializer.new(
       events,
-      include: [:user, :users, :event_category, :event_participations, :comments, :"comments.user"]
+      include: [ :user, :users, :event_category, :event_participations, :comments, :"comments.user" ]
     ).serializable_hash
   end
 
@@ -26,7 +26,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
     render json: EventSerializer.new(
       @event,
-      include: [:user, :users, :event_category, :comments, :likes, :event_participations, :"comments.user"]
+      include: [ :user, :users, :event_category, :comments, :likes, :event_participations, :"comments.user" ]
     ).serializable_hash
   end
 
@@ -46,7 +46,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
       render json: EventSerializer.new(
         @event,
-        include: [:user, :event_category, :users, :comments, :likes, :event_participations, :"comments.user"]
+        include: [ :user, :event_category, :users, :comments, :likes, :event_participations, :"comments.user" ]
       ).serializable_hash, status: :created
     else
       render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
@@ -68,7 +68,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
       render json: EventSerializer.new(
         @event,
-        include: [:user, :event_category, :users, :comments, :likes, :event_participations, :"comments.user"]
+        include: [ :user, :event_category, :users, :comments, :likes, :event_participations, :"comments.user" ]
       ).serializable_hash, status: :ok
     else
       render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
@@ -90,7 +90,7 @@ class Api::V1::EventsController < Api::V1::BaseController
       render json: {
         event: EventSerializer.new(
           @event,
-          include: [:user, :event_category, :users, :event_participations]
+          include: [ :user, :event_category, :users, :event_participations ]
         ).serializable_hash,
         rsvp_status: participation.rsvp_status
       }, status: :ok

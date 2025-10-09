@@ -19,7 +19,7 @@ class CreateRoles < ActiveRecord::Migration[8.0]
     end
 
     add_index :role_assignments,
-              [:user_id, :role_id, :resource_type, :resource_id],
+              [ :user_id, :role_id, :resource_type, :resource_id ],
               unique: true,
               name: "idx_role_assignments_unique"
   end

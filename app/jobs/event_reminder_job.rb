@@ -13,21 +13,21 @@ class EventReminderJob < ApplicationJob
     user_ids = event.event_participations
                     .where(rsvp_status: %w[accepted maybe])
                     .pluck(:user_id)
-    users = User.where(id: user_ids).where.not(fcm_token: [nil, ""])
+    users = User.where(id: user_ids).where.not(fcm_token: [ nil, "" ])
     return if users.empty?
 
     # Friendly copy per offset
     title, body =
       case minutes_before
       when 1440
-        ["⏰ Reminder: #{event.title} starts tomorrow!",
-         "Don't forget — it starts in 24 hours."]
+        [ "⏰ Reminder: #{event.title} starts tomorrow!",
+         "Don't forget — it starts in 24 hours." ]
       when 60
-        ["⏳ Almost time: #{event.title}",
-         "Starts in about 1 hour. See you soon!"]
+        [ "⏳ Almost time: #{event.title}",
+         "Starts in about 1 hour. See you soon!" ]
       else
-        ["Reminder: #{event.title}",
-         "Starts soon."]
+        [ "Reminder: #{event.title}",
+         "Starts soon." ]
       end
 
     data = { "event_id" => event.id.to_s }

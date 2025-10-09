@@ -37,7 +37,7 @@ class UserMailer < ApplicationMailer
         event_url: Rails.application.routes.url_helpers.event_url(event, host: "happenhub.co"),
         event_name: event.title,
         event_date: event.start_time.strftime("%B %d, %Y at %I:%M %p"),
-        user_name: user.full_name,
+        user_name: user.full_name
       }
     )
   end
@@ -51,7 +51,7 @@ class UserMailer < ApplicationMailer
       template_variables: {
         friendships_url: Rails.application.routes.url_helpers.friendships_url(host: "happenhub.co"),
         friend_name: friend.full_name,
-        user_name: user.full_name,
+        user_name: user.full_name
       }
     )
   end

@@ -76,7 +76,7 @@ class User < ApplicationRecord
 
   def self.from_omniauth(auth)
     user = where(email: auth.info.email).first_or_initialize
-  
+
     user.provider = auth.provider
     user.uid = auth.uid
     user.first_name ||= auth.info.first_name

@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::V1::BaseController
-  skip_before_action :authenticate_api_user!, only: [:create]
+  skip_before_action :authenticate_api_user!, only: [ :create ]
 
   def create
     user = User.find_by(email: params[:email])
@@ -27,7 +27,7 @@ class Api::V1::SessionsController < Api::V1::BaseController
       }, status: :ok
     else
       render json: {
-        errors: [{ detail: "Invalid email or password" }]
+        errors: [ { detail: "Invalid email or password" } ]
       }, status: :unauthorized
     end
   end

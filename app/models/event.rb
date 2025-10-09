@@ -127,12 +127,12 @@ class Event < ApplicationRecord
 
   def reminder_arguments?(raw_arguments, minutes_before)
     decoded = decode_arguments(raw_arguments)
-    decoded == [id, minutes_before]
+    decoded == [ id, minutes_before ]
   end
 
   def decode_arguments(raw_arguments)
     JSON.parse(raw_arguments)
   rescue JSON::ParserError, TypeError
-    YAML.safe_load(raw_arguments, permitted_classes: [Symbol, Time, Date, ActiveSupport::TimeWithZone])
+    YAML.safe_load(raw_arguments, permitted_classes: [ Symbol, Time, Date, ActiveSupport::TimeWithZone ])
   end
 end

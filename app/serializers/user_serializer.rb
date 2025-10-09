@@ -7,8 +7,8 @@ class UserSerializer
   attribute :avatar_url do |user|
     if user.avatar.attached?
       Rails.application.routes.url_helpers.rails_blob_url(
-        user.avatar, 
-        host: 'happenhub.co',
+        user.avatar,
+        host: "happenhub.co",
       )
     end
   end

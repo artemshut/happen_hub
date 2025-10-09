@@ -15,10 +15,10 @@ class Api::V1::TokensController < Api::V1::BaseController
           }
         }, status: :ok
       else
-        render json: { errors: [{ detail: "User not found" }] }, status: :unauthorized
+        render json: { errors: [ { detail: "User not found" } ] }, status: :unauthorized
       end
     else
-      render json: { errors: [{ detail: "Invalid refresh token" }] }, status: :unauthorized
+      render json: { errors: [ { detail: "Invalid refresh token" } ] }, status: :unauthorized
     end
   end
 end
