@@ -66,6 +66,7 @@ Rails.application.routes.draw do
           post :rsvp, to: "events#update_rsvp"
         end
       end
+      resources :groups, only: [:index, :show, :create, :update, :destroy]
       resources :users, only: [:show] do
         collection do
           post :fcm_token, to: "users#update_fcm_token"
