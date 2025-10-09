@@ -1,4 +1,3 @@
-# app/controllers/public_profiles_controller.rb
 class PublicProfilesController < ApplicationController
   before_action :find_user
 

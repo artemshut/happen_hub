@@ -4,8 +4,12 @@ one:
   event_id: 1
   user_id: 1
   status: MyString
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
 
 two:
   event_id: 1
   user_id: 1
   status: MyString
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
