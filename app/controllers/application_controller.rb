@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :authenticate_user! # 🔥 still protects web routes
+  before_action :authenticate_user!
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   protected
