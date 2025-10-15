@@ -20,13 +20,11 @@ class Api::V1::EventsController < Api::V1::BaseController
   def show
     authorize @event
 
-    event = EventSerializer.new(
+    render json: EventSerializer.new(
       @event,
       include: [ :user, :event_category, :comments, :likes, :"comments.user" ],
       params: serializer_params
     ).serializable_hash
-    Rails.logger.info("Event details: #{event}")
-    render json: event
   end
 
   # POST /api/v1/events
