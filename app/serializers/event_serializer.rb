@@ -9,6 +9,14 @@ class EventSerializer
   has_many :comments, serializer: CommentSerializer
   has_many :likes, serializer: LikeSerializer
 
+  has_many :event_participations, serializer: EventParticipationSerializer do |event, params|
+    event.participant_scope_for(params[:current_user])
+  end
+
+  has_many :users, serializer: UserSerializer do |event, params|
+    event.participant_scope_for(params[:current_user]).map(&:user).uniq
+  end
+
   attribute :cover_image_url do |event, params|
     host = params[:host] || "happenhub.co"
     if event.cover_image.attached?
