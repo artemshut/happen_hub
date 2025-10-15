@@ -11,7 +11,10 @@ RSpec.describe CommentPolicy do
   context "when user is not present" do
     let(:user) { nil }
 
-    it { is_expected.not_to permit_actions([:create, :destroy]) }
+    it "denies create and destroy" do
+      expect(policy.create?).to be(false)
+      expect(policy.destroy?).to be(false)
+    end
 
     context "when event is public" do
       let(:visibility) { "public" }

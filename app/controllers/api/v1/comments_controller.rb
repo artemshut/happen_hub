@@ -1,8 +1,9 @@
 class Api::V1::CommentsController < Api::V1::BaseController
-  skip_before_action :authenticate_api_user!, only: [:index]
+  skip_before_action :authenticate_api_user!, only: [ :index ]
+  before_action :authenticate_optional_user, only: [ :index ]
   before_action :set_event
   before_action :ensure_event_visible!
-  before_action :set_comment, only: [:destroy]
+  before_action :set_comment, only: [ :destroy ]
 
   def index
     comments = @event.comments.includes(:user).order(created_at: :asc)
@@ -52,5 +53,16 @@ class Api::V1::CommentsController < Api::V1::BaseController
 
   def serializer_params
     { host: request.base_url }
+  end
+
+  def authenticate_optional_user
+    return if current_api_user.present?
+
+    header = request.headers["Authorization"]
+    return unless header.present?
+
+    token = header.split(" ").last
+    decoded = JwtService.decode(token)
+    @current_api_user = User.find_by(id: decoded[:user_id]) if decoded
   end
 end
