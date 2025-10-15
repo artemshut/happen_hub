@@ -39,13 +39,18 @@ class Event < ApplicationRecord
 
     return scope unless visibility_public?
 
-    scope = scope.where(rsvp_status: VISIBLE_PARTICIPATION_STATUSES)
-    return scope.none unless viewer
+    filtered_scope = scope.where(rsvp_status: VISIBLE_PARTICIPATION_STATUSES)
+    return filtered_scope.none unless viewer
 
     allowed_ids = viewer.friend_ids + [ viewer.id ]
-    allowed_ids << user_id if viewer.friends_with?(user)
+    filtered_scope = filtered_scope.where(user_id: allowed_ids.uniq)
 
-    scope.where(user_id: allowed_ids.uniq)
+    if viewer.friends_with?(user)
+      owner_scope = scope.where(user_id: user_id)
+      filtered_scope = filtered_scope.or(owner_scope)
+    end
+
+    filtered_scope
   end
 
   def participants_grouped_for(viewer)
