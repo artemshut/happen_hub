@@ -31,7 +31,7 @@ RSpec.describe "API V1 Events participants", type: :request do
       expect(attributes["participant_count"]).to eq(3)
 
       participant_ids = attributes["participants"].map { |participant| participant["id"] }
-      expect(participant_ids).to match_array([user.id, friend.id])
+      expect(participant_ids).to match_array([ user.id, friend.id ])
     end
   end
 
@@ -50,7 +50,7 @@ RSpec.describe "API V1 Events participants", type: :request do
 
       expect(attributes["participant_count"]).to eq(3)
       participant_ids = attributes["participants"].map { |participant| participant["id"] }
-      expect(participant_ids).to match_array([user.id, friend.id, stranger.id])
+      expect(participant_ids).to match_array([ user.id, friend.id, stranger.id ])
     end
   end
 end

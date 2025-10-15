@@ -42,7 +42,7 @@ class Event < ApplicationRecord
     scope = scope.where(rsvp_status: VISIBLE_PARTICIPATION_STATUSES)
     return scope.none unless viewer
 
-    allowed_ids = viewer.friend_ids + [viewer.id]
+    allowed_ids = viewer.friend_ids + [ viewer.id ]
     allowed_ids << user_id if viewer.friends_with?(user)
 
     scope.where(user_id: allowed_ids.uniq)

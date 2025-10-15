@@ -8,9 +8,9 @@ class EventsController < ApplicationController
 
     @events = if params[:past] == "true"
                 Event.visible_to(current_user).past.order(start_time: :desc)
-              else
+    else
                 Event.visible_to(current_user).upcoming.ordered_by_start
-              end
+    end
 
     @events = @events.includes(:event_category)
     @events = @events.where(event_category_id: params[:category_id]) if params[:category_id].present?
