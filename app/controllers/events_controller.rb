@@ -7,10 +7,10 @@ class EventsController < ApplicationController
     authorize Event
 
     @events = if params[:past] == "true"
-                Event.past_for(current_user)
-    else
-                Event.upcoming_for(current_user)
-    end
+                Event.visible_to(current_user).past.order(start_time: :desc)
+              else
+                Event.visible_to(current_user).upcoming.ordered_by_start
+              end
 
     @events = @events.includes(:event_category)
     @events = @events.where(event_category_id: params[:category_id]) if params[:category_id].present?
@@ -27,6 +27,8 @@ class EventsController < ApplicationController
   def show
     @comment = Comment.new
     @friends = current_user.friends - @event.users
+    @participants_by_status = @event.participants_grouped_for(current_user)
+    @participant_count = @event.participant_count
   end
 
   def new
@@ -56,7 +58,17 @@ class EventsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("invitation_status", partial: "events/invitation_status_full", locals: { error: "Failed to update status." }) }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "invitation_status",
+            partial: "events/invitation_status_full",
+            locals: {
+              event: @event,
+              participants_by_status: @event.participants_grouped_for(current_user),
+              participant_count: @event.participant_count
+            }
+          )
+        end
         format.html { redirect_to event_path(@event), alert: "Failed to update RSVP status." }
       end
     end

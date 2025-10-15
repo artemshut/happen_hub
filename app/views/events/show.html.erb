@@ -46,7 +46,13 @@
     <%= render 'shared/map_view', event: @event %>
 
     <!-- Participants -->
-    <%= render partial: "events/invitation_status_full", locals: { event: @event } %>
+    <%= render partial: "events/invitation_status_full",
+               locals: {
+                 event: @event,
+                 viewer: current_user,
+                 participants_by_status: @participants_by_status,
+                 participant_count: @participant_count
+               } %>
 
     <% unless @event.past? %>
       <!-- Tabs: Friends, Suggestions, Groups -->

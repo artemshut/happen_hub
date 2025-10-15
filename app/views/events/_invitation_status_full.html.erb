@@ -1,19 +1,48 @@
 <div id="invitation_status" class="bg-neutral-surface shadow-xl rounded-2xl p-6 border border-neutral-border animate-fadeIn">
   <h2 class="text-2xl font-bold mb-6 text-gray-900">Participants</h2>
 
-  <% if event.event_participations.any? %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <% viewer = if defined?(current_user) && viewer.nil?
+                current_user
+              else
+                viewer
+              end %>
+  <% participants_by_status ||= event.participants_grouped_for(viewer) %>
+  <% participant_count ||= event.participant_count %>
 
-      <% { 
-        accepted: "Going", 
-        maybe: "Maybe", 
-        declined: "Not Going", 
-        pending: "Pending" 
-      }.each do |status, label| %>
+  <% status_labels = {
+    accepted: "Going",
+    maybe: "Maybe",
+    declined: "Not Going",
+    pending: "Pending"
+  } %>
+
+  <% statuses_to_render = if event.visibility_public?
+                            Event::VISIBLE_PARTICIPATION_STATUSES.map(&:to_sym)
+                          else
+                            status_labels.keys
+                          end %>
+
+  <% display_participants = participants_by_status.values.flatten %>
+
+  <% if event.visibility_public? %>
+    <p class="text-gray-600 text-sm mb-4">
+      <span class="font-semibold"><%= participant_count %></span> people are going.
+      <% if display_participants.empty? %>
+        None of your friends have RSVP'd yet.
+      <% end %>
+    </p>
+  <% end %>
+
+  <% if display_participants.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <% statuses_to_render.each do |status| %>
+        <% participants = participants_by_status[status] || [] %>
+        <% next if participants.empty? %>
         <div>
+          <% label = status_labels[status] || status.to_s.titleize %>
           <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3"><%= label %></h3>
           <ul class="flex flex-wrap gap-3">
-            <% event.event_participations.public_send(status).each do |participant| %>
+            <% participants.each do |participant| %>
               <li class="relative group">
                 <!-- Avatar or Initial -->
                 <% if participant.user.avatar.attached? %>
@@ -62,7 +91,13 @@
 
     </div>
   <% else %>
-    <p class="text-gray-500 text-center text-lg">No participants yet.</p>
+    <p class="text-gray-500 text-center text-lg">
+      <% if participant_count.positive? %>
+        No friends attending yet.
+      <% else %>
+        No participants yet.
+      <% end %>
+    </p>
   <% end %>
 
   <% unless event.past? %>

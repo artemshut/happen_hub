@@ -36,8 +36,9 @@
                     <p class="text-sm text-gray-500 mt-1"><%= formatted_event_date(event.start_time) %></p>
 
                     <!-- Participants -->
+                    <% visible_participants = event.participant_scope_for(current_user).limit(5) %>
                     <div class="flex items-center gap-2 mt-4">
-                      <% event.event_participations.limit(5).each do |p| %>
+                      <% visible_participants.each do |p| %>
                         <div class="relative group">
                           <% if p.user.avatar.attached? %>
                             <%= image_tag p.user.avatar.variant(resize_to_fill: [40, 40]),
@@ -77,8 +78,9 @@
                         </div>
                       <% end %>
 
-                      <% if event.event_participations.count > 5 %>
-                        <span class="text-xs text-gray-500 font-medium">+<%= event.event_participations.count - 5 %> more</span>
+                      <% remaining = event.participant_count - visible_participants.size %>
+                      <% if remaining.positive? %>
+                        <span class="text-xs text-gray-500 font-medium">+<%= remaining %> more</span>
                       <% end %>
                     </div>
                   </div>

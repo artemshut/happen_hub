@@ -1,7 +1,15 @@
 <div id="invitation_status" class="mt-3">
-  <% if event.event_participations.any? %>
+  <% viewer = if defined?(current_user) && viewer.nil?
+                current_user
+              else
+                viewer
+              end %>
+  <% participants = event.participant_scope_for(viewer) %>
+  <% participant_count ||= event.participant_count %>
+
+  <% if participants.any? %>
     <div class="flex flex-wrap items-center gap-3">
-      <% event.event_participations.includes(:user).each do |participant| %>
+      <% participants.each do |participant| %>
         <% user = participant.user %>
         <% status_tag = case participant.rsvp_status
             when 'accepted' then 'Going'
@@ -25,7 +33,18 @@
         </div>
       <% end %>
     </div>
+    <% if event.visibility_public? && participant_count > participants.size %>
+      <p class="text-xs text-gray-500 mt-2">
+        +<%= participant_count - participants.size %> more people attending.
+      </p>
+    <% end %>
   <% else %>
-    <p class="text-gray-500 text-center text-sm">No participants yet.</p>
+    <p class="text-gray-500 text-center text-sm">
+      <% if participant_count.positive? %>
+        No friends attending yet.
+      <% else %>
+        No participants yet.
+      <% end %>
+    </p>
   <% end %>
 </div>

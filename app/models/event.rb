@@ -30,6 +30,32 @@ class Event < ApplicationRecord
   scope :past, -> { where(arel_table[:start_time].lt(Time.current)) }
   scope :upcoming, -> { where(arel_table[:start_time].gteq(Time.current)) }
 
+  def participant_count
+    event_participations.where(rsvp_status: VISIBLE_PARTICIPATION_STATUSES).count
+  end
+
+  def participant_scope_for(viewer)
+    scope = event_participations.includes(:user)
+
+    return scope unless visibility_public?
+
+    scope = scope.where(rsvp_status: VISIBLE_PARTICIPATION_STATUSES)
+    return scope.none unless viewer
+
+    allowed_ids = viewer.friend_ids + [viewer.id]
+    allowed_ids << user_id if viewer.friends_with?(user)
+
+    scope.where(user_id: allowed_ids.uniq)
+  end
+
+  def participants_grouped_for(viewer)
+    participant_scope_for(viewer).group_by { |participation| participation.rsvp_status.to_sym }
+  end
+
+  def friend_participants_for(viewer)
+    participant_scope_for(viewer)
+  end
+
   def past?
     end_time < Time.current
   end
@@ -40,8 +66,6 @@ class Event < ApplicationRecord
   end
 
   def self.visible_to(user)
-    return none unless user
-
     event_table = arel_table
     participation_subquery = EventParticipation
                               .where(user_id: user.id, rsvp_status: VISIBLE_PARTICIPATION_STATUSES)
@@ -60,7 +84,24 @@ class Event < ApplicationRecord
       condition = condition.or(friends_condition)
     end
 
-    where(condition)
+    scope = where(visibility: :public)
+
+    if user
+      condition = event_table[:user_id].eq(user.id)
+      condition = condition.or(event_table[:id].in(participation_subquery))
+
+      friend_ids = user.friend_ids
+      if friend_ids.any?
+        friends_condition =
+          event_table[:user_id].in(friend_ids)
+                     .and(event_table[:visibility].eq(Event.visibilities[:friends]))
+        condition = condition.or(friends_condition)
+      end
+
+      scope = scope.or(where(condition))
+    end
+
+    scope
   end
 
   def self.past_for(user)
