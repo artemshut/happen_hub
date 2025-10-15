@@ -66,7 +66,12 @@ class Event < ApplicationRecord
   end
 
   def self.visible_to(user)
+    scope = where(visibility: :public)
+
+    return scope unless user
+
     event_table = arel_table
+
     participation_subquery = EventParticipation
                               .where(user_id: user.id, rsvp_status: VISIBLE_PARTICIPATION_STATUSES)
                               .select(:event_id)
@@ -75,7 +80,6 @@ class Event < ApplicationRecord
     condition = event_table[:user_id].eq(user.id)
     condition = condition.or(event_table[:id].in(participation_subquery))
 
-    # Include friends-only events hosted by accepted friends
     friend_ids = user.friend_ids
     if friend_ids.any?
       friends_condition =
@@ -84,24 +88,7 @@ class Event < ApplicationRecord
       condition = condition.or(friends_condition)
     end
 
-    scope = where(visibility: :public)
-
-    if user
-      condition = event_table[:user_id].eq(user.id)
-      condition = condition.or(event_table[:id].in(participation_subquery))
-
-      friend_ids = user.friend_ids
-      if friend_ids.any?
-        friends_condition =
-          event_table[:user_id].in(friend_ids)
-                     .and(event_table[:visibility].eq(Event.visibilities[:friends]))
-        condition = condition.or(friends_condition)
-      end
-
-      scope = scope.or(where(condition))
-    end
-
-    scope
+    scope.or(where(condition))
   end
 
   def self.past_for(user)

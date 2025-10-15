@@ -65,6 +65,8 @@ Rails.application.routes.draw do
         member do
           post :rsvp, to: "events#update_rsvp"
         end
+
+        resources :comments, only: [ :index, :create, :destroy ]
       end
       resources :event_categories, only: [ :index, :show ]
       resources :groups, only: [ :index, :show, :create, :update, :destroy ]
