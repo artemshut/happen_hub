@@ -1,7 +1,6 @@
 class Api::V1::EventsController < Api::V1::BaseController
   before_action :set_event, only: [ :show, :update, :update_rsvp ]
 
-  # GET /api/v1/events
   def index
     authorize Event
 
@@ -18,15 +17,16 @@ class Api::V1::EventsController < Api::V1::BaseController
     ).serializable_hash
   end
 
-  # GET /api/v1/events/:id
   def show
     authorize @event
 
-    render json: EventSerializer.new(
+    event = EventSerializer.new(
       @event,
       include: [ :user, :event_category, :comments, :likes, :"comments.user" ],
       params: serializer_params
     ).serializable_hash
+    Rails.logger.info("Event details: #{event}")
+    render json: event
   end
 
   # POST /api/v1/events
