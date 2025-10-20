@@ -165,6 +165,13 @@ class User < ApplicationRecord
     where("tag ILIKE ?", "%#{query}%")
   end
 
+  def self.ransackable_attributes(auth_object = nil)
+    [ "birthday", "confirmation_sent_at", "confirmation_token", "confirmed_at", "created_at", "email", "encrypted_password", "fcm_token", "first_name", "id", "id_value", "last_name", "platform", "provider", "remember_created_at", "reset_password_sent_at", "reset_password_token", "tag", "uid", "unconfirmed_email", "updated_at", "username" ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    reflect_on_all_associations.map(&:name)
+  end
 
   private
 

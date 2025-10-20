@@ -19,4 +19,12 @@ class EventParticipation < ApplicationRecord
     # Notify the user about the event participation
     UserMailer.send_event_participation_notification(user, event).deliver_now
   end
+
+  def self.ransackable_associations(auth_object = nil)
+    [ "event", "user" ]
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    [ "created_at", "event_id", "id", "rsvp_status", "updated_at", "user_id" ]
+  end
 end

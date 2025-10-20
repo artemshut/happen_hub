@@ -14,6 +14,14 @@ class Friendship < ApplicationRecord
       .first
   end
 
+  def self.ransackable_attributes(auth_object = nil)
+    column_names
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [ "friend", "user" ]
+  end
+
   private
 
   def notify_friend

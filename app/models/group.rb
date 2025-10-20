@@ -23,4 +23,12 @@ class Group < ApplicationRecord
   def add_friend(user)
     group_memberships.create(user: user)
   end
+
+  def self.ransackable_attributes(auth_object = nil)
+    column_names
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [ "creator", "events", "group_memberships", "members" ]
+  end
 end

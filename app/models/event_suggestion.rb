@@ -13,6 +13,14 @@ class EventSuggestion < ApplicationRecord
   validate :suggested_end_time_after_start_time
   validate :suggested_start_time_before_event_end_time
 
+  def self.ransackable_associations(auth_object = nil)
+    [ "event", "likes", "user" ]
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    [ "created_at", "id", "suggested_end_time", "suggested_start_time", "status", "updated_at", "event_id", "user_id" ]
+  end
+
   private
 
   def suggestion_not_in_past
