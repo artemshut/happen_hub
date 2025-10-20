@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/artemshut/happen_hub/actions/workflows/ci.yml/badge.svg)](https://github.com/artemshut/happen_hub/actions)
 [![Deploy on Fly.io](https://img.shields.io/badge/deployed%20on-Fly.io-purple?logo=fly.io)](https://fly.io/apps/happen-hub)
-[![Ruby](https://img.shields.io/badge/Ruby-3.2.2-red.svg?logo=ruby)](https://www.ruby-lang.org/en/)
+[![Ruby](https://img.shields.io/badge/Ruby-3.2.4-red.svg?logo=ruby)](https://www.ruby-lang.org/en/)
 
 **Plan better. Connect smarter. Live socially.**  
 A modern web app to plan events with friends, vote on dates, track attendance, and stay effortlessly connected — all in real-time.
