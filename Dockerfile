@@ -95,6 +95,6 @@ USER 1000:1000
 # Entrypoint sets up the container.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start server via Thruster by default, this can be overwritten at runtime
 EXPOSE 8080
-CMD ["./bin/thrust", "./bin/rails", "server"]
+# Start Puma directly so the PORT env and config/puma.rb are respected
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

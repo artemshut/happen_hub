@@ -7,6 +7,9 @@ app = 'happen-hub'
 primary_region = 'arn'
 console_command = '/rails/bin/rails console'
 
+[env]
+  PORT = "8080"
+
 [build]
 
 [http_service]
