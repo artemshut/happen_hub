@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
   get "public_profiles/show"
   match "/500", to: "errors#server_error", via: :all
   post "accept-cookies", to: "pages#accept_cookies"

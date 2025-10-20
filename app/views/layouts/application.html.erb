@@ -28,6 +28,7 @@
     <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.credentials.dig(:google, :maps, :api_key)}&libraries=places", async: true, defer: true %>
 
     <%= javascript_importmap_tags %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
   <%= render "shared/cookie_banner" %>
