@@ -73,3 +73,37 @@ cd happenhub
 bundle install
 bin/setup
 bin/dev
+```
+
+---
+
+## 🗂️ Task Workflow with `backlog.md`
+
+We manage ongoing development using `backlog.md` in the project root:
+
+- Add unchecked bullets under **Backlog** in priority order.
+- Move the current item to **In Progress** (mark it `[x]`) when you or the agent begin work.
+- After review/merge, move the item to **Done** and note the PR or outcome.
+
+See `docs/AGENT_WORKFLOW.md` for the full step-by-step guide to collaborating with the agent.
+
+### Terminal helpers
+
+```bash
+# Show the full backlog with simple coloring
+bin/backlog_ui
+
+# Print the next task waiting in Backlog
+bin/backlog_next
+
+# Start a task: creates/switches branch and moves it to In Progress
+bin/backlog_start HUB-001
+
+# Finish a task: runs tests, pushes, opens PR (via gh), moves to Done
+bin/backlog_finish HUB-001
+```
+
+The scripts expect task bullets in `backlog.md` to follow the `HUB-###` format.
+`bin/backlog_finish` auto-detects a sensible test command (`BACKLOG_TEST_COMMAND`
+env var overrides the default). Pull request creation uses the GitHub CLI when
+available; otherwise it will prompt you to open the PR manually.

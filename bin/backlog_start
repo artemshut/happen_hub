@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "open3"
+require_relative "../lib/backlog_cli"
+
+TASK_ID = ARGV[0]
+abort "Usage: bin/backlog_start HUB-001" unless TASK_ID
+
+def run_git(*args)
+  system("git", *args)
+end
+
+backlog = BacklogCLI.new
+task = backlog.find_task(TASK_ID)
+abort "Task #{TASK_ID} not found." unless task
+abort "Task #{TASK_ID} is already in progress." unless task.todo?
+
+branch = "feature/#{task.id.downcase}-#{task.slug}"
+
+unless run_git("checkout", "-b", branch)
+  warn "Branch #{branch} exists, switching to it."
+  abort "Failed to checkout #{branch}." unless run_git("checkout", branch)
+end
+
+backlog = BacklogCLI.new
+begin
+  task = backlog.start_task(TASK_ID)
+rescue StandardError => e
+  abort e.message
+end
+
+puts "Started #{task.id}: #{task.title}"
+puts "Branch: #{branch}"
+puts "Notes:"
+task.notes.each { |note| puts "  - #{note}" }
+puts
+puts "Next steps:"
+puts "  • Implement the feature, commit changes."
+puts "  • When ready, run bin/backlog_finish #{task.id}."

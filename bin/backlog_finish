@@ -1,0 +1,81 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "open3"
+require_relative "../lib/backlog_cli"
+
+TASK_ID = ARGV[0]
+abort "Usage: bin/backlog_finish HUB-001" unless TASK_ID
+
+def system_or_abort(*cmd, msg: nil)
+  success = system(*cmd)
+  return if success
+
+  abort(msg || "Command failed: #{cmd.join(' ')}")
+end
+
+def detect_test_command
+  return ENV["BACKLOG_TEST_COMMAND"] if ENV["BACKLOG_TEST_COMMAND"] && !ENV["BACKLOG_TEST_COMMAND"].empty?
+
+  return "bin/rails test" if File.exist?("bin/rails")
+  return "bundle exec rspec" if Dir.exist?("spec")
+
+  "bundle exec rake test"
+end
+
+def current_branch
+  stdout, status = Open3.capture2("git", "rev-parse", "--abbrev-ref", "HEAD")
+  abort "Unable to determine current branch." unless status.success?
+
+  stdout.strip
+end
+
+def gh_available?
+  system("gh", "--version", out: File::NULL, err: File::NULL)
+end
+
+backlog = BacklogCLI.new
+task = backlog.find_task(TASK_ID)
+abort "Task #{TASK_ID} not found." unless task
+abort "Task #{TASK_ID} is not currently in progress." unless task.in_progress?
+
+puts "Running tests..."
+test_command = detect_test_command
+system_or_abort(test_command, msg: "Tests failed (command: #{test_command}). Resolve before finishing.")
+puts "Tests passed."
+
+branch = current_branch
+puts "Pushing branch #{branch}..."
+system_or_abort("git", "push", "-u", "origin", branch, msg: "Failed to push branch #{branch}.")
+
+pr_note = nil
+if gh_available?
+  title = "feat: #{task.id} #{task.title}"
+  body = <<~BODY
+    ## Summary
+    - Implements task #{task.id} from backlog.md
+
+    ---
+    _Generated via bin/backlog_finish._
+  BODY
+
+  puts "Creating pull request with GitHub CLI..."
+  if system("gh", "pr", "create", "--fill", "--title", title, "--body", body)
+    url, status = Open3.capture2("gh", "pr", "view", branch, "--json", "url", "--template", "{{.url}}")
+    pr_note = "PR: #{url.strip}" if status.success? && !url.strip.empty?
+    puts "Pull request created: #{pr_note || 'See GitHub'}"
+  else
+    warn "gh pr create failed. Create the PR manually."
+  end
+else
+  warn "GitHub CLI not found. Push successful—create the PR manually."
+end
+
+begin
+  backlog.finish_task(TASK_ID, pr_note:)
+rescue StandardError => e
+  abort e.message
+end
+
+puts "Marked #{TASK_ID} as Done in backlog.md."
+puts "Remember to move the PR through review and merge it."

@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "pathname"
+
+ROOT = Pathname.new(__dir__).join("..").expand_path
+BACKLOG_PATH = ROOT.join("backlog.md")
+
+unless BACKLOG_PATH.exist?
+  warn "backlog.md not found at #{BACKLOG_PATH}"
+  exit 1
+end
+
+sections = {
+  "In Progress" => [],
+  "Backlog" => [],
+  "Done" => []
+}
+
+current_section = nil
+
+File.foreach(BACKLOG_PATH, encoding: "UTF-8") do |line|
+  trimmed = line.strip
+
+  case trimmed
+  when "## In Progress" then current_section = "In Progress"
+  when "## Backlog" then current_section = "Backlog"
+  when "## Done" then current_section = "Done"
+  when /^## / then current_section = nil
+  when /^### / then current_section = nil
+  else
+    next unless current_section
+
+    if trimmed.start_with?("- ")
+      sections[current_section] << trimmed
+    elsif !trimmed.empty?
+      sections[current_section] << "  #{trimmed}"
+    end
+  end
+end
+
+COLORS = {
+  header: "\e[95m",
+  bullet: "\e[36m",
+  note: "\e[37m",
+  reset: "\e[0m"
+}.freeze
+
+sections.each do |section, items|
+  puts "#{COLORS[:header]}== #{section} ==#{COLORS[:reset]}"
+  if items.empty?
+    puts "#{COLORS[:note]}(none)#{COLORS[:reset]}"
+  else
+    items.each do |item|
+      case item
+      when /\A- \[/
+        puts "#{COLORS[:bullet]}#{item}#{COLORS[:reset]}"
+      when /\A- /
+        puts "  #{COLORS[:note]}#{item[2..]}#{COLORS[:reset]}"
+      else
+        puts "#{COLORS[:note]}#{item}#{COLORS[:reset]}"
+      end
+    end
+  end
+  puts
+end
+
+puts "#{COLORS[:note]}Tip: edit backlog.md to update tasks.#{COLORS[:reset]}"
