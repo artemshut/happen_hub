@@ -11,7 +11,7 @@ def run_git(*args)
   system("git", *args)
 end
 
-backlog = BacklogCLI.new
+backlog = BacklogCli.new
 task = backlog.find_task(TASK_ID)
 abort "Task #{TASK_ID} not found." unless task
 abort "Task #{TASK_ID} is already in progress." unless task.todo?
@@ -23,7 +23,7 @@ unless run_git("checkout", "-b", branch)
   abort "Failed to checkout #{branch}." unless run_git("checkout", branch)
 end
 
-backlog = BacklogCLI.new
+backlog = BacklogCli.new
 begin
   task = backlog.start_task(TASK_ID)
 rescue StandardError => e

@@ -3,7 +3,7 @@
 
 require_relative "../app/lib/backlog_cli"
 
-backlog = BacklogCLI.new
+backlog = BacklogCli.new
 task = backlog.next_task
 
 if task

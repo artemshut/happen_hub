@@ -34,7 +34,7 @@ def gh_available?
   system("gh", "--version", out: File::NULL, err: File::NULL)
 end
 
-backlog = BacklogCLI.new
+backlog = BacklogCli.new
 task = backlog.find_task(TASK_ID)
 abort "Task #{TASK_ID} not found." unless task
 abort "Task #{TASK_ID} is not currently in progress." unless task.in_progress?

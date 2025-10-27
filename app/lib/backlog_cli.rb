@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BacklogCLI
+class BacklogCli
   Task = Struct.new(:status, :id, :title, :notes, keyword_init: true) do
     def in_progress?
       status == "x"
