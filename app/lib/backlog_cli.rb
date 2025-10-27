@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "fileutils"
-
 class BacklogCLI
   Task = Struct.new(:status, :id, :title, :notes, keyword_init: true) do
     def in_progress?

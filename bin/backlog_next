@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative "../lib/backlog_cli"
+require_relative "../app/lib/backlog_cli"
 
 backlog = BacklogCLI.new
 task = backlog.next_task

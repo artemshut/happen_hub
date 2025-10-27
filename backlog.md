@@ -5,14 +5,11 @@ Each task lives in the **Backlog** section until the agent starts it. When work 
 When the work has been reviewed and merged, move it to **Done** and include a short note or PR link.
 
 ## In Progress
-- [x] HUB-001 Define smart invitation availability rules
-  - Capture how event start/end times, time zones, and overlapping participations should influence the availability label (e.g., free, tentative, busy).
-  - Document any data model updates or new associations required.
-
-## Backlog
-- [ ] HUB-002 Implement backend availability checker for invites
+- [x] HUB-002 Implement backend availability checker for invites
   - Build a service or query that evaluates a friend’s availability for a target event based on their confirmed and tentative participations.
   - Expose the result through the API used when searching or selecting invitees.
+
+## Backlog
 - [ ] HUB-003 Display availability status in invite UI
   - Surface the computed status (with color/icon copy) wherever a host adds friends to an event.
   - Ensure the status updates reactively when the event time changes.
@@ -22,7 +19,8 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## Done
 
-- _empty_
+- [x] HUB-001 Define smart invitation availability rules
+  - See `docs/smart_invitation_availability.md` for the finalized status matrix and requirements.
 
 ### Tips
 - Use short codes in parentheses (e.g., `feature-flags`) to make it easy to reference a task in conversations.

@@ -78,6 +78,12 @@ payload similar to:
 The UI can then show a badge (“Tentative – responds to board game night”) while
 still allowing the host to proceed with the invite.
 
+### Implementation reference
+
+The backend entry point lives in `InviteeAvailabilityService.call(event:, invitee:)`.
+It returns the status string together with any conflict metadata and an optional
+`note` when availability cannot be determined.
+
 ## Follow-Up Tasks
 
 * HUB-002 will implement the actual query/service returning these statuses.

@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require "open3"
-require_relative "../lib/backlog_cli"
+require_relative "../app/lib/backlog_cli"
 
 TASK_ID = ARGV[0]
 abort "Usage: bin/backlog_finish HUB-001" unless TASK_ID
