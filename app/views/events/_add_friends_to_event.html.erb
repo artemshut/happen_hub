@@ -1,21 +1,19 @@
-<div class="tab-content" id="tab-friends">
-  <h2 class="text-xl font-bold mb-4">Add Friends to Event</h2>
-  <ul class="list-none space-y-2">
-    <% @friends.each do |friend| %>
-      <li class="flex justify-between items-center bg-gray-50 p-4 rounded-xl shadow-sm">
-        <span class="text-gray-800 font-medium"><%= friend.first_name %> <%= friend.last_name %> (<%= friend.tag %>)</span>
-        <div class="flex space-x-2">
-          <%= button_to 'Attending',
-              add_friend_event_path(@event, friend_id: friend.id, rsvp_status: 'accepted'),
-              method: :post,
-              class: "bg-brand-dark text-white px-4 py-2 rounded-lg text-sm hover:bg-brand-light transition" %>
+<% friends ||= [] %>
+<% friend_availabilities ||= {} %>
 
-          <%= button_to 'Maybe',
-              add_friend_event_path(@event, friend_id: friend.id, rsvp_status: 'pending'),
-              method: :post,
-              class: "bg-slate-300 text-gray-800 px-4 py-2 rounded-lg text-sm hover:bg-slate-400 transition" %>
-        </div>
-      </li>
-    <% end %>
-  </ul>
+<div
+  class="tab-content"
+  id="tab-friends"
+  data-controller="invitee-availability"
+  data-invitee-availability-url-value="<%= availability_preview_event_path(event) %>"
+  data-action="availability:update->invitee-availability#refresh">
+  <h2 class="text-xl font-bold mb-4">Add Friends to Event</h2>
+  <turbo-frame id="friend_invite_list">
+    <%= render partial: "events/friend_invite_list",
+               locals: {
+                 event: event,
+                 friends: friends,
+                 friend_availabilities: friend_availabilities
+               } %>
+  </turbo-frame>
 </div>

@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["start", "end"]
 
   connect() {
-    // optional: console.log("DatetimeLinkController connected")
+    // optional hook for future use
   }
 
   handleStartChange() {
@@ -14,5 +14,22 @@ export default class extends Controller {
         this.endTarget.showPicker?.() // for browsers that support it
       }, 100)
     }
+
+    this.dispatchAvailabilityUpdate()
+  }
+
+  handleEndChange() {
+    this.dispatchAvailabilityUpdate()
+  }
+
+  dispatchAvailabilityUpdate() {
+    const detail = {
+      startTime: this.startTarget.value,
+      endTime: this.endTarget.value
+    }
+
+    this.element.dispatchEvent(
+      new CustomEvent("availability:update", { detail, bubbles: true })
+    )
   }
 }

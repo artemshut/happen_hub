@@ -1,0 +1,30 @@
+<ul class="list-none space-y-2">
+  <% if friends.any? %>
+    <% friends.each do |friend| %>
+      <% availability = friend_availabilities[friend.id] %>
+      <li class="flex justify-between items-center bg-gray-50 p-4 rounded-xl shadow-sm">
+        <div>
+          <span class="text-gray-800 font-medium">
+            <%= friend.first_name %> <%= friend.last_name %> (<%= friend.tag %>)
+          </span>
+          <div class="mt-1">
+            <%= availability_badge(availability) %>
+          </div>
+        </div>
+        <div class="flex space-x-2">
+          <%= button_to "Attending",
+              add_friend_event_path(event, friend_id: friend.id, rsvp_status: "accepted"),
+              method: :post,
+              class: "bg-brand-dark text-white px-4 py-2 rounded-lg text-sm hover:bg-brand-light transition" %>
+
+          <%= button_to "Maybe",
+              add_friend_event_path(event, friend_id: friend.id, rsvp_status: "pending"),
+              method: :post,
+              class: "bg-slate-300 text-gray-800 px-4 py-2 rounded-lg text-sm hover:bg-slate-400 transition" %>
+        </div>
+      </li>
+    <% end %>
+  <% else %>
+    <li class="text-gray-500 italic">No friends available to invite.</li>
+  <% end %>
+</ul>
