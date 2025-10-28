@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group remove_file]
-  before_action :authorize_event, only: %i[show edit update destroy add_friend invite_group remove_file]
+  before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group remove_file availability_preview]
+  before_action :authorize_event, only: %i[show edit update destroy add_friend invite_group remove_file availability_preview]
   before_action :authorize_event_rsvp, only: %i[update_rsvp]
 
   def index
@@ -26,9 +26,9 @@ class EventsController < ApplicationController
 
   def show
     @comment = Comment.new
-    @friends = current_user.friends - @event.users
     @participants_by_status = @event.participants_grouped_for(current_user)
     @participant_count = @event.participant_count
+    load_friend_invite_context(@event)
   end
 
   def new
@@ -95,6 +95,7 @@ class EventsController < ApplicationController
   # GET /groups/:group_id/events/:id/edit
   def edit
     @event_categories = EventCategory.all
+    load_friend_invite_context(@event)
   end
 
   # PATCH/PUT /groups/:group_id/events/:id
@@ -136,6 +137,30 @@ class EventsController < ApplicationController
     end
   end
 
+  def availability_preview
+    preview_event = @event.dup
+    preview_event.id = @event.id
+    preview_event.start_time = parse_datetime(params[:start_time]) || @event.start_time
+    preview_event.end_time = parse_datetime(params[:end_time]) || @event.end_time
+
+    load_friend_invite_context(preview_event)
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "friend_invite_list",
+          partial: "events/friend_invite_list",
+          locals: {
+            event: @event,
+            friends: @friends,
+            friend_availabilities: @friend_availabilities
+          }
+        )
+      end
+      format.html { redirect_to event_path(@event) }
+    end
+  end
+
   private
 
   def set_event
@@ -156,5 +181,20 @@ class EventsController < ApplicationController
       :location, :latitude, :longitude, :visibility, :cover_image,
       :event_category_id, files: [],
     )
+  end
+
+  def load_friend_invite_context(event_for_availability)
+    @friends = current_user.friends - @event.users
+    @friend_availabilities = @friends.each_with_object({}) do |friend, hash|
+      hash[friend.id] = InviteeAvailabilityService.call(event: event_for_availability, invitee: friend)
+    end
+  end
+
+  def parse_datetime(value)
+    return if value.blank?
+
+    Time.zone.parse(value)
+  rescue ArgumentError
+    nil
   end
 end
