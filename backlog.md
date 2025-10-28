@@ -6,9 +6,7 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## In Progress
 
-- [x] HUB-004 Test coverage and documentation for smart invitations
-  - Add request/service specs covering each availability state.
-  - Update README or internal docs to explain how availability is calculated.
+- _empty_
 
 ## Backlog
 
@@ -16,6 +14,9 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## Done
 
+- [x] HUB-004 Test coverage and documentation for smart invitations
+  - Add request/service specs covering each availability state.
+  - Update README or internal docs to explain how availability is calculated.
 - [x] HUB-003 Display availability status in invite UI
   - Surface the computed status (with color/icon copy) wherever a host adds friends to an event.
   - Ensure the status updates reactively when the event time changes.
