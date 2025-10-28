@@ -185,8 +185,8 @@ class EventsController < ApplicationController
 
   def load_friend_invite_context(event_for_availability)
     @friends = current_user.friends - @event.users
-    @friend_availabilities = @friends.index_with do |friend|
-      InviteeAvailabilityService.call(event: event_for_availability, invitee: friend)
+    @friend_availabilities = @friends.each_with_object({}) do |friend, hash|
+      hash[friend.id] = InviteeAvailabilityService.call(event: event_for_availability, invitee: friend)
     end
   end
 
