@@ -54,6 +54,19 @@ A modern web app to plan events with friends, vote on dates, track attendance, a
 
 ---
 
+## 🧠 Smart Invitation Availability
+
+When a host tweaks event times, friends in the invite panel show a status badge so conflicts are obvious:
+
+- `Free` – no overlapping commitments for the invitee.
+- `Busy` – at least one overlapping event they have accepted.
+- `Tentative` – overlaps exist but they have only responded `maybe`/`pending`.
+- `Unknown` – insufficient time data to decide (either event times are missing or the invitee has incomplete records).
+
+Badges and tooltips come from `InviteeAvailabilityService` and the invite preview Turbo frame in `EventsController#availability_preview`. For the full matrix and background see `docs/smart_invitation_availability.md`.
+
+---
+
 ## 💻 Tech Stack
 
 - **Ruby on Rails** 7
