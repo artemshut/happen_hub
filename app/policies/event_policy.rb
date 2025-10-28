@@ -35,6 +35,10 @@ class EventPolicy < ApplicationPolicy
     manage?
   end
 
+  def availability_preview?
+    manage?
+  end
+
   def update_rsvp?
     user.present? && (manage? || participant? || friend_can_view?)
   end
