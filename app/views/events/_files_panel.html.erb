@@ -1,16 +1,20 @@
 <turbo-frame id="files_panel">
-  <div class="bg-white rounded-xl shadow-md p-6 space-y-5">
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-    <div>
-      <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-        <span>📎 Shared Files</span>
-        <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-          <%= event.files.count %> total
-        </span>
-      </h2>
-      <p class="text-sm text-gray-500 mt-1">Keep everything in one place—attendees can add resources everyone needs.</p>
-    </div>
-  </div>
+  <div class="rounded-3xl bg-gradient-to-br from-white via-white to-brand-soft/20 shadow-xl ring-1 ring-brand-soft/30 p-7 space-y-6 mt-6">
+    <header class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex flex-col gap-1">
+        <div class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-brand-dark/70">
+          <span class="text-lg">🧷</span>
+          <span>Shared Files</span>
+        </div>
+        <p class="text-sm text-gray-500">
+          Keep everything in one place—attendees can upload agendas, slides, or quick snapshots for the group.
+        </p>
+      </div>
+      <span class="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-4 py-1 text-xs font-semibold text-gray-600 shadow-sm ring-1 ring-gray-200">
+        <span class="h-2 w-2 rounded-full bg-brand-light"></span>
+        <%= pluralize(event.files.count, "file") %>
+      </span>
+    </header>
 
   <% if defined?(upload_notice) && upload_notice.present? %>
     <div class="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
@@ -36,7 +40,7 @@
           url: upload_files_event_path(event),
           method: :post,
           html: {
-            class: "group relative border-2 border-dashed border-gray-200 rounded-xl p-6 transition hover:border-accent-pink/60 hover:bg-accent-pink/5",
+            class: "group relative flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-gray-200 bg-white/60 px-6 py-8 text-sm text-gray-600 transition hover:border-brand-light hover:bg-brand-soft/10",
             data: {
               controller: "inline-upload",
               action: "dragover->inline-upload#highlight dragleave->inline-upload#unhighlight drop->inline-upload#drop"
@@ -45,23 +49,23 @@
           data: { inline_upload_target: "form" },
           multipart: true
         ) do |form| %>
-      <div class="flex flex-col items-center text-center gap-3 text-sm text-gray-600">
-        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-accent-pink/10 text-accent-pink text-xl">
+      <div class="flex flex-col items-center text-center gap-3">
+        <div class="flex h-14 w-14 items-center justify-center rounded-full bg-brand-soft/40 text-2xl">
           📤
         </div>
         <div>
           <p class="font-semibold text-gray-700">Drag & drop files here</p>
-          <p class="text-xs text-gray-500 mt-1">PDFs, images, slides & more—max 10 MB each.</p>
+          <p class="text-xs text-gray-500 mt-1">PDFs, images, slides & more — max 10 MB each.</p>
         </div>
-        <label class="inline-flex items-center gap-2 rounded-lg bg-accent-pink px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-pink-600 cursor-pointer">
-          <span>Browse files</span>
+        <label class="inline-flex items-center gap-2 rounded-full bg-brand-dark px-5 py-2 text-sm font-medium text-white shadow-md transition hover:bg-brand-light cursor-pointer">
+          <span>Choose files</span>
           <%= form.file_field :files,
                 multiple: true,
                 direct_upload: true,
                 class: "sr-only",
                 data: { inline_upload_target: "fileInput", action: "change->inline-upload#handleChange change->inline-upload#processQueued" } %>
         </label>
-        <ul data-inline-upload-target="fileList" class="hidden text-xs text-gray-500 space-y-1"></ul>
+        <ul data-inline-upload-target="fileList" class="hidden text-xs text-gray-500 space-y-1 [&>li]:rounded [&>li]:bg-white [&>li]:px-3 [&>li]:py-1 [&>li]:shadow-sm"></ul>
         <button type="submit" class="hidden" data-inline-upload-target="submit"></button>
       </div>
     <% end %>
@@ -73,28 +77,32 @@
 
   <div>
     <% if event.files.attached? %>
-      <ul class="divide-y divide-gray-100 border border-gray-100 rounded-lg overflow-hidden">
+      <ul class="divide-y divide-gray-100 rounded-2xl border border-gray-100 bg-white overflow-hidden">
         <% event.files.each do |file| %>
-          <li class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 bg-gray-50 hover:bg-gray-100 transition">
-            <div class="flex items-center gap-3">
-              <span class="text-xl"><%= attachment_icon_for(file) %></span>
-              <div>
-                <p class="font-medium text-gray-800 truncate max-w-xs" title="<%= file.filename.to_s %>">
+          <li class="flex flex-col gap-3 px-5 py-4 transition hover:bg-brand-soft/10 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-4">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-soft/50 text-lg">
+                <%= attachment_icon_for(file) %>
+              </span>
+              <div class="space-y-1">
+                <p class="font-medium text-gray-800 truncate max-w-xs sm:max-w-sm" title="<%= file.filename.to_s %>">
                   <%= file.filename.to_s.truncate(40) %>
                 </p>
-                <p class="text-xs text-gray-500">
-                  <%= number_to_human_size(file.byte_size) %> • Added <%= time_ago_in_words(file.created_at) %> ago
+                <p class="text-xs text-gray-500 flex items-center gap-2">
+                  <span><%= number_to_human_size(file.byte_size) %></span>
+                  <span class="h-1 w-1 rounded-full bg-gray-300"></span>
+                  <span>Added <%= time_ago_in_words(file.created_at) %> ago</span>
                 </p>
               </div>
             </div>
 
-            <div class="flex items-center gap-4 text-sm">
-              <%= link_to "Preview", url_for(file), target: "_blank", rel: "noopener", class: "text-blue-600 hover:underline" %>
-              <%= link_to "Download", rails_blob_path(file, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
+            <div class="flex items-center gap-3 text-sm">
+              <%= link_to "Preview", url_for(file), target: "_blank", rel: "noopener", class: "rounded-full bg-white px-3 py-1 text-blue-600 shadow-sm ring-1 ring-blue-100 transition hover:bg-blue-50" %>
+              <%= link_to "Download", rails_blob_path(file, disposition: "attachment"), class: "rounded-full bg-white px-3 py-1 text-blue-600 shadow-sm ring-1 ring-blue-100 transition hover:bg-blue-50" %>
               <% if policy(event).remove_file? %>
                 <%= link_to "Remove",
                             file_event_path(event, file_id: file.id),
-                            class: "text-red-600 hover:underline",
+                            class: "rounded-full bg-white px-3 py-1 text-red-500 shadow-sm ring-1 ring-red-100 transition hover:bg-red-50",
                             data: { turbo_method: :delete, turbo_stream: true, confirm: "Remove #{file.filename}?" } %>
               <% end %>
             </div>
@@ -102,7 +110,7 @@
         <% end %>
       </ul>
     <% else %>
-      <div class="border border-dashed border-gray-200 rounded-lg px-4 py-6 text-center text-sm text-gray-500">
+      <div class="rounded-2xl border border-dashed border-gray-200 bg-white px-6 py-10 text-center text-sm text-gray-500 shadow-inner">
         No files yet. Be the first to share something useful!
       </div>
     <% end %>
