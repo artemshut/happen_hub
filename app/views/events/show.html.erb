@@ -38,9 +38,7 @@
       </div>
     </div>
 
-    <turbo-frame id="files_panel">
-      <%= render "files_panel", event: @event %>
-    </turbo-frame>
+    <%= render "files_panel", event: @event %>
 
     <!-- Map -->
     <%= render 'shared/map_view', event: @event %>

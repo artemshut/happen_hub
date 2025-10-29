@@ -49,7 +49,7 @@ gem "aws-sdk-s3", "~> 1.178", require: false
 gem "redis", "~> 5.4"
 gem "activeadmin", "= 4.0.0beta15"
 gem "cssbundling-rails", "= 1.4.1"
-gem 'mailgun-ruby', '~>1.4.0'
+gem "mailgun-ruby", "~>1.4.0"
 
 # For QR code generation
 gem "rqrcode"

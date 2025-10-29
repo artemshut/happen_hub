@@ -45,7 +45,7 @@ RSpec.describe "Event file attachments", type: :request do
             params: {
               event: {
                 title: "Updated title",
-                files: [""]
+                files: [ "" ]
               }
             }
 
@@ -62,13 +62,65 @@ RSpec.describe "Event file attachments", type: :request do
             params: {
               event: {
                 title: "Updated title again",
-                files: [new_file]
+                files: [ new_file ]
               }
             }
 
       updated_event = event.reload
       expect(response).to redirect_to(event_path(updated_event))
       expect(updated_event.files.count).to eq(2)
+    end
+  end
+
+  describe "POST /events/:id/upload_files" do
+    let(:attachment) { fixture_file_upload("sample.txt", "text/plain") }
+
+    it "allows the host to upload files for a private event" do
+      event.update!(visibility: :private)
+
+      expect do
+        post upload_files_event_path(event), params: { event: { files: [ attachment ] } }
+      end.to change { event.reload.files.count }.by(1)
+
+      expect(response).to redirect_to(event_path(event))
+    end
+
+    it "allows a participant to upload files for a friends-only event" do
+      friend = create(:user)
+      create(:friendship, user: user, friend: friend, status: :accepted)
+      event.update!(visibility: :friends)
+      event.event_participations.create!(user: friend, rsvp_status: :accepted)
+
+      sign_in friend, scope: :user
+
+      expect do
+        post upload_files_event_path(event), params: { event: { files: [ attachment ] } }
+      end.to change { event.reload.files.count }.by(1)
+
+      expect(response).to redirect_to(event_path(event))
+    end
+
+    it "denies upload when the event is public" do
+      event.update!(visibility: :public)
+
+      expect do
+        post upload_files_event_path(event), params: { event: { files: [ attachment ] } }
+      end.not_to change { event.reload.files.count }
+
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to be_present
+    end
+
+    it "denies upload when the user is not attending" do
+      other_user = create(:user)
+      sign_in other_user, scope: :user
+
+      expect do
+        post upload_files_event_path(event), params: { event: { files: [ attachment ] } }
+      end.not_to change { event.reload.files.count }
+
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to be_present
     end
   end
 end

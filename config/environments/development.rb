@@ -43,7 +43,7 @@ Rails.application.configure do
   config.action_mailer.enveloop_settings = {
     api_key: Rails.application.credentials.dig(:mailgun, :api_key),
     domain: Rails.application.credentials.dig(:mailgun, :domain),
-    api_host: 'api.eu.mailgun.net'
+    api_host: "api.eu.mailgun.net"
   }
 
   # Set localhost to be used by links generated in mailer templates.

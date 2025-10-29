@@ -35,6 +35,10 @@ class EventPolicy < ApplicationPolicy
     manage?
   end
 
+  def upload_files?
+    user.present? && restricted_visibility? && (manage? || participant?)
+  end
+
   def availability_preview?
     manage?
   end
@@ -85,5 +89,11 @@ class EventPolicy < ApplicationPolicy
 
   def public_event?
     record.respond_to?(:visibility_public?) && record.visibility_public?
+  end
+
+  def restricted_visibility?
+    return false unless record.respond_to?(:visibility_private?) && record.respond_to?(:visibility_friends?)
+
+    record.visibility_private? || record.visibility_friends?
   end
 end

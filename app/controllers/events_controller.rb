@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group remove_file availability_preview]
-  before_action :authorize_event, only: %i[show edit update destroy add_friend invite_group remove_file availability_preview]
+  before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group upload_files remove_file availability_preview]
+  before_action :authorize_event, only: %i[show edit update destroy add_friend invite_group upload_files remove_file availability_preview]
   before_action :authorize_event_rsvp, only: %i[update_rsvp]
 
   def index
@@ -138,9 +138,33 @@ class EventsController < ApplicationController
     redirect_to event_path(@event), notice: "Invitations sent to all members of #{@group.name}."
   end
 
+  def upload_files
+    authorize @event, :upload_files?
+
+    new_files = Array(params.dig(:event, :files)).reject(&:blank?)
+    if new_files.blank?
+      respond_to_upload(alert: "Please choose at least one file to upload.")
+      return
+    end
+
+    @event.pending_files = new_files
+
+    if @event.valid?
+      attach_uploaded_files(@event, new_files)
+      @event.reload
+      respond_to_upload(notice: "Files uploaded.")
+    else
+      @upload_errors = @event.errors.full_messages
+      respond_to_upload(status: :unprocessable_entity)
+    end
+  ensure
+    @event.pending_files = nil
+  end
+
   def remove_file
     file = @event.files.find(params[:file_id])
     file.purge
+    @event.reload
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: turbo_stream.replace("files_panel", partial: "events/files_panel", locals: { event: @event })
@@ -208,6 +232,21 @@ class EventsController < ApplicationController
     end
   ensure
     event.pending_files = nil
+  end
+
+  def respond_to_upload(status: :ok, notice: nil, alert: nil)
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "files_panel",
+          partial: "events/files_panel",
+          locals: { event: @event, upload_notice: notice, upload_alert: alert, upload_errors: @upload_errors }
+        ), status: status
+      end
+      format.html do
+        redirect_to event_path(@event), notice: notice, alert: alert
+      end
+    end
   end
 
   def load_friend_invite_context(event_for_availability)

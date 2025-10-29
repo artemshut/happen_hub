@@ -1,27 +1,111 @@
-<details class="bg-white rounded-lg shadow-md p-4 mt-6 animate-fade-in transition">
-  <summary class="cursor-pointer font-semibold text-accent-red text-lg">📎 Files</summary>
+<turbo-frame id="files_panel">
+  <div class="bg-white rounded-xl shadow-md p-6 space-y-5">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div>
+      <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+        <span>📎 Shared Files</span>
+        <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+          <%= event.files.count %> total
+        </span>
+      </h2>
+      <p class="text-sm text-gray-500 mt-1">Keep everything in one place—attendees can add resources everyone needs.</p>
+    </div>
+  </div>
 
-  <% if event.files.attached? %>
-    <ul class="mt-3 space-y-2 text-sm text-gray-700">
-      <% event.files.each do |file| %>
-        <li class="flex justify-between items-center border border-gray-200 rounded px-3 py-2 bg-gray-50">
-          <div class="flex items-center gap-2">
-            <span><%= attachment_icon_for(file) %></span>
-            <span class="truncate max-w-[12rem]" title="<%= file.filename.to_s %>"><%= file.filename.to_s.truncate(30) %></span>
-          </div>
-
-          <div class="flex gap-3 items-center">
-            <%= link_to "Download", rails_blob_path(file, disposition: "attachment"),
-                        class: "text-blue-600 hover:underline text-sm" %>
-            <%= button_to "Remove", file_event_path(event, file_id: file.id),
-                          method: :delete,
-                          form: { data: { turbo_stream: true } },
-                          class: "text-red-600 text-xs hover:underline" %>
-          </div>
-        </li>
-      <% end %>
-    </ul>
-  <% else %>
-    <p class="mt-3 text-sm text-gray-500">No files uploaded yet.</p>
+  <% if defined?(upload_notice) && upload_notice.present? %>
+    <div class="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+      <%= upload_notice %>
+    </div>
+  <% elsif defined?(upload_alert) && upload_alert.present? %>
+    <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <%= upload_alert %>
+    </div>
   <% end %>
-</details>
+
+  <% if defined?(upload_errors) && upload_errors.present? %>
+    <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 space-y-1">
+      <% upload_errors.each do |message| %>
+        <p>• <%= message %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if policy(event).upload_files? %>
+    <%= form_with(
+          scope: :event,
+          url: upload_files_event_path(event),
+          method: :post,
+          html: {
+            class: "group relative border-2 border-dashed border-gray-200 rounded-xl p-6 transition hover:border-accent-pink/60 hover:bg-accent-pink/5",
+            data: {
+              controller: "inline-upload",
+              action: "dragover->inline-upload#highlight dragleave->inline-upload#unhighlight drop->inline-upload#drop"
+            }
+          },
+          data: { inline_upload_target: "form" },
+          multipart: true
+        ) do |form| %>
+      <div class="flex flex-col items-center text-center gap-3 text-sm text-gray-600">
+        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-accent-pink/10 text-accent-pink text-xl">
+          📤
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Drag & drop files here</p>
+          <p class="text-xs text-gray-500 mt-1">PDFs, images, slides & more—max 10 MB each.</p>
+        </div>
+        <label class="inline-flex items-center gap-2 rounded-lg bg-accent-pink px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-pink-600 cursor-pointer">
+          <span>Browse files</span>
+          <%= form.file_field :files,
+                multiple: true,
+                direct_upload: true,
+                class: "sr-only",
+                data: { inline_upload_target: "fileInput", action: "change->inline-upload#handleChange change->inline-upload#processQueued" } %>
+        </label>
+        <ul data-inline-upload-target="fileList" class="hidden text-xs text-gray-500 space-y-1"></ul>
+        <button type="submit" class="hidden" data-inline-upload-target="submit"></button>
+      </div>
+    <% end %>
+  <% elsif event.visibility_public? %>
+    <div class="rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+      File sharing is limited to private or friends-only events.
+    </div>
+  <% end %>
+
+  <div>
+    <% if event.files.attached? %>
+      <ul class="divide-y divide-gray-100 border border-gray-100 rounded-lg overflow-hidden">
+        <% event.files.each do |file| %>
+          <li class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 bg-gray-50 hover:bg-gray-100 transition">
+            <div class="flex items-center gap-3">
+              <span class="text-xl"><%= attachment_icon_for(file) %></span>
+              <div>
+                <p class="font-medium text-gray-800 truncate max-w-xs" title="<%= file.filename.to_s %>">
+                  <%= file.filename.to_s.truncate(40) %>
+                </p>
+                <p class="text-xs text-gray-500">
+                  <%= number_to_human_size(file.byte_size) %> • Added <%= time_ago_in_words(file.created_at) %> ago
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 text-sm">
+              <%= link_to "Preview", url_for(file), target: "_blank", rel: "noopener", class: "text-blue-600 hover:underline" %>
+              <%= link_to "Download", rails_blob_path(file, disposition: "attachment"), class: "text-blue-600 hover:underline" %>
+              <% if policy(event).remove_file? %>
+                <%= link_to "Remove",
+                            file_event_path(event, file_id: file.id),
+                            class: "text-red-600 hover:underline",
+                            data: { turbo_method: :delete, turbo_stream: true, confirm: "Remove #{file.filename}?" } %>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="border border-dashed border-gray-200 rounded-lg px-4 py-6 text-center text-sm text-gray-500">
+        No files yet. Be the first to share something useful!
+      </div>
+    <% end %>
+  </div>
+  </div>
+</turbo-frame>
