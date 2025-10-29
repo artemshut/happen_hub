@@ -196,6 +196,8 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
+    faraday-multipart (1.1.1)
+      multipart-post (~> 2.0)
     faraday-net_http (3.4.1)
       net-http (>= 0.5.0)
     fast-mcp (1.6.0)
@@ -327,6 +329,10 @@ GEM
       net-imap
       net-pop
       net-smtp
+    mailgun-ruby (1.4.0)
+      faraday (~> 2.1)
+      faraday-multipart (~> 1.1.0)
+      mini_mime
     marcel (1.1.0)
     matrix (0.4.3)
     method_source (1.1.0)
@@ -344,6 +350,7 @@ GEM
     multi_json (1.17.0)
     multi_xml (0.7.2)
       bigdecimal (~> 3.1)
+    multipart-post (2.4.1)
     net-http (0.6.0)
       uri
     net-imap (0.5.12)
@@ -666,6 +673,7 @@ DEPENDENCIES
   kaminari-tailwind
   letter_opener
   letter_opener_web
+  mailgun-ruby (~> 1.4.0)
   omniauth
   omniauth-google-oauth2
   omniauth-rails_csrf_protection

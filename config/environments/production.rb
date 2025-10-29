@@ -63,12 +63,14 @@ Rails.application.configure do
   # config/environments/production.rb
   config.exceptions_app = self.routes
 
-  config.action_mailer.default_url_options = { host: "happenhub.com", protocol: "https" }
+  config.action_mailer.default_url_options = { host: "happenhub.co", protocol: "https" }
 
-  config.action_mailer.delivery_method = :enveloop
+  config.action_mailer.delivery_method = :mailgun
 
   config.action_mailer.enveloop_settings = {
-    api_key: Rails.application.credentials.dig(:enveloop, :live_api_key)
+    api_key: Rails.application.credentials.dig(:mailgun, :api_key),
+    domain: Rails.application.credentials.dig(:mailgun, :domain),
+    api_host: 'api.eu.mailgun.net'
   }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
