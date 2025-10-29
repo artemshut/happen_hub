@@ -75,10 +75,15 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = current_user.owned_events.new(event_params)
+    attributes = event_params
+    uploaded_files = attributes.delete(:files)
+
+    @event = current_user.owned_events.new(attributes)
+    @event.pending_files = uploaded_files if uploaded_files.present?
     authorize @event
 
-    if @event.save!
+    if @event.save
+      attach_uploaded_files(@event, uploaded_files)
       @event.event_participations.create(user: current_user, rsvp_status: "maybe")
       Activity.create(
         user: current_user,
@@ -100,7 +105,14 @@ class EventsController < ApplicationController
 
   # PATCH/PUT /groups/:group_id/events/:id
   def update
-    if @event.update(event_params)
+    attributes = event_params
+    new_files = attributes.delete(:files)
+
+    @event.assign_attributes(attributes)
+    @event.pending_files = new_files if new_files.present?
+
+    if @event.save
+      attach_uploaded_files(@event, new_files)
       redirect_to event_path(@event), notice: "Event updated successfully."
     else
       render :edit, status: :unprocessable_entity
@@ -180,7 +192,22 @@ class EventsController < ApplicationController
       :title, :description, :rsvp_status, :start_time, :end_time,
       :location, :latitude, :longitude, :visibility, :cover_image,
       :event_category_id, files: [],
-    )
+    ).tap do |whitelisted|
+      next unless whitelisted[:files].is_a?(Array)
+
+      whitelisted[:files].reject!(&:blank?)
+      whitelisted.delete(:files) if whitelisted[:files].blank?
+    end
+  end
+
+  def attach_uploaded_files(event, files)
+    return if files.blank?
+
+    Array(files).each do |file|
+      event.files.attach(file)
+    end
+  ensure
+    event.pending_files = nil
   end
 
   def load_friend_invite_context(event_for_availability)

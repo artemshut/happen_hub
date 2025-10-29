@@ -4,6 +4,7 @@ class Event < ApplicationRecord
 
   has_one_attached :cover_image
   has_many_attached :files
+  attr_accessor :pending_files
 
   belongs_to :group, optional: true
   belongs_to :event_category
@@ -127,10 +128,11 @@ class Event < ApplicationRecord
   end
 
   def validate_file_sizes
-    files.each do |file|
-      if file.byte_size > 10.megabytes
-        errors.add(:files, "#{file.filename} is too large. Each file must be under 10 MB.")
-      end
+    (files.to_a + Array(pending_files)).compact.each do |file|
+      size = file_size_for_validation(file)
+      next if size <= 10.megabytes
+
+      errors.add(:files, "#{file_label_for_validation(file)} is too large. Each file must be under 10 MB.")
     end
   end
 
@@ -175,5 +177,25 @@ class Event < ApplicationRecord
     JSON.parse(raw_arguments)
   rescue JSON::ParserError, TypeError
     YAML.safe_load(raw_arguments, permitted_classes: [ Symbol, Time, Date, ActiveSupport::TimeWithZone ])
+  end
+
+  def file_size_for_validation(file)
+    if file.respond_to?(:byte_size)
+      file.byte_size
+    elsif file.respond_to?(:size)
+      file.size.to_i
+    else
+      0
+    end
+  end
+
+  def file_label_for_validation(file)
+    if file.respond_to?(:filename)
+      file.filename.to_s
+    elsif file.respond_to?(:original_filename)
+      file.original_filename.to_s
+    else
+      "Attachment"
+    end
   end
 end

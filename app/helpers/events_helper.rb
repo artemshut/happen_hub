@@ -5,6 +5,21 @@ module EventsHelper
     "tentative" => "bg-amber-100 text-amber-800 border-amber-200",
     "unknown" => "bg-gray-200 text-gray-700 border-gray-300"
   }.freeze
+  ATTACHMENT_ICONS = {
+    "pdf" => "📄",
+    "doc" => "📝",
+    "docx" => "📝",
+    "xls" => "📊",
+    "xlsx" => "📊",
+    "png" => "🖼️",
+    "jpg" => "🖼️",
+    "jpeg" => "🖼️",
+    "gif" => "🖼️",
+    "webp" => "🖼️",
+    "zip" => "🗜️",
+    "rar" => "🗜️",
+    "7z" => "🗜️"
+  }.freeze
 
   def availability_badge(availability)
     availability ||= {}
@@ -36,5 +51,10 @@ module EventsHelper
       time_str = start_time.respond_to?(:in_time_zone) ? I18n.l(start_time.in_time_zone, format: :short) : start_time.to_s
       "#{title} (#{time_str})"
     end.join("\n")
+  end
+
+  def attachment_icon_for(file)
+    extension = file.filename.extension&.downcase
+    ATTACHMENT_ICONS.fetch(extension, "📁")
   end
 end

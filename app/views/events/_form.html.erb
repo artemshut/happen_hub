@@ -68,6 +68,8 @@
       <%= form.file_field :files, multiple: true, direct_upload: true, class: "mt-1 block w-full" %>
     </div>
 
+    <%= render "events/existing_files", event: form.object %>
+
     <div class="mb-4">
       <label for="event_event_category_id" class="block text-sm font-medium text-gray-700 mb-1">
         Category

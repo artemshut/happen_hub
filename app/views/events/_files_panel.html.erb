@@ -4,22 +4,10 @@
   <% if event.files.attached? %>
     <ul class="mt-3 space-y-2 text-sm text-gray-700">
       <% event.files.each do |file| %>
-        <% extension = File.extname(file.filename.to_s).delete(".").downcase %>
-        <% icon = case extension
-          when "pdf" then "📄"
-          when "doc", "docx" then "📝"
-          when "xls", "xlsx" then "📊"
-          when "png", "jpg", "jpeg", "gif", "webp" then "🖼️"
-          when "zip", "rar", "7z" then "🗜️"
-          else "📁"
-        end %>
-
-        <% short_name = file.filename.to_s.truncate(30) %>
-
         <li class="flex justify-between items-center border border-gray-200 rounded px-3 py-2 bg-gray-50">
           <div class="flex items-center gap-2">
-            <span><%= icon %></span>
-            <span class="truncate max-w-[12rem]" title="<%= file.filename.to_s %>"><%= short_name %></span>
+            <span><%= attachment_icon_for(file) %></span>
+            <span class="truncate max-w-[12rem]" title="<%= file.filename.to_s %>"><%= file.filename.to_s.truncate(30) %></span>
           </div>
 
           <div class="flex gap-3 items-center">
