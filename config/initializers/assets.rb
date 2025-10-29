@@ -11,4 +11,7 @@ Rails.application.config.assets.precompile += %w[
   active_admin.css
   active_admin/print.css
   active_admin.js
+  application.css
+  tailwind.css
+  app.css
 ]
