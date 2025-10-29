@@ -1,5 +1,5 @@
 class Api::V1::EventsController < Api::V1::BaseController
-  before_action :set_event, only: [ :show, :update, :update_rsvp ]
+  before_action :set_event, only: [ :show, :update, :update_rsvp, :upload_files ]
 
   def index
     authorize Event
@@ -99,6 +99,29 @@ class Api::V1::EventsController < Api::V1::BaseController
     end
   end
 
+  def upload_files
+    authorize @event, :upload_files?
+
+    new_files = Array(params.dig(:event, :files)).reject(&:blank?)
+    return render json: { error: "No files provided" }, status: :unprocessable_entity if new_files.blank?
+
+    @event.pending_files = new_files
+
+    if @event.valid?
+      attach_uploaded_files(@event, new_files)
+      @event.reload
+      render json: EventSerializer.new(
+        @event,
+        include: [ :user, :event_category, :comments, :likes, :event_participations ],
+        params: serializer_params
+      ).serializable_hash, status: :created
+    else
+      render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
+    end
+  ensure
+    @event.pending_files = nil
+  end
+
   private
 
   def set_event
@@ -135,5 +158,9 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   def serializer_params
     { current_user: current_api_user, host: request.base_url }
+  end
+
+  def attach_uploaded_files(event, files)
+    Array(files).each { |file| event.files.attach(file) }
   end
 end
