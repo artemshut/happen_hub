@@ -1,33 +1,43 @@
-<div class="bg-white rounded-3xl shadow-sm p-6">
-  <h2 class="text-xl font-semibold text-gray-900 mb-4">Past Events</h2>
+<div class="glass-panel space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-xl font-semibold text-neutral-text">Recent highlights</h2>
+    <span class="soft-badge">
+      <i class="fa-solid fa-sparkles"></i>
+      Memories
+    </span>
+  </div>
 
   <% if past_events.any? %>
-    <ul class="space-y-3">
-      <% past_events.limit(3).each do |event| %>
-        <li class="flex items-start justify-between group">
+    <div class="space-y-4">
+      <% past_events.limit(4).each do |event| %>
+        <div class="timeline-card group flex items-center justify-between gap-4 border border-transparent transition hover:border-brand-light/40 hover:bg-brand-soft/40">
           <div>
-            <h3 class="text-sm font-medium text-gray-700 group-hover:text-accent-pink transition">
+            <p class="text-sm font-semibold text-neutral-text group-hover:text-brand">
               <%= link_to event.title, event_path(event) %>
-            </h3>
-            <p class="text-xs text-gray-500">
+            </p>
+            <p class="text-xs text-neutral-muted">
               <%= event.start_time.strftime("%b %d, %Y") %>
             </p>
           </div>
-          <!-- little faded badge -->
-          <span class="text-xs px-2 py-1 rounded-lg bg-gray-100 text-gray-500 font-semibold">
-            Past
-          </span>
-        </li>
+          <%= link_to event_path(event), class: "chip-link text-xs" do %>
+            <i class="fa-solid fa-reply"></i>
+            Revisit
+          <% end %>
+        </div>
       <% end %>
-    </ul>
+    </div>
 
-    <% if past_events.count > 3 %>
-      <div class="mt-4">
-        <%= link_to "View all past events →", events_path(past: true),
-            class: "text-sm text-accent-red font-medium hover:underline" %>
+    <% if past_events.count > 4 %>
+      <div class="pt-2 text-right">
+        <%= link_to events_path(past: true), class: "chip-link text-xs" do %>
+          View all past events
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        <% end %>
       </div>
     <% end %>
   <% else %>
-    <p class="text-gray-500 text-sm">No past events yet.</p>
+    <div class="text-sm text-neutral-muted">
+      You haven’t hosted anything yet—your first recap will shine here.
+    </div>
   <% end %>
 </div>

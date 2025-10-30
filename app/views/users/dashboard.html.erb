@@ -1,126 +1,281 @@
-<div class="container mx-auto px-6 py-10 animate-fade-in">
-  <!-- Header -->
-  <h1 class="text-4xl font-extrabold text-gray-900 mb-10">
-    Hey <%= current_user.first_name %>, here’s what’s happening 🎉
-  </h1>
+<% next_event = @upcoming_events.first %>
 
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
-    <!-- Event Feed -->
-    <div class="lg:col-span-2 space-y-8">
-      <% if @upcoming_events.any? %>
-        <% grouped = @upcoming_events.includes(:event_category).group_by(&:event_category) %>
-        <% grouped.each do |category, events| %>
-          <div>
-            <h2 class="text-lg font-semibold text-gray-600 uppercase tracking-wide mb-4 flex items-center gap-2">
-              <%= category.emoji %> <%= category.name %>
-            </h2>
-            <div class="space-y-6">
-              <% events.each do |event| %>
-                <div class="bg-white rounded-3xl shadow-sm hover:shadow-xl transition overflow-visible">
-                  <!-- Event image placeholder -->
-                  <div class="relative h-48 bg-gradient-to-r from-gray-200 to-gray-300 flex items-center justify-center">
-                    <span class="absolute top-4 left-4 bg-accent-violet text-white px-4 py-2 rounded-xl font-bold text-sm shadow">
-                      <%= event.start_time.strftime("%b %d") %>
-                    </span>
-                    <% if event.cover_image.attached? %>
-                      <%= image_tag event.cover_image.variant(resize_to_fill: [600, 200]), class: "w-full h-48 object-cover" %>
-                    <% else %>
-                      <%= image_tag "default_event.jpg", class: "w-full h-48 object-cover" %>
+<div class="relative overflow-hidden">
+  <div class="landing-bubble w-80 h-80 -left-20 top-24 opacity-40 animate-floatSlow"></div>
+  <div class="landing-bubble w-[28rem] h-[28rem] right-12 top-0 opacity-30 animate-floatSlow" style="animation-delay: 1.4s;"></div>
+  <div class="landing-bubble w-[32rem] h-[32rem] -bottom-48 left-1/2 -translate-x-1/2 opacity-20 animate-pulseRing"></div>
+
+  <section class="landing-section pt-16 md:pt-20">
+    <div class="space-y-14">
+      <div class="grid items-start gap-10 xl:grid-cols-[1.15fr_1fr]">
+        <div class="space-y-8">
+          <span class="landing-pill animate-fadeIn gap-3 text-sm font-semibold">
+            <i class="fa-solid fa-sun text-brand"></i>
+            Your day at a glance
+          </span>
+          <div class="space-y-4">
+            <h1 class="text-4xl font-extrabold leading-tight text-neutral-text sm:text-5xl">
+              Welcome back, <%= current_user.first_name %> 👋
+            </h1>
+            <p class="max-w-2xl text-lg text-neutral-muted">
+              Curated invites, vibrant communities, and effortless coordination—everything in one pulse so you can host with confidence.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div class="metric-card">
+              <span class="metric-value"><%= @upcoming_events.size %></span>
+              <span class="metric-label">Upcoming Events</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value"><%= @total_groups || 0 %></span>
+              <span class="metric-label">Active Groups</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-value"><%= @total_friends || 0 %></span>
+              <span class="metric-label">Community Reach</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-4">
+            <%= link_to new_event_path, class: "chip-link--primary" do %>
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              Plan a new event
+            <% end %>
+            <%= link_to friendships_path, class: "chip-link" do %>
+              <i class="fa-solid fa-user-plus"></i>
+              Invite friends
+            <% end %>
+            <%= link_to groups_path, class: "chip-link" do %>
+              <i class="fa-solid fa-people-group"></i>
+              Explore groups
+            <% end %>
+          </div>
+        </div>
+
+        <div class="glass-panel bg-gradient-to-br from-brand-soft/60 via-white/90 to-white/95 shadow-glow">
+          <% if next_event.present? %>
+            <div class="flex items-center justify-between">
+              <span class="soft-badge">
+                <i class="fa-solid fa-bolt"></i>
+                Up next
+              </span>
+              <span class="text-sm font-semibold text-brand">
+                <%= next_event.start_time.strftime("%b %d · %I:%M %p") %>
+              </span>
+            </div>
+
+            <div class="mt-6 space-y-4">
+              <h2 class="text-2xl font-bold text-neutral-text transition-colors hover:text-brand-dark">
+                <%= link_to next_event.title, event_path(next_event) %>
+              </h2>
+              <p class="text-sm text-neutral-muted">
+                <%= formatted_event_date(next_event.start_time) %>
+                <% if next_event.location.present? %>
+                  · <%= next_event.location %>
+                <% end %>
+              </p>
+
+              <% if next_event.event_category.present? %>
+                <div class="inline-flex items-center gap-2 rounded-full bg-brand-soft/60 px-3 py-1 text-xs font-semibold text-brand">
+                  <span><%= next_event.event_category.emoji %></span>
+                  <span><%= next_event.event_category.name %></span>
+                </div>
+              <% end %>
+
+              <% visible_participants = next_event.participant_scope_for(current_user).limit(5) %>
+              <div class="mt-6 space-y-3">
+                <div class="text-xs uppercase tracking-[0.35em] text-neutral-muted/80">
+                  RSVP PULSE
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <div class="avatar-stack">
+                    <% visible_participants.each do |p| %>
+                      <div class="group relative">
+                        <% if p.user.avatar.attached? %>
+                          <%= image_tag p.user.avatar.variant(resize_to_fill: [48, 48]),
+                                class: "avatar-stack__item h-12 w-12 overflow-hidden" %>
+                        <% else %>
+                          <div class="avatar-stack__item">
+                            <%= p.user.first_name[0].upcase %>
+                          </div>
+                        <% end %>
+                        <div class="pointer-events-none absolute left-1/2 z-50 hidden w-48 -translate-x-1/2 translate-y-3 rounded-2xl border border-neutral-border bg-white p-3 text-xs text-neutral-muted shadow-xl transition group-hover:block">
+                          <p class="text-sm font-semibold text-neutral-text"><%= p.user.full_name %></p>
+                          <p><%= p.user.username %></p>
+                          <p class="mt-1 text-[11px] uppercase tracking-wide text-neutral-muted/70">Joined <%= p.user.created_at.strftime("%b %Y") %></p>
+                        </div>
+                      </div>
                     <% end %>
                   </div>
+                  <% remaining = next_event.participant_count - visible_participants.size %>
+                  <div class="text-sm font-semibold text-brand">
+                    <%= next_event.participant_count %> going
+                    <% if remaining.positive? %>
+                      <span class="text-neutral-muted">· +<%= remaining %> more</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                  <div class="p-6">
-                    <h3 class="text-2xl font-bold text-gray-900 hover:text-accent-red transition">
-                      <%= link_to event.title, event_path(event) %>
-                    </h3>
-                    <p class="text-sm text-gray-500 mt-1"><%= formatted_event_date(event.start_time) %></p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <%= link_to event_path(next_event), class: "chip-link--primary px-5 py-2 text-sm" do %>
+                View details
+              <% end %>
+              <%= link_to event_path(next_event, anchor: "comments"), class: "chip-link px-4 py-2 text-sm" do %>
+                Message guests
+              <% end %>
+            </div>
+          <% else %>
+            <div class="space-y-4 text-center">
+              <span class="soft-badge justify-center">
+                <i class="fa-solid fa-compass"></i>
+                Let’s host something
+              </span>
+              <h2 class="text-2xl font-bold text-neutral-text">No events on the horizon yet</h2>
+              <p class="text-neutral-muted">
+                Plan your next gathering to see it highlighted here with RSVP pulse and smart insights.
+              </p>
+              <div class="flex flex-wrap justify-center gap-3">
+                <%= link_to new_event_path, class: "chip-link--primary" do %>
+                  Create your first invite
+                <% end %>
+                <%= link_to events_path, class: "chip-link" do %>
+                  Browse inspiration
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
 
-                    <!-- Participants -->
-                    <% visible_participants = event.participant_scope_for(current_user).limit(5) %>
-                    <div class="flex items-center gap-2 mt-4">
-                      <% visible_participants.each do |p| %>
-                        <div class="relative group">
-                          <% if p.user.avatar.attached? %>
-                            <%= image_tag p.user.avatar.variant(resize_to_fill: [40, 40]),
-                                  class: "w-10 h-10 rounded-full object-cover ring-2 ring-white shadow cursor-pointer" %>
+      <div class="grid items-start gap-10 xl:grid-cols-[1.15fr_1fr]">
+        <div class="space-y-8">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 class="text-2xl font-bold text-neutral-text">Upcoming experiences</h2>
+              <p class="text-sm text-neutral-muted">Keep tabs on what’s trending across your circles.</p>
+            </div>
+            <%= link_to events_path, class: "chip-link text-sm" do %>
+              View all events
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <% end %>
+          </div>
+
+          <% if @upcoming_events.any? %>
+            <% grouped = @upcoming_events.includes(:event_category).group_by(&:event_category) %>
+            <div class="space-y-10">
+              <% grouped.each do |category, events| %>
+                <div class="space-y-5">
+                  <div class="flex items-center justify-between">
+                    <span class="soft-badge text-brand-dark">
+                      <%= category&.emoji %>
+                      <%= category&.name || "Events" %>
+                    </span>
+                    <span class="text-xs uppercase tracking-[0.35em] text-neutral-muted/70">
+                      <%= pluralize(events.count, "event") %>
+                    </span>
+                  </div>
+                  <div class="grid gap-6 md:grid-cols-2">
+                    <% events.each do |event| %>
+                      <div class="event-feed-card group">
+                        <div class="event-feed-card__header">
+                          <% if event.cover_image.attached? %>
+                            <%= image_tag event.cover_image.variant(resize_to_fill: [600, 240]), class: "absolute inset-0 h-full w-full object-cover" %>
                           <% else %>
-                            <div class="bg-accent-pink text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold ring-2 ring-white shadow cursor-pointer">
-                              <%= p.user.first_name[0].upcase %>
-                            </div>
+                            <%= image_tag "default_event.jpg", class: "absolute inset-0 h-full w-full object-cover" %>
                           <% end %>
-
-                          <!-- Hover Card -->
-                          <div class="absolute left-1/2 -translate-x-1/2 top-12 w-64 bg-white rounded-xl shadow-lg border border-gray-200 p-4 z-50 
-                                      hidden group-hover:block">
-                            <div class="flex items-center gap-3">
-                              <% if p.user.avatar.attached? %>
-                                <%= image_tag p.user.avatar.variant(resize_to_fill: [50, 50]),
-                                      class: "w-12 h-12 rounded-full object-cover ring-2 ring-gray-100" %>
-                              <% else %>
-                                <div class="bg-accent-pink text-white w-12 h-12 flex items-center justify-center rounded-full text-xl font-bold ring-2 ring-gray-100">
-                                  <%= p.user.first_name[0].upcase %>
-                                </div>
-                              <% end %>
-                              <div>
-                                <p class="text-gray-900 font-semibold"><%= p.user.full_name %></p>
-                                <p class="text-sm text-gray-500"><%= p.user.username %></p>
-                              </div>
-                            </div>
-                            <div class="mt-3 text-sm text-gray-600">
-                              <p><span class="font-medium">Joined:</span> <%= p.user.created_at.strftime("%B %Y") %></p>
-                              <p><span class="font-medium">Events:</span> <%= p.user.event_participations.count %></p>
-                            </div>
-                            <div class="mt-4">
-                              <%= link_to "View Profile", profile_path(p.user),
-                                    class: "text-accent-red text-sm font-semibold hover:underline" %>
-                            </div>
+                          <div class="absolute inset-0 bg-gradient-to-t from-neutral-text/80 via-neutral-text/20 to-transparent opacity-90"></div>
+                          <span class="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-brand">
+                            <%= event.start_time.strftime("%b %d") %>
+                          </span>
+                          <div class="absolute bottom-5 left-5 right-5 text-white">
+                            <p class="text-sm uppercase tracking-wide text-white/80">Hosted by <%= event.user.full_name %></p>
+                            <h3 class="mt-1 text-xl font-semibold leading-tight">
+                              <%= link_to event.title, event_path(event), class: "transition hover:text-brand-soft" %>
+                            </h3>
                           </div>
                         </div>
-                      <% end %>
 
-                      <% remaining = event.participant_count - visible_participants.size %>
-                      <% if remaining.positive? %>
-                        <span class="text-xs text-gray-500 font-medium">+<%= remaining %> more</span>
-                      <% end %>
-                    </div>
+                        <div class="event-feed-card__body">
+                          <div class="flex flex-wrap items-center gap-3 text-sm text-neutral-muted">
+                            <span>
+                              <i class="fa-regular fa-clock mr-1 text-brand"></i>
+                              <%= formatted_event_date(event.start_time) %>
+                            </span>
+                            <% if event.location.present? %>
+                              <span>
+                                <i class="fa-solid fa-location-dot mr-1 text-brand"></i>
+                                <%= event.location %>
+                              </span>
+                            <% end %>
+                          </div>
+
+                          <% visible_participants = event.participant_scope_for(current_user).limit(4) %>
+                          <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div class="avatar-stack mt-1">
+                              <% visible_participants.each do |p| %>
+                                <% if p.user.avatar.attached? %>
+                                  <%= image_tag p.user.avatar.variant(resize_to_fill: [44, 44]),
+                                        class: "avatar-stack__item h-11 w-11 overflow-hidden" %>
+                                <% else %>
+                                  <div class="avatar-stack__item"><%= p.user.first_name[0].upcase %></div>
+                                <% end %>
+                              <% end %>
+                            </div>
+                            <% remaining = event.participant_count - visible_participants.size %>
+                            <span class="text-xs uppercase tracking-[0.35em] text-neutral-muted">
+                              <%= event.participant_count %> RSVP’d
+                              <% if remaining.positive? %>
+                                · +<%= remaining %> more
+                              <% end %>
+                            </span>
+                          </div>
+
+                          <div class="flex flex-wrap gap-3 pt-4">
+                            <%= link_to event_path(event), class: "chip-link px-4 py-2 text-sm" do %>
+                              Open event
+                            <% end %>
+                            <%= link_to event_path(event, anchor: "comments"), class: "chip-link px-4 py-2 text-sm" do %>
+                              View chat
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                    <% end %>
                   </div>
                 </div>
               <% end %>
             </div>
-          </div>
-        <% end %>
-      <% else %>
-        <p class="text-gray-600">
-          No upcoming events.
-          <%= link_to "Create one", new_event_path, class: "text-accent-red font-medium hover:underline" %>.
-        </p>
-      <% end %>
-    </div>
+          <% else %>
+            <div class="glass-panel text-center">
+              <h3 class="text-xl font-semibold text-neutral-text">No upcoming events just yet</h3>
+              <p class="mt-3 text-neutral-muted">
+                Kick off a new plan or explore what your friends are hosting to fill this space with energy.
+              </p>
+              <div class="mt-6 flex flex-wrap justify-center gap-3">
+                <%= link_to new_event_path, class: "chip-link--primary" do %>
+                  Create an event
+                <% end %>
+                <%= link_to events_path, class: "chip-link" do %>
+                  Discover public events
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
 
-    <!-- Sidebar -->
-    <div class="lg:col-span-2 space-y-8">
-      <!-- Calendar -->
-      <div class="bg-white rounded-3xl shadow-sm p-6">
-        <%= render 'shared/calendar' %>
-      </div>
-
-      <!-- Past Events -->
-      <div class="bg-white rounded-3xl shadow-sm p-6">
-        <%= render 'past_events_widget', past_events: @past_events %>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="bg-white rounded-3xl shadow-sm p-6">
-        <%= render 'quick_actions' %>
-      </div>
-
-      <!-- Stats -->
-      <div class="bg-white rounded-3xl shadow-sm p-6">
-        <%= render 'stats',
-            total_events: @total_events,
-            total_groups: @total_groups,
-            total_friends: @total_friends %>
+        <div class="space-y-6">
+          <%= render 'stats',
+              total_events: @total_events,
+              total_groups: @total_groups,
+              total_friends: @total_friends %>
+          <%= render 'quick_actions' %>
+          <%= render 'shared/calendar' %>
+          <%= render 'past_events_widget', past_events: @past_events %>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </div>
