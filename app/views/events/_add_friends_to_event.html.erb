@@ -1,13 +1,21 @@
+<% event ||= @event %>
 <% friends ||= [] %>
 <% friend_availabilities ||= {} %>
 
 <div
-  class="tab-content"
-  id="tab-friends"
+  class="space-y-6"
   data-controller="invitee-availability"
   data-invitee-availability-url-value="<%= availability_preview_event_path(event) %>"
   data-action="availability:update->invitee-availability#refresh">
-  <h2 class="text-xl font-bold mb-4">Add Friends to Event</h2>
+  <div class="flex flex-col gap-3">
+    <div class="icon-circle text-lg">🤝</div>
+    <div>
+      <h2 class="text-xl font-bold text-neutral-text">Add friends to this event</h2>
+      <p class="text-sm text-neutral-muted">
+        Handpick attendees and preview availability before sending invites.
+      </p>
+    </div>
+  </div>
   <turbo-frame id="friend_invite_list">
     <%= render partial: "events/friend_invite_list",
                locals: {

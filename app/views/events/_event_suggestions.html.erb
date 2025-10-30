@@ -1,18 +1,37 @@
-<div class="tab-content hidden" id="tab-suggestions">
-  <!-- Suggest New Time -->
-  <details class="mb-6">
-    <summary class="cursor-pointer text-accent-red font-semibold hover:underline transition">+ Suggest New Time</summary>
-    <div class="mt-4">
-      <%= render partial: "event_suggestions/form", locals: { event: @event } %>
+<% event ||= @event %>
+
+<div class="space-y-6">
+  <div class="flex flex-col gap-3">
+    <div class="icon-circle text-lg">💡</div>
+    <div>
+      <h2 class="text-xl font-bold text-neutral-text">Event suggestions</h2>
+      <p class="text-sm text-neutral-muted">
+        Let your guests co-create alternative times or twists to keep the energy high.
+      </p>
+    </div>
+  </div>
+
+  <details class="group rounded-2xl border border-brand-light/40 bg-brand-soft/30 p-5 transition hover:border-brand-light">
+    <summary class="flex cursor-pointer items-center gap-3 text-sm font-semibold text-brand transition group-open:text-brand-dark">
+      <span class="icon-circle h-10 w-10 text-base leading-none">➕</span>
+      Suggest a new time or idea
+    </summary>
+    <div class="mt-4 rounded-2xl border border-brand-light/30 bg-white/90 p-4 shadow-inner">
+      <%= render partial: "event_suggestions/form", locals: { event: event } %>
     </div>
   </details>
 
-  <!-- Suggestions List -->
-  <h3 class="text-xl font-semibold mb-4 text-gray-800">Suggestions</h3>
-
-  <div id="suggestions_list" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-    <%- @event.event_suggestions.each do |suggestion| %>
-      <%= render partial: "event_suggestions/event_suggestion", locals: { suggestion: suggestion, event: @event } %>
+  <div class="space-y-4">
+    <h3 class="text-lg font-semibold text-neutral-text">Live suggestions</h3>
+    <div id="suggestions_list" class="grid gap-4 md:grid-cols-2">
+      <%- event.event_suggestions.each do |suggestion| %>
+        <%= render partial: "event_suggestions/event_suggestion", locals: { suggestion: suggestion, event: event } %>
+      <% end %>
+    </div>
+    <% if event.event_suggestions.empty? %>
+      <p class="rounded-2xl border border-dashed border-brand-light/40 bg-white/80 px-4 py-6 text-center text-sm text-neutral-muted">
+        No suggestions yet—invite your guests to spark a fresh angle.
+      </p>
     <% end %>
   </div>
 </div>

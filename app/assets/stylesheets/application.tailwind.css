@@ -101,6 +101,22 @@
   .timeline-card {
     @apply glass-panel p-5;
   }
+
+  .info-chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-light/40 bg-white/80 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-neutral-muted/80 shadow-sm;
+  }
+
+  .icon-circle {
+    @apply flex h-12 w-12 items-center justify-center rounded-full bg-brand-soft/70 text-brand text-xl shadow-inner;
+  }
+
+  .modal-backdrop {
+    @apply fixed inset-0 z-50 hidden items-center justify-center bg-neutral-text/40 backdrop-blur-xl transition;
+  }
+
+  .modal-panel {
+    @apply relative max-h-[85vh] w-full max-w-4xl overflow-y-auto rounded-3xl bg-white p-8 shadow-[0_50px_120px_rgba(15,23,42,0.35)];
+  }
 }
 
 @layer utilities {

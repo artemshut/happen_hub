@@ -1,101 +1,286 @@
-<div class="container mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
-  <!-- Left Column: Event Details -->
-  <div class="lg:col-span-7 space-y-10">
-    <!-- Cover Image -->
-    <div class="relative rounded-xl overflow-hidden shadow-lg h-64">
-      <% if @event.cover_image.attached? %>
-        <%= link_to event_path(@event) do %>
-          <%= image_tag @event.cover_image.variant(resize_to_fill: [1200, 400]), class: "w-full h-full object-cover" %>
-          <div class="absolute inset-0 bg-black/40 flex items-end p-6">
-            <h1 class="text-white text-3xl font-bold"><%= @event.title %></h1>
-          </div>
-        <% end %>
-      <% else %>
-        <%= link_to event_path(@event) do %>
-          <div class="relative h-full w-full bg-gradient-to-br from-accent-red to-pink-500">
-            <%= image_tag "default_event.jpg", class: "w-full h-full object-cover opacity-60" %>
-            <div class="absolute inset-0 bg-black/40 flex items-end p-6">
-              <h1 class="text-white text-3xl font-bold"><%= @event.title %></h1>
+<% host = @event.user %>
+<% category = @event.event_category %>
+<% duration = if @event.start_time.present? && @event.end_time.present?
+                distance_of_time_in_words(@event.start_time, @event.end_time)
+              end %>
+
+<div class="relative pb-16">
+  <div class="landing-bubble w-[28rem] h-[28rem] -left-24 top-0 animate-floatSlow"></div>
+  <div class="landing-bubble w-[22rem] h-[22rem] right-0 top-24 animate-floatSlow" style="animation-delay: 1.6s;"></div>
+  <div class="landing-bubble w-[30rem] h-[30rem] -bottom-40 left-1/3 animate-pulseRing opacity-20"></div>
+
+  <section class="landing-section pt-20">
+    <div class="space-y-12">
+      <div class="grid gap-10 xl:grid-cols-[1.2fr_0.8fr]">
+        <div class="space-y-8">
+          <div class="glass-panel p-0 overflow-hidden">
+            <div class="relative h-80 md:h-96">
+              <% if @event.cover_image.attached? %>
+                <%= image_tag @event.cover_image.variant(resize_to_fill: [1400, 560]),
+                      class: "absolute inset-0 h-full w-full object-cover" %>
+              <% else %>
+                <%= image_tag "default_event.jpg", class: "absolute inset-0 h-full w-full object-cover opacity-80" %>
+              <% end %>
+              <div class="absolute inset-0 bg-gradient-to-br from-neutral-text/80 via-neutral-text/30 to-transparent"></div>
+              <div class="relative flex h-full flex-col justify-end gap-5 p-8 text-white">
+                <div class="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.35em] text-white/70">
+                  <% if category.present? %>
+                    <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 font-semibold">
+                      <span class="text-lg"><%= category.emoji %></span>
+                      <%= category.name %>
+                    </span>
+                  <% end %>
+                  <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 font-semibold">
+                    <i class="fa-regular fa-clock"></i>
+                    <%= formatted_event_date(@event.start_time) %>
+                  </span>
+                </div>
+                <h1 class="text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
+                  <%= @event.title %>
+                </h1>
+                <div class="flex flex-wrap items-center gap-5 text-sm text-white/80">
+                  <div class="flex items-center gap-3">
+                    <% if host.avatar.attached? %>
+                      <%= image_tag host.avatar.variant(resize_to_fill: [48, 48]),
+                            class: "h-12 w-12 rounded-full border-2 border-white/40 object-cover shadow-lg" %>
+                    <% else %>
+                      <div class="avatar-stack__item h-12 w-12 border-2 border-white/40 text-white shadow-lg">
+                        <%= host.first_name[0].upcase %>
+                      </div>
+                    <% end %>
+                    <div>
+                      <p class="font-semibold text-white">Hosted by <%= host.full_name %></p>
+                      <p class="text-xs uppercase tracking-[0.35em] text-white/70"><%= host.username %></p>
+                    </div>
+                  </div>
+                  <% if duration.present? %>
+                    <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em]">
+                      <i class="fa-solid fa-hourglass-half"></i>
+                      <%= duration %>
+                    </span>
+                  <% end %>
+                  <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em]">
+                    <i class="fa-solid fa-eye"></i>
+                    <%= @event.visibility.titleize %>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid gap-4 bg-white/90 p-6 sm:grid-cols-3">
+              <div class="rounded-2xl border border-brand-light/30 bg-white/80 p-4">
+                <p class="text-xs uppercase tracking-[0.35em] text-neutral-muted">Starts</p>
+                <p class="mt-2 text-sm font-semibold text-neutral-text"><%= formatted_event_date(@event.start_time) %></p>
+              </div>
+              <div class="rounded-2xl border border-brand-light/30 bg-white/80 p-4">
+                <p class="text-xs uppercase tracking-[0.35em] text-neutral-muted">Location</p>
+                <p class="mt-2 text-sm font-semibold text-neutral-text">
+                  <%= @event.location.present? ? strip_tags(@event.location.to_s) : "To be announced" %>
+                </p>
+              </div>
+              <div class="rounded-2xl border border-brand-light/30 bg-white/80 p-4">
+                <p class="text-xs uppercase tracking-[0.35em] text-neutral-muted">Guests</p>
+                <p class="mt-2 text-sm font-semibold text-neutral-text">
+                  <%= pluralize(@event.participant_count, "person") %> invited
+                </p>
+              </div>
             </div>
           </div>
+
+          <div class="glass-panel space-y-6">
+            <div class="flex items-center gap-3">
+              <div class="icon-circle text-lg">🗓️</div>
+              <div>
+                <h2 class="text-xl font-bold text-neutral-text">Schedule</h2>
+                <p class="text-sm text-neutral-muted">All the timings so your guests stay perfectly in sync.</p>
+              </div>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div class="rounded-2xl border border-brand-light/30 bg-white/90 p-4">
+                <p class="text-xs uppercase tracking-[0.35em] text-neutral-muted">Starts</p>
+                <p class="mt-2 text-base font-semibold text-neutral-text"><%= formatted_event_date(@event.start_time) %></p>
+              </div>
+              <div class="rounded-2xl border border-brand-light/30 bg-white/90 p-4">
+                <p class="text-xs uppercase tracking-[0.35em] text-neutral-muted">Ends</p>
+                <p class="mt-2 text-base font-semibold text-neutral-text"><%= formatted_event_date(@event.end_time) %></p>
+              </div>
+            </div>
+            <% if duration.present? %>
+              <p class="rounded-2xl border border-dashed border-brand-light/40 bg-brand-soft/40 px-4 py-3 text-sm text-neutral-muted">
+                Expect around <span class="font-semibold text-brand-dark"><%= duration %></span> of shared moments together.
+              </p>
+            <% end %>
+          </div>
+
+          <div class="glass-panel space-y-6">
+            <div class="flex items-center gap-3">
+              <div class="icon-circle text-lg">📖</div>
+              <div>
+                <h2 class="text-xl font-bold text-neutral-text">About this experience</h2>
+                <p class="text-sm text-neutral-muted">Set the scene, highlight the vibe, and tease what’s to come.</p>
+              </div>
+            </div>
+            <div class="prose prose-lg max-w-none text-neutral-muted">
+              <%= render_rich_text_with_embeds(@event.description) %>
+            </div>
+          </div>
+
+          <%= render "events/files_panel", event: @event %>
+
+          <%= render partial: "events/invitation_status_full",
+                     locals: {
+                       event: @event,
+                       viewer: current_user,
+                       participants_by_status: @participants_by_status,
+                       participant_count: @participant_count
+                     } %>
+
+          <div class="glass-panel space-y-6">
+            <div class="flex items-center gap-3">
+              <div class="icon-circle text-lg">🎯</div>
+              <div>
+                <h2 class="text-xl font-bold text-neutral-text">Coordinate invites</h2>
+                <p class="text-sm text-neutral-muted">
+                  Drop in friends, capture fresh suggestions, and loop in groups without cluttering the page.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+              <div data-controller="modal">
+                <button class="chip-link--primary px-6 py-3 text-xs uppercase tracking-[0.35em]" data-action="modal#open">
+                  Add friends
+                </button>
+                <div class="modal-backdrop hidden" data-modal-target="backdrop" data-action="click->modal#close">
+                  <div class="modal-panel" data-modal-target="dialog" data-action="click->modal#stop">
+                    <button class="chip-link absolute right-6 top-6 text-[10px]" data-action="modal#close">
+                      <i class="fa-solid fa-xmark"></i>
+                      Close
+                    </button>
+                    <div class="mt-8">
+                      <%= render "events/add_friends_to_event",
+                                event: @event,
+                                friends: @friends,
+                                friend_availabilities: @friend_availabilities %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div data-controller="modal">
+                <button class="chip-link px-6 py-3 text-xs uppercase tracking-[0.35em]" data-action="modal#open">
+                  Suggestions
+                </button>
+                <div class="modal-backdrop hidden" data-modal-target="backdrop" data-action="click->modal#close">
+                  <div class="modal-panel" data-modal-target="dialog" data-action="click->modal#stop">
+                    <button class="chip-link absolute right-6 top-6 text-[10px]" data-action="modal#close">
+                      <i class="fa-solid fa-xmark"></i>
+                      Close
+                    </button>
+                    <div class="mt-8">
+                      <%= render "events/event_suggestions", event: @event %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div data-controller="modal">
+                <button class="chip-link px-6 py-3 text-xs uppercase tracking-[0.35em]" data-action="modal#open">
+                  Invite groups
+                </button>
+                <div class="modal-backdrop hidden" data-modal-target="backdrop" data-action="click->modal#close">
+                  <div class="modal-panel" data-modal-target="dialog" data-action="click->modal#stop">
+                    <button class="chip-link absolute right-6 top-6 text-[10px]" data-action="modal#close">
+                      <i class="fa-solid fa-xmark"></i>
+                      Close
+                    </button>
+                    <div class="mt-8">
+                      <%= render "events/group_invitations", event: @event %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <%= render "shared/map_view", event: @event %>
+        </div>
+
+        <div class="space-y-6 xl:pl-4">
+          <div class="glass-panel space-y-6">
+            <div class="flex items-center gap-3">
+              <div class="icon-circle text-lg">🧭</div>
+              <div>
+                <h2 class="text-xl font-bold text-neutral-text">Host overview</h2>
+                <p class="text-sm text-neutral-muted">
+                  Everything guests need to trust the experience.
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <% if host.avatar.attached? %>
+                <%= image_tag host.avatar.variant(resize_to_fill: [60, 60]),
+                      class: "h-16 w-16 rounded-full border-2 border-brand-light object-cover shadow-lg" %>
+              <% else %>
+                <div class="avatar-stack__item h-16 w-16 rounded-full text-xl">
+                  <%= host.first_name[0].upcase %>
+                </div>
+              <% end %>
+              <div>
+                <p class="text-lg font-semibold text-neutral-text"><%= host.full_name %></p>
+                <p class="text-xs uppercase tracking-[0.35em] text-neutral-muted"><%= host.username %></p>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <span class="info-chip">Visibility · <%= @event.visibility.titleize %></span>
+              <% if category.present? %>
+                <span class="info-chip">Category · <%= category.name %></span>
+              <% end %>
+              <span class="info-chip">Guests · <%= @event.participant_count %></span>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <%= link_to "View host profile", profile_path(host), class: "chip-link px-5 py-2 text-sm" %>
+              <% if @event.owned_by?(current_user) %>
+                <%= link_to "Edit event", edit_event_path(@event),
+                      class: "chip-link--primary px-5 py-2 text-sm" %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="glass-panel space-y-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-xl font-bold text-neutral-text">Conversation</h2>
+                <p class="text-sm text-neutral-muted">Keep everyone aligned with real-time updates.</p>
+              </div>
+              <span class="soft-badge">
+                <i class="fa-solid fa-comments"></i>
+                Live
+              </span>
+            </div>
+            <div class="space-y-6">
+              <%= turbo_frame_tag "event_#{@event.id}_comments" do %>
+                <%= render partial: "comments/comment", collection: @event.comments %>
+              <% end %>
+
+              <%= turbo_frame_tag "event_comment_form" do %>
+                <%= render "comments/form", event: @event, comment: @comment %>
+              <% end %>
+            </div>
+          </div>
+
+          <%= render "shared/calendar" %>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-3">
+        <%= link_to "← Back to events", events_path,
+              class: "chip-link px-6 py-3 text-xs uppercase tracking-[0.35em]" %>
+        <% unless @event.owned_by?(current_user) %>
+          <%= link_to "Message host", profile_path(host),
+                class: "chip-link px-6 py-3 text-xs uppercase tracking-[0.35em]" %>
         <% end %>
-      <% end %>
-    </div>
-
-    <!-- About Section -->
-    <div class="bg-white shadow-md rounded-xl p-6">
-      <h2 class="text-xl font-semibold mb-4">What?</h2>
-      <div class="prose prose-lg max-w-none">
-        <%= render_rich_text_with_embeds(@event.description) %>
       </div>
     </div>
-
-    <div class="bg-white shadow-md rounded-xl p-6 text-sm text-neutral-text">
-      <h2 class="text-lg font-bold mb-2">🕒 When?</h2>
-      <div class="space-y-1">
-        <p><span class="font-semibold">Start:</span> <%= formatted_event_date(@event.start_time) %></p>
-        <p><span class="font-semibold">End:</span> <%= formatted_event_date(@event.end_time) %></p>
-      </div>
-    </div>
-
-    <%= render "files_panel", event: @event %>
-
-    <!-- Map -->
-    <%= render 'shared/map_view', event: @event %>
-
-    <!-- Participants -->
-    <%= render partial: "events/invitation_status_full",
-               locals: {
-                 event: @event,
-                 viewer: current_user,
-                 participants_by_status: @participants_by_status,
-                 participant_count: @participant_count
-               } %>
-
-    <% unless @event.past? %>
-      <!-- Tabs: Friends, Suggestions, Groups -->
-      <div class="bg-white shadow-md rounded-xl overflow-hidden">
-        <div class="border-b">
-          <nav class="flex space-x-4 px-6 py-4 text-sm font-medium text-gray-700">
-            <button data-tab="tab-friends" class="tab-btn active">Add Friends</button>
-            <button data-tab="tab-suggestions" class="tab-btn">Suggestions</button>
-            <button data-tab="tab-groups" class="tab-btn">Invite Groups</button>
-          </nav>
-        </div>
-        <div class="p-6 text-sm space-y-6">
-          <%= render 'events/add_friends_to_event', event: @event, friends: @friends, friend_availabilities: @friend_availabilities %>
-          <%= render 'events/event_suggestions', event: @event %>
-          <%= render 'events/group_invitations', event: @event %>
-        </div>
-      </div>
-    <% end %>
-
-    <!-- Navigation Buttons -->
-    <div class="mt-4 flex flex-wrap gap-2">
-      <%= link_to "← Back to Events", events_path,
-          class: "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 px-4 py-2 rounded-lg shadow-sm transition" %>
-
-      <% if @event.owned_by?(current_user) %>
-        <%= link_to "✎ Edit Event", edit_event_path(@event),
-            class: "bg-accent-pink hover:bg-pink-600 text-white px-4 py-2 rounded-lg shadow-md transition" %>
-      <% end %>
-    </div>
-  </div>
-
-  <!-- Right Column -->
-  <div class="lg:col-span-5 space-y-8 sticky top-10 h-fit">
-    <%= render 'shared/calendar' %>
-
-    <!-- Comments -->
-    <div class="bg-white shadow-md rounded-xl p-6">
-      <h2 class="text-lg font-bold mb-4">Comments</h2>
-      <%= turbo_frame_tag "event_#{@event.id}_comments" do %>
-        <%= render partial: "comments/comment", collection: @event.comments %>
-      <% end %>
-
-      <%= turbo_frame_tag "event_comment_form" do %>
-        <%= render "comments/form", event: @event, comment: @comment %>
-      <% end %>
-    </div>
-  </div>
+  </section>
 </div>

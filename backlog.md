@@ -10,7 +10,10 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## Backlog
 
-- _empty_
+- [ ] HUB-005 Sharing invite links / social previews
+  - Create shareable invitation cards with copy/graphics matching the landing-page CTA (“Share invite”).
+  - Generate secure invite URLs for guests (web + mobile) and surface native share sheet / copy link actions.
+  - Include lightweight analytics (views/clicks) so hosts see engagement pulse on the dashboard.
 
 ## Done
 

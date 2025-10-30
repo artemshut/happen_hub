@@ -1,14 +1,36 @@
-<div class="tab-content hidden" id="tab-groups">
-  <h2 class="text-xl font-bold mb-4 text-gray-800">Invite Groups</h2>
-  <ul class="list-none space-y-3">
-    <% current_user.created_groups.each do |group| %>
-      <li class="flex justify-between items-center bg-neutral-bg p-4 rounded-lg shadow-sm border border-neutral-border">
-        <span class="text-gray-700 font-medium"><%= group.name %></span>
-        <%= button_to "Invite Group",
-              invite_group_event_path(@event, group_id: group.id),
-              method: :post,
-              class: "bg-brand text-white px-4 py-2 rounded-md hover:bg-brand-dark transition" %>
-      </li>
-    <% end %>
-  </ul>
+<% event ||= @event %>
+
+<div class="space-y-6">
+  <div class="flex flex-col gap-3">
+    <div class="icon-circle text-lg">🤝</div>
+    <div>
+      <h2 class="text-xl font-bold text-neutral-text">Invite groups</h2>
+      <p class="text-sm text-neutral-muted">
+        Rally entire crews with a single tap. Perfect for clubs, teams, or recurring circles.
+      </p>
+    </div>
+  </div>
+
+  <% if current_user.created_groups.any? %>
+    <ul class="space-y-3">
+      <% current_user.created_groups.each do |group| %>
+        <li class="flex items-center justify-between rounded-2xl border border-brand-light/30 bg-white/90 px-5 py-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+          <div>
+            <p class="text-sm font-semibold text-neutral-text"><%= group.name %></p>
+            <p class="text-xs uppercase tracking-[0.3em] text-neutral-muted">
+              <%= pluralize(group.group_memberships.count, "member") %>
+            </p>
+          </div>
+          <%= button_to "Invite group",
+                invite_group_event_path(event, group_id: group.id),
+                method: :post,
+                class: "chip-link--primary px-5 py-2 text-xs uppercase tracking-[0.35em]" %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="rounded-2xl border border-dashed border-neutral-border bg-white/80 px-4 py-6 text-center text-sm text-neutral-muted">
+      You haven’t created any groups yet. Build one from your dashboard to unlock group invites.
+    </p>
+  <% end %>
 </div>

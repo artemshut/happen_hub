@@ -1,17 +1,28 @@
-<!-- app/views/events/_map_view.html.erb -->
-<div class="bg-neutral-surface shadow-xl rounded-2xl p-6 border border-neutral-border animate-fadeIn">
-  <h2 class="text-2xl font-bold text-neutral-text mb-4">Event Location</h2>
+<% event ||= @event %>
 
-  <% if @event.location.present? %>
-    <div class="prose max-w-none mb-6 text-neutral-muted">
-      <%= render_rich_text_with_embeds(@event.location) %>
+<div class="glass-panel space-y-5 animate-fadeIn">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h2 class="text-2xl font-bold text-neutral-text">Event location</h2>
+      <p class="text-sm text-neutral-muted">
+        Share the coordinates so everyone lands effortlessly.
+      </p>
+    </div>
+    <span class="soft-badge">
+      <i class="fa-solid fa-location-dot"></i>
+      Map
+    </span>
+  </div>
+
+  <% if event&.location.present? %>
+    <div class="rounded-2xl border border-brand-light/30 bg-white/80 px-4 py-3 text-sm text-neutral-muted">
+      <%= render_rich_text_with_embeds(event.location) %>
     </div>
   <% end %>
 
   <div data-controller="google-map"
-       data-google-map-lat-value="<%= @event.latitude %>"
-       data-google-map-lng-value="<%= @event.longitude %>"
-       class="rounded-xl border border-neutral-border shadow-inner"
-       style="height: 400px; width: 100%;">
+       data-google-map-lat-value="<%= event&.latitude %>"
+       data-google-map-lng-value="<%= event&.longitude %>"
+       class="h-[360px] w-full overflow-hidden rounded-3xl border border-brand-light/30 shadow-[0_30px_80px_rgba(15,23,42,0.18)]">
   </div>
 </div>
