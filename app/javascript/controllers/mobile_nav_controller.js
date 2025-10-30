@@ -1,24 +1,38 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["menu", "overlay"]
+  static targets = ["panel", "overlay"]
+
+  connect() {
+    this.open = false
+    this.boundCloseOnEscape = this.closeOnEscape.bind(this)
+  }
 
   toggle() {
-    const menuOpen = this.menuTarget.classList.contains("translate-x-0")
+    this.open ? this.close() : this.openMenu()
+  }
 
-    this.menuTarget.classList.toggle("translate-x-0")
-    this.menuTarget.classList.toggle("-translate-x-full")
-
-    this.overlayTarget.classList.toggle("opacity-0")
-    this.overlayTarget.classList.toggle("opacity-100")
-    this.overlayTarget.classList.toggle("pointer-events-none")
+  openMenu() {
+    this.open = true
+    this.panelTarget.classList.remove("translate-x-full")
+    this.panelTarget.classList.add("translate-x-0")
+    this.overlayTarget.classList.remove("hidden")
+    document.body.classList.add("overflow-hidden")
+    document.addEventListener("keydown", this.boundCloseOnEscape)
   }
 
   close() {
-    this.menuTarget.classList.remove("translate-x-0")
-    this.menuTarget.classList.add("-translate-x-full")
+    this.open = false
+    this.panelTarget.classList.add("translate-x-full")
+    this.panelTarget.classList.remove("translate-x-0")
+    this.overlayTarget.classList.add("hidden")
+    document.body.classList.remove("overflow-hidden")
+    document.removeEventListener("keydown", this.boundCloseOnEscape)
+  }
 
-    this.overlayTarget.classList.add("opacity-0", "pointer-events-none")
-    this.overlayTarget.classList.remove("opacity-100")
+  closeOnEscape(event) {
+    if (event.key === "Escape") {
+      this.close()
+    }
   }
 }

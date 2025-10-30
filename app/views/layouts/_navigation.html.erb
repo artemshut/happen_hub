@@ -1,117 +1,234 @@
-<nav class="text-white px-6 py-4 flex items-center justify-between z-50 relative lg:static" data-controller="mobile-nav">
-  <!-- Mobile Toggle Button -->
-  <button data-action="click->mobile-nav#toggle" class="lg:hidden focus:outline-none">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  </button>
+<nav data-controller="mobile-nav mega-nav" class="relative z-50 text-white">
+  <div class="flex items-center gap-4">
+    <!-- Mobile Menu Button -->
+    <button data-action="click->mobile-nav#toggle" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 lg:hidden">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
 
-  <!-- Overlay -->
-  <div data-mobile-nav-target="overlay"
-       data-action="click->mobile-nav#close"
-       class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden"></div>
-
-  <!-- Desktop Navigation -->
-  <div class="hidden lg:flex space-x-6 items-center">
-    <% if user_signed_in? %>
-      <!-- Events Dropdown -->
-      <div class="relative" data-controller="dropdown">
-        <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-brand-light">
-          Events
-          <% if current_user.pending_event_requests.any? %>
-            <span class="bg-white text-brand text-xs font-bold rounded-full px-2 ml-2">
-              <%= current_user.pending_event_requests.count %>
-            </span>
-          <% end %>
-          <span data-dropdown-target="arrow" class="transition-transform duration-200">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M19 9l-7 7-7-7" />
-            </svg>
+    <!-- Desktop Navigation -->
+    <div class="hidden items-center gap-3 lg:flex">
+      <% if user_signed_in? %>
+        <button
+          data-mega-nav-target="toggle"
+          data-section="events"
+          data-action="click->mega-nav#showSection click->mega-nav#toggle"
+          class="nav-trigger nav-trigger--active">
+          <span class="nav-icon">
+            <i class="fa-solid fa-calendar-days"></i>
           </span>
+          <span>Events</span>
         </button>
-        <div data-dropdown-target="menu"
-             class="absolute left-0 mt-2 w-44 bg-brand-dark/95 text-white shadow-2xl backdrop-blur-lg rounded-2xl py-2 hidden opacity-0 scale-y-95 origin-top transition-all duration-200 z-50">
-          <%= link_to "My Events", events_path, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
-          <%= link_to "Create Event", new_event_path, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
-        </div>
-      </div>
 
-      <!-- Groups Dropdown -->
-      <div class="relative" data-controller="dropdown">
-        <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-brand-light">
-          Groups
-          <span data-dropdown-target="arrow" class="transition-transform duration-200">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M19 9l-7 7-7-7" />
-            </svg>
+        <button
+          data-mega-nav-target="toggle"
+          data-section="groups"
+          data-action="click->mega-nav#showSection click->mega-nav#toggle"
+          class="nav-trigger">
+          <span class="nav-icon">
+            <i class="fa-solid fa-people-group"></i>
           </span>
+          <span>Groups</span>
         </button>
-        <div data-dropdown-target="menu"
-             class="absolute left-0 mt-2 w-44 bg-brand-dark/95 text-white shadow-2xl backdrop-blur-lg rounded-2xl py-2 hidden opacity-0 scale-y-95 origin-top transition-all duration-200 z-50">
-          <%= link_to "All Groups", groups_path, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
-          <%= link_to "Create Group", new_group_path, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
-        </div>
-      </div>
 
-      <!-- Friends Dropdown -->
-      <div class="relative" data-controller="dropdown">
-        <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-brand-light">
-          Friends
+        <button
+          data-mega-nav-target="toggle"
+          data-section="friends"
+          data-action="click->mega-nav#showSection click->mega-nav#toggle"
+          class="nav-trigger">
+          <span class="nav-icon">
+            <i class="fa-solid fa-user-group"></i>
+          </span>
+          <span>Friends</span>
           <% if current_user.pending_friend_requests.any? %>
-            <span class="bg-white text-brand text-xs font-bold rounded-full px-2 ml-2">
+            <span class="ml-2 inline-flex h-5 min-w-[1.4rem] items-center justify-center rounded-full bg-white text-[11px] font-semibold text-brand">
               <%= current_user.pending_friend_requests.count %>
             </span>
           <% end %>
-          <span data-dropdown-target="arrow" class="transition-transform duration-200">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
         </button>
-        <div data-dropdown-target="menu"
-             class="absolute left-0 mt-2 w-44 bg-brand-dark/95 text-white shadow-2xl backdrop-blur-lg rounded-2xl py-2 hidden opacity-0 scale-y-95 origin-top transition-all duration-200 z-50">
-          <%= link_to "Friend Requests", friendships_path, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
-        </div>
-      </div>
 
-      <!-- Profile Dropdown -->
-      <div class="relative ml-4" data-controller="dropdown">
-        <button data-action="click->dropdown#toggle" class="flex items-center gap-1 hover:text-brand-light">
-          <%= current_user.full_name %>
-          <span data-dropdown-target="arrow" class="transition-transform duration-200">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
-        </button>
-        <div data-dropdown-target="menu"
-             class="absolute right-0 mt-2 w-44 bg-brand-dark/95 text-white shadow-2xl backdrop-blur-lg rounded-2xl py-2 hidden opacity-0 scale-y-95 origin-top transition-all duration-200 z-50">
-          <%= link_to "Profile", profile_path, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
-          <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "block px-4 py-2 hover:bg-brand-light transition-colors duration-150" %>
+        <%= link_to "Create Event", new_event_path,
+              class: "hidden xl:inline-flex nav-cta" %>
+
+        <div data-controller="dropdown" class="relative">
+          <button data-action="click->dropdown#toggle" class="nav-trigger">
+            <% if current_user.avatar.attached? %>
+              <%= image_tag current_user.avatar.variant(resize_to_fill: [48, 48]), class: "nav-icon nav-icon--avatar" %>
+            <% else %>
+              <span class="nav-icon"><%= current_user.first_name.first.upcase %></span>
+            <% end %>
+            <span><%= current_user.first_name %></span>
+          </button>
+          <div data-dropdown-target="menu" class="nav-popover hidden">
+            <%= link_to "Dashboard", dashboard_path, class: "nav-popover__link" %>
+            <%= link_to "Profile", profile_path, class: "nav-popover__link" %>
+            <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "nav-popover__link text-red-400 hover:text-red-300" %>
+          </div>
         </div>
-      </div>
-    <% else %>
-      <!-- Guest Navigation -->
-      <div class="ml-auto flex space-x-4">
-        <%= link_to "Login", new_user_session_path, class: "hover:text-brand-light transition-colors duration-150" %>
-        <%= link_to "Sign Up", new_user_registration_path, class: "hover:text-brand-light transition-colors duration-150" %>
-      </div>
-    <% end %>
+      <% else %>
+        <%= link_to "Log in", new_user_session_path, class: "nav-trigger text-white/70 hover:text-white" %>
+        <%= link_to "Sign up", new_user_registration_path, class: "nav-cta" %>
+      <% end %>
+    </div>
   </div>
 
-  <!-- Mobile Drawer Menu -->
-  <div data-mobile-nav-target="menu" class="fixed top-0 left-0 h-full w-64 bg-brand-dark z-50 transform -translate-x-full transition-transform duration-300 lg:hidden p-6 space-y-4">
-    <% if user_signed_in? %>
-      <%= link_to "My Events", events_path, class: "block text-white hover:text-brand-light" %>
-      <%= link_to "Create Event", new_event_path, class: "block text-white hover:text-brand-light" %>
-      <%= link_to "All Groups", groups_path, class: "block text-white hover:text-brand-light" %>
-      <%= link_to "Create Group", new_group_path, class: "block text-white hover:text-brand-light" %>
-      <%= link_to "Friend Requests", friendships_path, class: "block text-white hover:text-brand-light" %>
-      <%= link_to "Profile", profile_path, class: "block text-white hover:text-brand-light" %>
-      <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "block text-white hover:text-brand-light" %>
-    <% else %>
-      <%= link_to "Login", new_user_session_path, class: "block text-white hover:text-brand-light" %>
-      <%= link_to "Sign Up", new_user_registration_path, class: "block text-white hover:text-brand-light" %>
-    <% end %>
+  <% if user_signed_in? %>
+    <!-- Mega Overlay -->
+    <div data-mega-nav-target="backdrop" class="absolute inset-x-0 top-full hidden pt-4">
+      <div class="container mx-auto px-4">
+        <div
+          data-mega-nav-target="dialog"
+          class="pointer-events-none -translate-y-4 opacity-0 transition-all duration-200">
+          <div class="rounded-[1.75rem] border border-white/15 bg-gradient-to-br from-brand-dark/85 via-brand/80 to-brand-gradientTo/85 px-10 py-8 text-sm shadow-[0_35px_80px_rgba(124,58,237,0.35)]">
+            <div class="flex items-center justify-between text-white/75">
+              <p class="text-[11px] uppercase tracking-[0.45em]">Explore HappenHub</p>
+              <button class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/25" data-action="mega-nav#close">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="mt-8 grid gap-8 lg:grid-cols-[240px_1fr]">
+              <div class="flex flex-col gap-3">
+                <button data-mega-nav-target="trigger" data-section="events" data-action="click->mega-nav#showSection" class="nav-section-trigger">
+                  <span>Events</span>
+                  <span>Plan, host & collaborate</span>
+                </button>
+                <button data-mega-nav-target="trigger" data-section="groups" data-action="click->mega-nav#showSection" class="nav-section-trigger text-white/60">
+                  <span>Groups</span>
+                  <span>Keep communities aligned</span>
+                </button>
+                <button data-mega-nav-target="trigger" data-section="friends" data-action="click->mega-nav#showSection" class="nav-section-trigger text-white/60">
+                  <span>Friends</span>
+                  <span>Grow your social orbit</span>
+                </button>
+              </div>
+
+              <div class="grid gap-6 md:grid-cols-2">
+                <section data-mega-nav-target="section" data-section="events" class="space-y-4">
+                  <h3 class="text-lg font-semibold text-white">Events toolkit</h3>
+                  <p class="text-white/70">Craft premium invites, track RSVP pulse, and orchestrate flawless gatherings.</p>
+                  <div class="grid gap-3">
+                    <%= link_to dashboard_path, class: "nav-card" do %>
+                      <span class="nav-card__title">Dashboard</span>
+                      <span class="nav-card__desc">Daily pulse and upcoming highlights</span>
+                    <% end %>
+                    <%= link_to events_path, class: "nav-card" do %>
+                      <span class="nav-card__title">My events</span>
+                      <span class="nav-card__desc">Manage every moment you’re hosting</span>
+                    <% end %>
+                    <%= link_to new_event_path, class: "nav-card" do %>
+                      <span class="nav-card__title">Create event</span>
+                      <span class="nav-card__desc">Launch a new invitation in minutes</span>
+                    <% end %>
+                  </div>
+                </section>
+
+                <section data-mega-nav-target="section" data-section="groups" class="hidden space-y-4">
+                  <h3 class="text-lg font-semibold text-white">Groups & communities</h3>
+                  <p class="text-white/70">Keep recurring crews in sync with curated spaces and actions.</p>
+                  <div class="grid gap-3">
+                    <%= link_to groups_path, class: "nav-card" do %>
+                      <span class="nav-card__title">All groups</span>
+                      <span class="nav-card__desc">Browse and manage your circles</span>
+                    <% end %>
+                    <%= link_to new_group_path, class: "nav-card" do %>
+                      <span class="nav-card__title">Create group</span>
+                      <span class="nav-card__desc">Spin up a dedicated community hub</span>
+                    <% end %>
+                  </div>
+                </section>
+
+                <section data-mega-nav-target="section" data-section="friends" class="hidden space-y-4">
+                  <h3 class="text-lg font-semibold text-white">Friends & invites</h3>
+                  <p class="text-white/70">Track connections and keep your social orbit vibrant.</p>
+                  <div class="grid gap-3">
+                    <%= link_to friendships_path, class: "nav-card" do %>
+                      <span class="nav-card__title">Friend requests</span>
+                      <span class="nav-card__desc">Respond and manage pending invites</span>
+                    <% end %>
+                    <%= link_to profile_path, class: "nav-card" do %>
+                      <span class="nav-card__title">My profile</span>
+                      <span class="nav-card__desc">Refresh your public look & links</span>
+                    <% end %>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Mobile Navigation Panel -->
+  <div>
+    <div data-mobile-nav-target="overlay" class="fixed inset-0 z-40 hidden bg-neutral-text/60 backdrop-blur-lg lg:hidden" data-action="click->mobile-nav#close"></div>
+    <div data-mobile-nav-target="panel" class="fixed inset-y-0 right-0 z-50 flex w-80 max-w-[80vw] flex-col gap-6 overflow-y-auto bg-neutral-surface/95 p-6 text-neutral-text shadow-xl transition-transform duration-300 ease-out translate-x-full lg:hidden">
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-semibold uppercase tracking-[0.35em] text-neutral-muted">Menu</span>
+        <button class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-neutral-text/5 text-neutral-text" data-action="click->mobile-nav#close">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <% if user_signed_in? %>
+        <div class="space-y-2">
+          <p class="text-xs uppercase tracking-[0.3em] text-neutral-muted">Events</p>
+          <%= link_to dashboard_path, class: "mobile-nav-link" do %>
+            <span>Dashboard</span>
+            <span>Daily pulse</span>
+          <% end %>
+          <%= link_to events_path, class: "mobile-nav-link" do %>
+            <span>My events</span>
+            <span>Planning & RSVPs</span>
+          <% end %>
+          <%= link_to new_event_path, class: "mobile-nav-link" do %>
+            <span>Create event</span>
+            <span>Launch something new</span>
+          <% end %>
+        </div>
+
+        <div class="space-y-2">
+          <p class="text-xs uppercase tracking-[0.3em] text-neutral-muted">Groups</p>
+          <%= link_to groups_path, class: "mobile-nav-link" do %>
+            <span>All groups</span>
+            <span>Communities & clubs</span>
+          <% end %>
+          <%= link_to new_group_path, class: "mobile-nav-link" do %>
+            <span>Create group</span>
+            <span>Build your circle</span>
+          <% end %>
+        </div>
+
+        <div class="space-y-2">
+          <p class="text-xs uppercase tracking-[0.3em] text-neutral-muted">Friends</p>
+          <%= link_to friendships_path, class: "mobile-nav-link" do %>
+            <span>Friend requests</span>
+            <span>Pending connections</span>
+          <% end %>
+          <%= link_to profile_path, class: "mobile-nav-link" do %>
+            <span>My profile</span>
+            <span>Presence & sharing</span>
+          <% end %>
+        </div>
+
+        <%= button_to "Sign out", destroy_user_session_path,
+              method: :delete,
+              class: "mobile-nav-cta" %>
+      <% else %>
+        <div class="space-y-4">
+          <%= link_to "Log in", new_user_session_path, class: "mobile-nav-link" do %>
+            <span>Log in</span>
+            <span>Jump back into planning</span>
+          <% end %>
+          <%= link_to "Create account", new_user_registration_path, class: "mobile-nav-cta" %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </nav>
