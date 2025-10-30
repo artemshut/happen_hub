@@ -6,6 +6,8 @@ export default class extends Controller {
   connect() {
     this.open = false
     this.boundCloseOnEscape = this.closeOnEscape.bind(this)
+    this.boundCloseAll = () => this.close()
+    window.addEventListener("mega-nav:closeAll", this.boundCloseAll)
   }
 
   toggle(event) {
@@ -16,6 +18,7 @@ export default class extends Controller {
   openMenu(trigger) {
     this.open = true
     this.activeTrigger = trigger
+    window.dispatchEvent(new CustomEvent("dropdown:closeAll"))
     this.backdropTarget.classList.remove("hidden")
     this.dialogTarget.classList.remove("pointer-events-none", "opacity-0", "-translate-y-4")
     this.dialogTarget.classList.add("opacity-100", "translate-y-0")
@@ -32,6 +35,11 @@ export default class extends Controller {
     if (this.activeTrigger) {
       this.activeTrigger.focus()
     }
+  }
+
+  disconnect() {
+    window.removeEventListener("mega-nav:closeAll", this.boundCloseAll)
+    document.removeEventListener("keydown", this.boundCloseOnEscape)
   }
 
   closeOnEscape(event) {

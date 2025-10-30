@@ -31,6 +31,7 @@ export default class extends Controller {
   }
 
   open() {
+    window.dispatchEvent(new CustomEvent("mega-nav:closeAll"))
     this.menuTarget.classList.remove("hidden", "opacity-0", "scale-y-95")
     this.menuTarget.classList.add("block", "opacity-100", "scale-y-100")
 
