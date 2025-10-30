@@ -26,6 +26,14 @@ document.addEventListener("turbo:load", () => {
         FullCalendar.globalPlugins[6], // interactionPlugin
       ],
       initialView: "dayGridMonth",
+      height: "auto",
+      contentHeight: "auto",
+      buttonText: {
+        today: "Today",
+        dayGridMonth: "Month",
+        dayGridWeek: "Week",
+        dayGridDay: "Day",
+      },
       headerToolbar: {
         left: "prev,next today",
         center: "title",
@@ -37,34 +45,23 @@ document.addEventListener("turbo:load", () => {
       selectable: true,
       eventDisplay: "block",
       dayMaxEventRows: true,
+      navLinks: true,
+      titleFormat: { year: "numeric", month: "long" },
 
       // General styling
-      eventColor: "#E34717", // fallback color
-      eventTextColor: "#ffffff",
-
       eventClick: function (info) {
         window.location.href = info.event.url;
       },
 
       eventDidMount: function (info) {
         const el = info.el;
-        el.style.backgroundColor = info.event.extendedProps.color || "#E34717"; // brand.DEFAULT fallback
-        el.style.border = "none";
-        el.style.borderRadius = "0.5rem";
-        el.style.padding = "4px 6px";
-        el.style.fontSize = "0.4rem";
-        el.style.fontWeight = "600";
-        el.classList.add(
-          "hover:scale-[1.02]",
-          "hover:shadow-md",
-          "transition-all",
-          "duration-150",
-          "ease-in-out"
-        );
+        const color = info.event.extendedProps.color || "#9333EA";
+        el.style.background = color;
+        el.classList.add("calendar-event");
       },
 
       dayCellDidMount: function (info) {
-        info.el.classList.add("hover:bg-neutral-100", "transition-colors", "duration-200");
+        info.el.classList.add("transition-colors", "duration-200");
       },
 
       dateClick: function (info) {

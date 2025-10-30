@@ -56,6 +56,123 @@
     @apply mx-auto mt-10 h-px w-28 bg-gradient-to-r from-transparent via-brand-gradientVia/40 to-transparent;
   }
 
+  .calendar-shell {
+    @apply relative overflow-hidden rounded-[2.75rem] border border-white/40 bg-white/80 shadow-[0_45px_120px_rgba(15,23,42,0.16)] backdrop-blur-2xl;
+  }
+
+  .calendar-shell__glow {
+    @apply pointer-events-none absolute inset-0;
+    background: radial-gradient(circle at top left, rgba(147, 51, 234, 0.25), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.2), transparent 50%);
+  }
+
+  .calendar-shell__content {
+    @apply relative z-10 px-8 py-10 md:px-12;
+  }
+
+  .calendar-shell__badge {
+    @apply items-center gap-2 rounded-full bg-brand-soft/90 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-brand shadow-sm;
+  }
+
+  .calendar-surface {
+    @apply rounded-[2.25rem] border border-brand-light/40 bg-white/85 p-6 shadow-[0_35px_90px_rgba(147,51,234,0.12)] backdrop-blur-xl;
+  }
+
+  .calendar-modern .fc {
+    @apply text-neutral-text;
+  }
+
+  .calendar-modern .fc-scrollgrid,
+  .calendar-modern .fc-scrollgrid td,
+  .calendar-modern .fc-scrollgrid th {
+    border-color: rgba(147, 51, 234, 0.08);
+  }
+
+  .calendar-modern .fc-toolbar.fc-header-toolbar {
+    @apply flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .calendar-modern .fc-toolbar-title {
+    @apply text-xl font-semibold text-neutral-text sm:text-2xl;
+  }
+
+  .calendar-modern .fc-toolbar-chunk {
+    @apply flex items-center gap-3;
+  }
+
+  .calendar-modern .fc-button-group {
+    @apply flex rounded-full bg-white/80 p-1 shadow-sm;
+  }
+
+  .calendar-modern .fc-button {
+    @apply rounded-full border border-transparent bg-white/0 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-brand transition;
+  }
+
+  .calendar-modern .fc-button:hover {
+    @apply bg-white/70 text-brand-dark;
+  }
+
+  .calendar-modern .fc-button:focus {
+    @apply outline-none ring-0;
+  }
+
+  .calendar-modern .fc-button-primary:not(:disabled).fc-button-active,
+  .calendar-modern .fc-button-primary:not(:disabled):active {
+    @apply bg-gradient-to-r from-brand-gradientFrom to-brand-gradientTo text-white shadow-[0_18px_45px_rgba(147,51,234,0.35)];
+    border: none;
+  }
+
+  .calendar-modern .fc-button-primary {
+    @apply bg-white/70 text-brand;
+    border: none;
+  }
+
+  .calendar-modern .fc-button-primary:not(:disabled):hover {
+    @apply text-brand-dark;
+  }
+
+  .calendar-modern .fc-daygrid-day-number {
+    @apply block text-sm font-semibold text-neutral-muted transition;
+    padding: 0.35rem 0.5rem;
+  }
+
+  .calendar-modern .fc-daygrid-day {
+    @apply transition-colors duration-200;
+  }
+
+  .calendar-modern .fc-daygrid-day:hover {
+    @apply bg-brand-soft/40;
+  }
+
+  .calendar-modern .fc-day-today {
+    @apply bg-brand-soft/60;
+  }
+
+  .calendar-modern .fc-day-today .fc-daygrid-day-number {
+    @apply inline-flex items-center justify-center rounded-full bg-gradient-to-r from-brand-gradientFrom to-brand-gradientTo px-3 text-xs font-bold uppercase tracking-[0.35em] text-white shadow-[0_14px_35px_rgba(147,51,234,0.3)];
+  }
+
+  .calendar-modern .fc-col-header-cell-cushion {
+    @apply text-xs font-semibold uppercase tracking-[0.35em] text-neutral-muted;
+  }
+
+  .calendar-modern .fc-daygrid-day-frame {
+    @apply flex flex-col;
+  }
+
+  .calendar-modern .fc-day-other .fc-daygrid-day-number {
+    @apply text-neutral-muted/50;
+  }
+
+  .calendar-modern .calendar-event {
+    @apply block rounded-2xl border-none px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-white shadow-[0_20px_55px_rgba(147,51,234,0.3)] transition;
+  }
+
+  .calendar-modern .calendar-event:hover {
+    @apply -translate-y-0.5 shadow-[0_26px_65px_rgba(147,51,234,0.35)];
+  }
+
   .glass-panel {
     @apply relative overflow-visible rounded-3xl border border-white/20 bg-white/80 p-6 shadow-[0_25px_60px_rgba(15,23,42,0.12)] backdrop-blur-xl transition-all duration-300;
   }
