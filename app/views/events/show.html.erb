@@ -1,15 +1,16 @@
+<% content_for :main_classes, "relative flex-grow overflow-x-hidden pb-20" %>
 <% host = @event.user %>
 <% category = @event.event_category %>
 <% duration = if @event.start_time.present? && @event.end_time.present?
                 distance_of_time_in_words(@event.start_time, @event.end_time)
               end %>
 
-<div class="relative pb-16">
+<div class="full-bleed overflow-hidden bg-gradient-to-br from-brand-soft/30 via-neutral-bg to-neutral-bg pb-16">
   <div class="landing-bubble w-[28rem] h-[28rem] -left-24 top-0 animate-floatSlow"></div>
   <div class="landing-bubble w-[22rem] h-[22rem] right-0 top-24 animate-floatSlow" style="animation-delay: 1.6s;"></div>
   <div class="landing-bubble w-[30rem] h-[30rem] -bottom-40 left-1/3 animate-pulseRing opacity-20"></div>
 
-  <section class="landing-section pt-20">
+  <section class="landing-section pt-28 md:pt-36">
     <div class="space-y-12">
       <div class="grid gap-10 xl:grid-cols-[1.2fr_0.8fr]">
         <div class="space-y-8">

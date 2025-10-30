@@ -42,7 +42,14 @@
                       else
                         "bg-gradient-to-r from-brand-gradientFrom via-brand-gradientVia to-brand-gradientTo text-white py-4 shadow-md"
                       end %>
-  <% main_classes = landing_page ? "relative flex-grow pt-28 md:pt-36" : "container mx-auto px-4 py-8 flex-grow" %>
+  <% main_classes =
+       if content_for?(:main_classes)
+         content_for(:main_classes)
+       elsif landing_page
+         "relative flex-grow pt-28 md:pt-36"
+       else
+         "container mx-auto px-4 py-8 flex-grow"
+       end %>
 
   <%= render "shared/cookie_banner" %>
 

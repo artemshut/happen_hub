@@ -1,7 +1,1 @@
 <%= render 'form', event: @event %>
-
-<% unless @event.past? %>
-  <div class="max-w-2xl mx-auto mt-8 px-4 py-6 bg-white shadow rounded-lg">
-    <%= render 'events/add_friends_to_event', event: @event, friends: @friends, friend_availabilities: @friend_availabilities %>
-  </div>
-<% end %>

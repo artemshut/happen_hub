@@ -1,101 +1,240 @@
-<div class="max-w-2xl mx-auto px-4 py-6 bg-white shadow rounded-lg">
-  <div class="mb-4">
-    <h2 class="text-2xl font-bold"><%= @event.persisted? ? "Edit #{@event.title}" : "New Event" %></h2>
-  </div>
+<% content_for :main_classes, "relative flex-grow overflow-x-hidden pb-20" %>
+<% event = local_assigns.fetch(:event) %>
+<% persisted = event.persisted? %>
+<% page_title = persisted ? "Update #{event.title}" : "Create a new event" %>
+<% page_subtitle = persisted ? "Refresh details, files, and visibility in a single flow." : "Craft a vibrant invitation with timing, location, and media in minutes." %>
 
-  <%= form_with(model: @event, local: true, html: { multipart: true }) do |form| %>
-    <div class="mb-4">
-      <%= form.label :title, class: "block text-gray-700 font-bold mb-2" %>
-      <%= form.text_field :title, required: true, class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
-    </div>
-    <div class="mb-4">
-      <%= form.label :description, class: "block text-gray-700 font-bold mb-2" %>
-      <%= form.rich_text_area :description, class: "w-full border border-gray-300 rounded focus:ring-2 focus:ring-accent-red" %>
-    </div>
-    <div data-controller="datetime-link">
-      <div class="mb-4">
-        <%= form.label :start_time, "Start Time", class: "block text-sm font-medium text-gray-700" %>
-        <%= form.datetime_local_field :start_time,
-              data: {
-                datetime_link_target: "start",
-                action: "change->datetime-link#handleStartChange"
-              },
-              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200" %>
-      </div>
+<div class="full-bleed overflow-hidden bg-gradient-to-br from-brand-soft/40 via-neutral-bg to-neutral-bg pb-20">
+  <div class="absolute inset-x-[-40vw] top-0 h-[36rem] bg-gradient-to-br from-brand-soft/60 via-brand-soft/40 to-brand-soft/25 opacity-80 blur-3xl"></div>
+  <div class="landing-bubble w-[26rem] h-[26rem] -left-24 top-10 opacity-40 animate-floatSlow"></div>
+  <div class="landing-bubble w-[20rem] h-[20rem] right-0 top-24 opacity-30 animate-floatSlow" style="animation-delay: 1.4s;"></div>
+  <div class="landing-bubble w-[32rem] h-[32rem] left-1/2 top-[38rem] -translate-x-1/2 opacity-20 animate-pulseRing"></div>
 
-      <div class="mb-4">
-        <%= form.label :end_time, "End Time", class: "block text-sm font-medium text-gray-700" %>
-        <%= form.datetime_local_field :end_time,
-              data: {
-                datetime_link_target: "end",
-                action: "change->datetime-link#handleEndChange"
-              },
-              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200" %>
-      </div>
-    </div>
-
-    <div data-controller="location-autocomplete"
-      data-location-autocomplete-target="container">
-
-      <div class="mb-4">
-        <label>Location</label>
-        <input type="text"
-              name="event[location]"
-              class="input"
-              data-location-autocomplete-target="input"
-              id="autocomplete-location"
-              value="<%= @event.location %>">
-      </div>
-
-      <input type="hidden"
-            name="event[latitude]"
-            data-location-autocomplete-target="lat"
-            value="<%= @event.latitude %>" />
-
-      <input type="hidden"
-            name="event[longitude]"
-            data-location-autocomplete-target="lng"
-            value="<%= @event.longitude %>" />
-    </div>
-
-    <div class="mb-4">
-      <%= form.label :cover_image %>
-      <%= form.file_field :cover_image %>
-    </div>
-
-    <div class="mb-4">
-      <%= form.label :files, "Files (PDFs, images, etc.)", class: "block font-medium text-gray-700" %>
-      <%= form.file_field :files, multiple: true, direct_upload: true, class: "mt-1 block w-full" %>
-    </div>
-
-    <%= render "events/existing_files", event: form.object %>
-
-    <div class="mb-4">
-      <label for="event_event_category_id" class="block text-sm font-medium text-gray-700 mb-1">
-        Category
-      </label>
-      <div class="relative">
-        <%= form.collection_select :event_category_id, @event_categories, :id, :name,
-              { prompt: "Choose a category" },
-              class: "block w-full border border-gray-300 rounded-lg shadow-sm px-4 py-2 pr-10 bg-white focus:outline-none focus:ring-2 focus:ring-accent-red focus:border-accent-red transition" %>
-        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M19 9l-7 7-7-7" />
-          </svg>
+  <section class="landing-section pt-24 md:pt-32">
+    <div class="space-y-12">
+      <header class="glass-panel bg-gradient-to-r from-brand-gradientFrom/95 via-brand-gradientVia/85 to-brand-gradientTo/85 text-white shadow-[0_35px_80px_rgba(124,58,237,0.35)]">
+        <div class="flex flex-wrap items-center justify-between gap-6">
+          <div>
+            <p class="text-xs uppercase tracking-[0.45em] text-white/70">Plan your next moment</p>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl"><%= page_title %></h1>
+            <p class="mt-4 max-w-2xl text-sm text-white/80"><%= page_subtitle %></p>
+          </div>
+          <% if persisted %>
+            <div class="rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm text-white/80">
+              <p class="font-semibold text-white">Status overview</p>
+              <p class="mt-1 flex items-center gap-2 text-xs uppercase tracking-[0.35em]">
+                <span class="h-2 w-2 rounded-full bg-emerald-300"></span>
+                <%= event.visibility.titleize %>
+              </p>
+              <p class="mt-2 text-xs text-white/70">Last updated <%= time_ago_in_words(event.updated_at) %> ago</p>
+            </div>
+          <% end %>
         </div>
-      </div>
-    </div>
-    
-    <div class="mb-4">
-      <%= form.label :visibility, "Who can see this event?", class: "block text-gray-700 font-bold mb-2" %>
-      <%= form.select :visibility, Event.visibilities.keys.map { |v| [v.titleize, v] }, {}, 
-          class: "w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-accent-red" %>
-    </div>
+      </header>
 
-    <div class="mt-4 flex gap-2">
-      <%= link_to "Back to Events", events_path,
-            class: "bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded border" %>
-      <%= form.submit "Save", class: "bg-accent-pink text-white px-4 py-2 rounded hover:bg-pink-600 cursor-pointer" %>
+      <%= form_with(model: event, local: true, html: { multipart: true, class: "space-y-10" }) do |form| %>
+        <div class="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+          <div class="space-y-8">
+            <!-- Basics -->
+            <section class="form-card space-y-6">
+              <div class="form-card__header">
+                <div>
+                  <p class="form-card__eyebrow">Essentials</p>
+                  <h2 class="form-card__title">Event basics</h2>
+                  <p class="form-card__subtitle">Name it and capture the vibe with a rich description.</p>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <%= form.label :title, "Event title", class: "form-label" %>
+                <%= form.text_field :title,
+                      required: true,
+                      class: "form-input text-lg font-semibold",
+                      placeholder: "Sunset rooftop social" %>
+              </div>
+
+              <div class="form-field">
+                <%= form.label :description, "Description", class: "form-label" %>
+                <div class="form-rich-text">
+                  <%= form.rich_text_area :description, class: "form-rich-text__editor" %>
+                </div>
+              </div>
+            </section>
+
+            <!-- Timing -->
+            <section class="form-card space-y-6" data-controller="datetime-link">
+              <div class="form-card__header">
+                <div>
+                  <p class="form-card__eyebrow">Schedule</p>
+                  <h2 class="form-card__title">Pick your timeline</h2>
+                  <p class="form-card__subtitle">Set the start and end so reminders line up perfectly.</p>
+                </div>
+              </div>
+
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div class="form-field">
+                  <%= form.label :start_time, "Start", class: "form-label" %>
+                  <%= form.datetime_local_field :start_time,
+                        data: { datetime_link_target: "start", action: "change->datetime-link#handleStartChange" },
+                        class: "form-input",
+                        required: true %>
+                </div>
+                <div class="form-field">
+                  <%= form.label :end_time, "End", class: "form-label" %>
+                  <%= form.datetime_local_field :end_time,
+                        data: { datetime_link_target: "end", action: "change->datetime-link#handleEndChange" },
+                        class: "form-input" %>
+                </div>
+              </div>
+            </section>
+
+            <!-- Location -->
+            <section class="form-card space-y-6" data-controller="location-autocomplete" data-location-autocomplete-target="container">
+              <div class="form-card__header">
+                <div>
+                  <p class="form-card__eyebrow">Where</p>
+                  <h2 class="form-card__title">Drop a pin or virtual meet</h2>
+                  <p class="form-card__subtitle">Search a venue or paste an address so guests land smoothly.</p>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="autocomplete-location">Location</label>
+                <input id="autocomplete-location"
+                       type="text"
+                       name="event[location]"
+                       value="<%= event.location %>"
+                       class="form-input"
+                       placeholder="123 Sunnyside Ave or Zoom link"
+                       data-location-autocomplete-target="input">
+              </div>
+
+              <input type="hidden" name="event[latitude]" data-location-autocomplete-target="lat" value="<%= event.latitude %>" />
+              <input type="hidden" name="event[longitude]" data-location-autocomplete-target="lng" value="<%= event.longitude %>" />
+            </section>
+
+            <!-- Media & Files -->
+            <section class="form-card space-y-6">
+              <div class="form-card__header">
+                <div>
+                  <p class="form-card__eyebrow">Visuals</p>
+                  <h2 class="form-card__title">Cover & attachments</h2>
+                  <p class="form-card__subtitle">Upload a hero image plus supporting docs for guests.</p>
+                </div>
+              </div>
+
+              <div class="grid gap-4 md:grid-cols-2">
+                <div class="form-field">
+                  <%= form.label :cover_image, "Cover image", class: "form-label" %>
+                  <%= form.file_field :cover_image,
+                        class: "form-file",
+                        direct_upload: true %>
+                  <% if event.cover_image.attached? %>
+                    <p class="form-helper mt-2">Current image: <%= event.cover_image.filename.to_s %></p>
+                  <% end %>
+                </div>
+
+                <div class="form-field">
+                  <%= form.label :files, "Supporting files", class: "form-label" %>
+                  <%= form.file_field :files,
+                        multiple: true,
+                        direct_upload: true,
+                        class: "form-file",
+                        accept: "image/*,application/pdf" %>
+                  <p class="form-helper">Share agendas, menus, or decks (10MB max each).</p>
+                </div>
+              </div>
+
+              <%= render "events/existing_files", event: event %>
+            </section>
+
+            <!-- Visibility -->
+            <section class="form-card space-y-6">
+              <div class="form-card__header">
+                <div>
+                  <p class="form-card__eyebrow">Visibility</p>
+                  <h2 class="form-card__title">Audience & category</h2>
+                  <p class="form-card__subtitle">Choose a theme and who should discover this invite.</p>
+                </div>
+              </div>
+
+              <div class="grid gap-4 md:grid-cols-2">
+                <div class="form-field">
+                  <label for="event_event_category_id" class="form-label">Category</label>
+                  <div class="relative">
+                    <%= form.collection_select :event_category_id, @event_categories, :id, :name,
+                          { prompt: "Choose a category" },
+                          class: "form-input pr-10" %>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-neutral-muted">
+                      <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <%= form.label :visibility, "Who can see this event?", class: "form-label" %>
+                  <%= form.select :visibility,
+                        Event.visibilities.keys.map { |v| [v.titleize, v] },
+                        {},
+                        class: "form-input" %>
+                </div>
+              </div>
+            </section>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <%= link_to "Back to events", events_path, class: "chip-link" %>
+              <%= form.submit(persisted ? "Update event" : "Create event", class: "chip-link--primary px-8 py-3 text-xs uppercase tracking-[0.35em]") %>
+            </div>
+          </div>
+
+          <aside class="space-y-6">
+            <div class="glass-panel space-y-5">
+              <p class="form-card__eyebrow text-brand-dark">Workflow</p>
+              <h3 class="text-lg font-semibold text-neutral-text">Host checklist</h3>
+              <ul class="space-y-3 text-sm text-neutral-muted">
+                <li class="flex items-start gap-3">
+                  <span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand"></span>
+                  Draft compelling copy so guests feel the vibe immediately.
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand"></span>
+                  Confirm availability by sharing after you save.
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand"></span>
+                  Upload key files so everyone arrives prepared.
+                </li>
+              </ul>
+            </div>
+
+            <% if persisted %>
+              <div class="glass-panel space-y-4">
+                <h3 class="text-lg font-semibold text-neutral-text">Event quick links</h3>
+                <div class="flex flex-col gap-3">
+                  <%= link_to "View live page", event_path(event), class: "chip-link px-5 py-2 text-sm" %>
+                  <div class="rounded-2xl border border-brand-light/30 bg-white/80 px-4 py-3 text-xs text-neutral-muted break-all">
+                    <p class="font-semibold text-neutral-text mb-1">Shareable URL</p>
+                    <%= event_url(event) %>
+                  </div>
+                </div>
+              </div>
+
+              <% if !event.past? && instance_variable_defined?(:@friends) %>
+                <div class="glass-panel space-y-4">
+                  <%= render "events/add_friends_to_event",
+                            event: event,
+                            friends: @friends,
+                            friend_availabilities: instance_variable_defined?(:@friend_availabilities) ? @friend_availabilities : {} %>
+                </div>
+              <% end %>
+            <% else %>
+              <div class="glass-panel space-y-4">
+                <h3 class="text-lg font-semibold text-neutral-text">Pro tip</h3>
+                <p class="text-sm text-neutral-muted">Save the draft once and you can invite friends, attach files, and preview the shareable invite instantly.</p>
+              </div>
+            <% end %>
+          </aside>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+  </section>
 </div>
