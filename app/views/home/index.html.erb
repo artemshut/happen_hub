@@ -1,108 +1,360 @@
-<div class="bg-white text-gray-900">
-  <!-- Hero Section -->
-  <section class="container mx-auto px-6 py-20 text-center opacity-0 transform scale-90 animate-fade-in">
-    <h1 class="text-5xl font-extrabold leading-tight">
-      Plan Events <span class="text-red-500">Effortlessly</span> with HappenHub
-    </h1>
-    <p class="mt-4 text-lg text-gray-600">
-      Organize, invite, and track events with real-time updates and seamless RSVPs.
-    </p>
-    <div class="mt-8 flex justify-center space-x-6">
-      <a href="<%= new_user_registration_path %>" class="btn-primary">Get Started</a>
-      <a href="#features" class="btn-secondary scroll-link">Learn More</a>
+<div class="relative overflow-hidden text-neutral-text">
+  <div class="landing-bubble w-72 md:w-96 h-72 md:h-96 -left-24 md:-left-32 top-16 animate-floatSlow"></div>
+  <div class="landing-bubble w-[22rem] h-[22rem] right-0 top-1/3 animate-floatSlow" style="animation-delay: 1.2s;"></div>
+  <div class="landing-bubble w-[30rem] h-[30rem] -bottom-40 left-1/2 -translate-x-1/2 blur-2xl opacity-20 animate-pulseRing"></div>
+
+  <section id="hero" class="landing-section pt-20 md:pt-28">
+    <div class="grid items-center gap-14 lg:grid-cols-[1.15fr_1fr]">
+      <div class="space-y-8 animate-slideUp">
+        <span class="landing-pill animate-fadeIn">
+          <i class="fa-solid fa-wand-magic-sparkles text-accent-pink"></i>
+          Host unforgettable moments
+        </span>
+        <h1 class="text-4xl font-extrabold leading-tight text-neutral-text sm:text-5xl lg:text-6xl">
+          Bring people together without the planning chaos
+        </h1>
+        <p class="max-w-xl text-lg text-neutral-muted">
+          HappenHub orchestrates invites, RSVPs, reminders, and collaborative planning so you can focus on building memories—not juggling spreadsheets and group chats.
+        </p>
+        <div class="flex flex-wrap items-center gap-4">
+          <%= link_to "Start planning free", new_user_registration_path, class: "landing-cta-primary animate-scaleUp" %>
+          <%= link_to "Preview an event", events_path, class: "landing-cta-secondary" %>
+        </div>
+        <div class="flex flex-wrap items-center gap-6 text-sm text-neutral-muted/90">
+          <a href="#features" class="inline-flex items-center gap-2 hover:text-brand">
+            <span class="h-2 w-2 rounded-full bg-brand-gradientTo animate-pulse"></span>
+            Explore the product
+          </a>
+          <a href="#workflow" class="inline-flex items-center gap-2 hover:text-brand">
+            <span class="h-2 w-2 rounded-full bg-accent-pink animate-pulse" style="animation-delay: 0.6s;"></span>
+            See how it flows
+          </a>
+          <a href="#stories" class="inline-flex items-center gap-2 hover:text-brand">
+            <span class="h-2 w-2 rounded-full bg-brand-gradientFrom animate-pulse" style="animation-delay: 1s;"></span>
+            Hear from hosts
+          </a>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-3">
+          <div class="rounded-2xl border border-neutral-border/60 bg-white/80 p-4 shadow-lg backdrop-blur">
+            <p class="text-3xl font-bold text-brand" data-count-to="32" data-suffix="K+">0</p>
+            <p class="text-xs uppercase tracking-wider text-neutral-muted">Successful RSVPs processed</p>
+          </div>
+          <div class="rounded-2xl border border-neutral-border/60 bg-white/80 p-4 shadow-lg backdrop-blur">
+            <p class="text-3xl font-bold text-brand" data-count-to="4.9" data-suffix="/5">0</p>
+            <p class="text-xs uppercase tracking-wider text-neutral-muted">Average host rating</p>
+          </div>
+          <div class="rounded-2xl border border-neutral-border/60 bg-white/80 p-4 shadow-lg backdrop-blur">
+            <p class="text-3xl font-bold text-brand" data-count-to="18" data-suffix="min saved">0</p>
+            <p class="text-xs uppercase tracking-wider text-neutral-muted">Per event on planning tasks</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="absolute -right-10 -top-10 hidden h-28 w-28 rounded-full border border-brand-light/70 bg-brand-soft/70 blur-md md:block animate-floatSlow"></div>
+        <div class="landing-card animate-floatSlow">
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <p class="text-sm uppercase tracking-wide text-neutral-muted">Upcoming mixer</p>
+              <p class="mt-1 text-xl font-semibold text-neutral-text">Sunset Rooftop Social</p>
+            </div>
+            <span class="rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">Live</span>
+          </div>
+          <div class="space-y-4 text-sm text-neutral-muted">
+            <div class="flex items-center gap-3 rounded-2xl border border-neutral-border/60 bg-white/80 px-4 py-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-soft text-brand">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-neutral-text">Friday, 7:00 PM</p>
+                <p>Auto-reminders enabled for 23 guests</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 rounded-2xl border border-neutral-border/60 bg-white/80 px-4 py-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-soft text-brand">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-neutral-text">Cloudline Terrace</p>
+                <p>Directions and parking shared instantly</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 rounded-2xl border border-neutral-border/60 bg-white/80 px-4 py-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-soft text-brand">
+                <i class="fa-solid fa-people-group"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-neutral-text">Group RSVP Pulse</p>
+                <p class="flex items-center gap-2">
+                  18 yes · 3 maybe
+                  <span class="inline-flex items-center gap-1 rounded-full bg-brand-soft px-2 py-1 text-xs font-semibold text-brand">
+                    <i class="fa-solid fa-sparkles"></i> Trending
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="landing-divider"></div>
+          <div class="mt-8 flex items-center justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-wide text-neutral-muted">Smart insights</p>
+              <p class="text-base font-semibold text-neutral-text">Perfect weather window · 76% engaged</p>
+            </div>
+            <%= link_to "Share invite", new_user_session_path, class: "landing-cta-secondary px-6 py-2 text-sm" %>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- How It Works -->
-  <section class="bg-gray-100 py-16 opacity-0 transform translate-y-10 animate-scroll-fade">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold mb-6">How It Works</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-          <h3 class="text-xl font-semibold mb-2">1. Create an Event</h3>
-          <p class="text-gray-600">Set up your event in seconds with details, date, and location.</p>
+  <section id="features" class="landing-section">
+    <div class="mx-auto max-w-3xl text-center">
+      <span class="landing-pill justify-center">
+        <i class="fa-solid fa-fire"></i>
+        Feature highlights
+      </span>
+      <h2 class="mt-6 text-3xl font-bold text-neutral-text sm:text-4xl">
+        A full planning suite wrapped in delightful details
+      </h2>
+      <p class="mt-4 text-lg text-neutral-muted">
+        Everything you need to rally friends, align schedules, and keep energy high—crafted with modern design and subtle motion that feels alive.
+      </p>
+    </div>
+    <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div class="landing-card animate-slideUp" style="animation-delay: 0.1s;">
+        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+          <i class="fa-solid fa-bolt"></i>
         </div>
-        <div class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-          <h3 class="text-xl font-semibold mb-2">2. Invite Friends</h3>
-          <p class="text-gray-600">Send invites to friends and track their RSVP responses in real-time.</p>
+        <h3 class="text-xl font-semibold text-neutral-text">Instant RSVPs & pulse tracking</h3>
+        <p class="mt-3 text-neutral-muted">
+          Live RSVP tallies, nudges for undecided guests, and celebratory confetti for every new “yes”.
+        </p>
+      </div>
+      <div class="landing-card animate-slideUp" style="animation-delay: 0.2s;">
+        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+          <i class="fa-solid fa-route"></i>
         </div>
-        <div class="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-          <h3 class="text-xl font-semibold mb-2">3. Enjoy the Event</h3>
-          <p class="text-gray-600">Get automatic reminders and stay updated on event changes.</p>
+        <h3 class="text-xl font-semibold text-neutral-text">Beautiful shareable routes</h3>
+        <p class="mt-3 text-neutral-muted">
+          Share maps, travel plans, and meet-up notes in one tap—no more scattered directions.
+        </p>
+      </div>
+      <div class="landing-card animate-slideUp" style="animation-delay: 0.3s;">
+        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+          <i class="fa-solid fa-sparkles"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-neutral-text">Moments that feel premium</h3>
+        <p class="mt-3 text-neutral-muted">
+          Animated invites, branded color palettes, and dynamic hero images that turn RSVPs into excitement.
+        </p>
+      </div>
+      <div class="landing-card animate-slideUp" style="animation-delay: 0.4s;">
+        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+          <i class="fa-solid fa-user-gear"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-neutral-text">Personalized host dashboards</h3>
+        <p class="mt-3 text-neutral-muted">
+          Deep-dive into guest insights, reminders, and smooth coordination across groups in seconds.
+        </p>
+      </div>
+      <div class="landing-card animate-slideUp" style="animation-delay: 0.5s;">
+        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+          <i class="fa-solid fa-robot"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-neutral-text">Automated concierge</h3>
+        <p class="mt-3 text-neutral-muted">
+          Let automations handle reminders, menu polls, and follow-up thanks, while you enjoy the moment.
+        </p>
+      </div>
+      <div class="landing-card animate-slideUp" style="animation-delay: 0.6s;">
+        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+          <i class="fa-solid fa-earth-americas"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-neutral-text">Seamless across every device</h3>
+        <p class="mt-3 text-neutral-muted">
+          Desktop, tablet, or phone—your community stays in sync with responsive layouts and buttery transitions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="workflow" class="landing-section">
+    <div class="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+      <div>
+        <span class="landing-pill">
+          <i class="fa-solid fa-infinity"></i>
+          Flow that just works
+        </span>
+        <h2 class="mt-6 text-3xl font-bold text-neutral-text sm:text-4xl">
+          Plan, share, celebrate—on repeat
+        </h2>
+        <p class="mt-4 text-lg text-neutral-muted">
+          Every step of the host experience is thoughtfully connected, so your community never misses a beat.
+        </p>
+        <div class="mt-8 space-y-6">
+          <div class="flex gap-4 rounded-3xl border border-neutral-border/60 bg-white/80 p-5 shadow-lg backdrop-blur">
+            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+              <i class="fa-solid fa-swatchbook"></i>
+            </div>
+            <div>
+              <p class="text-lg font-semibold text-neutral-text">Craft your vibe</p>
+              <p class="text-neutral-muted">Pick a template, drop in a hero image, and choose an accent color palette in under a minute.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 rounded-3xl border border-neutral-border/60 bg-white/80 p-5 shadow-lg backdrop-blur">
+            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+              <i class="fa-solid fa-paper-plane"></i>
+            </div>
+            <div>
+              <p class="text-lg font-semibold text-neutral-text">Send cinematic invites</p>
+              <p class="text-neutral-muted">Share across socials or email with animated previews and personalized RSVP links.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 rounded-3xl border border-neutral-border/60 bg-white/80 p-5 shadow-lg backdrop-blur">
+            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+              <i class="fa-solid fa-hand-holding-heart"></i>
+            </div>
+            <div>
+              <p class="text-lg font-semibold text-neutral-text">Delight guests automatically</p>
+              <p class="text-neutral-muted">Smart nudges, weather-aware updates, and thank-you notes keep the hospitality flowing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="relative">
+        <div class="absolute -left-6 top-10 h-28 w-28 rounded-full border border-brand-light/60 bg-shimmer opacity-70 blur-xl"></div>
+        <div class="landing-card bg-gradient-to-br from-white via-brand-soft/40 to-white">
+          <p class="text-sm uppercase tracking-wide text-neutral-muted">Itinerary preview</p>
+          <h3 class="mt-2 text-2xl font-semibold text-neutral-text">Weekend retreat in Sonoma</h3>
+          <div class="mt-6 space-y-4">
+            <div class="rounded-2xl border border-neutral-border/60 bg-white/90 p-4 shadow-lg">
+              <p class="text-sm font-semibold text-brand">Friday</p>
+              <p class="text-neutral-text">Sunset welcome toast · RSVP streak unlocked</p>
+            </div>
+            <div class="rounded-2xl border border-neutral-border/60 bg-white/90 p-4 shadow-lg">
+              <p class="text-sm font-semibold text-brand">Saturday</p>
+              <p class="text-neutral-text">Group tasting tour · Carpool routes synced automatically</p>
+            </div>
+            <div class="rounded-2xl border border-neutral-border/60 bg-white/90 p-4 shadow-lg">
+              <p class="text-sm font-semibold text-brand">Sunday</p>
+              <p class="text-neutral-text">Brunch & reflections · Photo reel shared instantly</p>
+            </div>
+          </div>
+          <div class="landing-divider"></div>
+          <div class="mt-6 rounded-2xl border border-brand-light/20 bg-brand-soft/60 p-4 text-sm text-neutral-text">
+            <p class="font-semibold text-brand">Pro tip:</p>
+            <p>Use Smart Suggestions to auto-plan downtime adventures sourced from your guests’ interests.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section id="features" class="container mx-auto px-6 py-16 text-center opacity-0 transform translate-y-10 animate-scroll-fade">
-    <h2 class="text-3xl font-bold mb-6">Why Choose HappenHub?</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="feature-card">
-        <h3 class="text-xl font-semibold mb-2">🔔 Real-Time Notifications</h3>
-        <p class="text-gray-600">Get instant updates on RSVPs, changes, and messages.</p>
+  <section id="stories" class="landing-section">
+    <div class="mx-auto max-w-3xl text-center">
+      <span class="landing-pill justify-center">
+        <i class="fa-solid fa-heart"></i>
+        Loved by hosts everywhere
+      </span>
+      <h2 class="mt-6 text-3xl font-bold text-neutral-text sm:text-4xl">
+        Moments from the HappenHub community
+      </h2>
+      <p class="mt-4 text-lg text-neutral-muted">
+        From intimate dinner parties to city-wide meetups, creators trust HappenHub to keep their communities connected.
+      </p>
+    </div>
+    <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div class="landing-card animate-slideUp" style="animation-delay: 0.1s;">
+        <div class="flex items-center gap-3">
+          <img src="<%= asset_path('default_event.jpg') %>" alt="Creative brunch" class="h-12 w-12 rounded-full object-cover shadow-md">
+          <div>
+            <p class="font-semibold text-neutral-text">Creative Brunch Club</p>
+            <p class="text-xs uppercase tracking-wide text-neutral-muted">Austin, TX</p>
+          </div>
+        </div>
+        <p class="mt-4 text-neutral-muted">
+          “Our RSVP chaos vanished overnight. Guests rave about the animated invites and I finally get to enjoy hosting again.”
+        </p>
+        <p class="mt-4 text-sm font-semibold text-brand">82% increase in returning guests</p>
       </div>
-      <div class="feature-card">
-        <h3 class="text-xl font-semibold mb-2">📍 Integrated Maps</h3>
-        <p class="text-gray-600">Easily find event locations and navigate effortlessly.</p>
+      <div class="landing-card animate-slideUp" style="animation-delay: 0.2s;">
+        <div class="flex items-center gap-3">
+          <img src="<%= asset_path('blank_avatar.jpg') %>" alt="Outdoor collective" class="h-12 w-12 rounded-full object-cover shadow-md">
+          <div>
+            <p class="font-semibold text-neutral-text">Outdoor Collective</p>
+            <p class="text-xs uppercase tracking-wide text-neutral-muted">Portland, OR</p>
+          </div>
+        </div>
+        <p class="mt-4 text-neutral-muted">
+          “Route sharing is a lifesaver. Everyone arrives on time with gear in hand, and messages stay unified in one place.”
+        </p>
+        <p class="mt-4 text-sm font-semibold text-brand">Zero last-minute cancellations</p>
       </div>
-      <div class="feature-card">
-        <h3 class="text-xl font-semibold mb-2">📅 Smart Scheduling</h3>
-        <p class="text-gray-600">Suggest and vote on the best event times with friends.</p>
+      <div class="landing-card animate-slideUp" style="animation-delay: 0.3s;">
+        <div class="flex items-center gap-3">
+          <img src="<%= asset_path('default_event.jpg') %>" alt="Tech meetup" class="h-12 w-12 rounded-full object-cover shadow-md">
+          <div>
+            <p class="font-semibold text-neutral-text">Tech Meetup Lab</p>
+            <p class="text-xs uppercase tracking-wide text-neutral-muted">Berlin, DE</p>
+          </div>
+        </div>
+        <p class="mt-4 text-neutral-muted">
+          “We love the energy each invite brings. Animations, smart reminders, and real-time RSVPs keep our community thriving.”
+        </p>
+        <p class="mt-4 text-sm font-semibold text-brand">Community NPS rose to 94</p>
       </div>
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section class="bg-gray-100 py-16 opacity-0 transform translate-y-10 animate-scroll-fade">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold mb-6">What Our Users Say</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="testimonial-card">
-          <p>"HappenHub changed the way I plan my meetups. Super easy to use!"</p>
-          <p class="text-red-500 font-semibold mt-2">- Alex M.</p>
+  <section id="cta" class="landing-section pb-16 md:pb-20">
+    <div class="relative overflow-hidden rounded-3xl border border-brand-light/50 bg-gradient-to-br from-brand-gradientFrom via-brand-gradientVia to-brand-gradientTo px-8 py-16 text-center text-white shadow-[0_20px_80px_rgba(124,58,237,0.35)]">
+      <div class="absolute inset-0 bg-shimmer opacity-30 animate-shimmer"></div>
+      <div class="relative mx-auto flex max-w-2xl flex-col items-center space-y-6">
+        <span class="landing-pill border-white/30 bg-white/20 text-white">
+          <i class="fa-solid fa-star"></i>
+          Ready to host differently?
+        </span>
+        <h2 class="text-4xl font-bold leading-tight sm:text-5xl">
+          Transform the way you gather—start in minutes for free
+        </h2>
+        <p class="text-lg text-white/80">
+          Create your first event, invite your crew, and let HappenHub choreograph the rest with delightful motion and clarity.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <%= link_to "Create my first event", new_user_registration_path, class: "landing-cta-primary bg-none bg-white/90 text-brand-dark hover:text-brand" %>
+          <%= link_to "Log in as a guest host", new_user_session_path, class: "landing-cta-secondary border-white/40 bg-transparent text-white hover:border-white hover:text-white" %>
         </div>
-        <div class="testimonial-card">
-          <p>"The RSVP tracking feature is genius. 10/10 would recommend!"</p>
-          <p class="text-red-500 font-semibold mt-2">- Sarah L.</p>
-        </div>
-        <div class="testimonial-card">
-          <p>"I love how seamless and fast everything updates in real-time."</p>
-          <p class="text-red-500 font-semibold mt-2">- Mark R.</p>
-        </div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70">No credit card. Full feature tour unlocked.</p>
       </div>
     </div>
-  </section>
-
-  <!-- Call to Action -->
-  <section class="py-20 bg-fuchsia-500 text-white text-center opacity-0 transform translate-y-10 animate-scroll-fade">
-    <h2 class="text-4xl font-bold mb-6">Start Your Event Journey Now</h2>
-    <a href="<%= new_user_registration_path %>" class="btn-primary bg-white text-red-500 hover:bg-gray-200">Sign Up</a>
   </section>
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Scroll Animations
-    const sections = document.querySelectorAll(".animate-scroll-fade");
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("animate-fade-in-up");
+  function initLandingPageCounts() {
+    const counters = document.querySelectorAll("[data-count-to]");
+    if (!counters.length) return;
+
+    counters.forEach((counter) => {
+      const target = parseFloat(counter.dataset.countTo);
+      const suffix = counter.dataset.suffix || "";
+      const duration = 1600;
+      let startTimestamp = null;
+
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const value = (target * progress).toFixed(target % 1 === 0 ? 0 : 1);
+        counter.textContent = `${value}${suffix}`;
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
         }
-      });
-    });
+      };
 
-    sections.forEach((section) => observer.observe(section));
-
-    // Smooth Scroll for "Learn More"
-    document.querySelectorAll(".scroll-link").forEach((link) => {
-      link.addEventListener("click", function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute("href").substring(1);
-        const targetElement = document.getElementById(targetId);
-        targetElement.scrollIntoView({ behavior: "smooth" });
-      });
+      window.requestAnimationFrame(step);
     });
-  });
+  }
+
+  document.addEventListener("DOMContentLoaded", initLandingPageCounts);
+  document.addEventListener("turbo:load", initLandingPageCounts);
 </script>

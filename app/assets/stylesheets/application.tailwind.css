@@ -13,6 +13,51 @@
 
 */
 
+@layer components {
+  .landing-section {
+    @apply relative mx-auto max-w-6xl px-6 py-16 md:px-12 md:py-24;
+  }
+
+  .landing-card {
+    @apply rounded-3xl border border-neutral-border/60 bg-neutral-surface/90 p-8 shadow-xl backdrop-blur-lg transition-transform duration-300;
+  }
+
+  .landing-card:hover {
+    @apply -translate-y-2 shadow-2xl;
+  }
+
+  .landing-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-light/40 bg-brand-soft/60 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-brand-dark shadow-sm backdrop-blur;
+  }
+
+  .landing-cta-primary {
+    @apply inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-gradientFrom via-brand-gradientVia to-brand-gradientTo px-8 py-3 text-base font-semibold text-white shadow-[0_20px_50px_rgba(124,58,237,0.35)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_26px_60px_rgba(124,58,237,0.45)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-light/60;
+  }
+
+  .landing-cta-secondary {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-light/40 bg-white px-8 py-3 text-base font-semibold text-brand-dark shadow-md transition-all duration-200 hover:-translate-y-1 hover:border-brand-light hover:text-brand hover:shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-soft;
+  }
+
+  .landing-bubble {
+    @apply absolute rounded-full bg-gradient-to-br from-brand-gradientFrom via-brand-gradientVia to-brand-gradientTo opacity-30 blur-3xl;
+  }
+
+  .landing-divider {
+    @apply mx-auto mt-10 h-px w-28 bg-gradient-to-r from-transparent via-brand-gradientVia/40 to-transparent;
+  }
+}
+
+@layer utilities {
+  .bg-shimmer {
+    background-size: 200% 100%;
+    background-image: linear-gradient(120deg, rgba(124,58,237,0.18), rgba(236,72,153,0.1), rgba(124,58,237,0.18));
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 .youtube-embed {
   margin: 1rem 0;
   position: relative;

@@ -46,6 +46,9 @@ module.exports = {
         slideUp: "slideUp 1s ease-in-out",
         glowPulse: "glowPulse 1.5s ease-in-out infinite",
         scaleUp: "scaleUp 0.4s ease-out",
+        floatSlow: "floatSlow 6s ease-in-out infinite",
+        pulseRing: "pulseRing 2.4s ease-in-out infinite",
+        shimmer: "shimmer 2.8s linear infinite",
       },
       keyframes: {
         fadeIn: {
@@ -63,6 +66,19 @@ module.exports = {
         scaleUp: {
           "0%": { transform: "scale(0.95)" },
           "100%": { transform: "scale(1)" },
+        },
+        floatSlow: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-12px)" },
+        },
+        pulseRing: {
+          "0%": { boxShadow: "0 0 0 0 rgba(124, 58, 237, 0.45)" },
+          "70%": { boxShadow: "0 0 0 18px rgba(124, 58, 237, 0)" },
+          "100%": { boxShadow: "0 0 0 0 rgba(124, 58, 237, 0)" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "100%": { backgroundPosition: "200% 50%" },
         },
       },
     },

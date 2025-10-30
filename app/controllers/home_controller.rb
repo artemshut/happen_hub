@@ -1,7 +1,9 @@
 class HomeController < ApplicationController
+  skip_before_action :authenticate_user!, only: :index
+
   def index
     return redirect_to dashboard_path if user_signed_in?
 
-    redirect_to new_user_session_path
+    @landing_page = true
   end
 end

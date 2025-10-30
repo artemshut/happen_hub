@@ -30,13 +30,26 @@
     <%= javascript_importmap_tags %>
   </head>
 
+  <% landing_page = defined?(@landing_page) && @landing_page %>
+  <% body_classes = ["flex flex-col min-h-screen font-sans text-neutral-text"] %>
+  <% if landing_page %>
+    <% body_classes << "bg-neutral-bg" %>
+  <% else %>
+    <% body_classes << "bg-gradient-to-b from-brand-soft via-neutral-bg to-neutral-bg" %>
+  <% end %>
+  <% header_classes = if landing_page
+                        "fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-gradient-to-r from-brand-gradientFrom/95 via-brand-gradientVia/80 to-brand-gradientTo/90 py-4 text-white shadow-lg backdrop-blur-xl"
+                      else
+                        "bg-gradient-to-r from-brand-gradientFrom via-brand-gradientVia to-brand-gradientTo text-white py-4 shadow-md"
+                      end %>
+  <% main_classes = landing_page ? "relative flex-grow pt-28 md:pt-36" : "container mx-auto px-4 py-8 flex-grow" %>
+
   <%= render "shared/cookie_banner" %>
 
-  <body class="flex flex-col min-h-screen font-sans text-neutral-text 
-               bg-gradient-to-b from-brand-soft via-neutral-bg to-neutral-bg">
+  <body class="<%= body_classes.join(' ') %>">
     <!-- Header -->
-    <header class="bg-gradient-to-r from-brand-gradientFrom via-brand-gradientVia to-brand-gradientTo text-white py-4 shadow-md">
-      <div class="container mx-auto px-4 flex justify-between items-center">
+    <header class="<%= header_classes %>">
+      <div class="container mx-auto flex items-center justify-between px-4">
         <!-- Logo -->
         <div class="flex items-center space-x-2 text-2xl font-bold">
           <%= link_to (user_signed_in? ? dashboard_path : new_user_session_path), class: "flex items-center hover:opacity-80 transition" do %>
@@ -53,7 +66,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8 flex-grow">
+    <main class="<%= main_classes %>">
       <!-- Flash Messages -->
       <div id="flash-messages" class="fixed bottom-6 left-4 space-y-2 z-50">
         <% flash.each do |type, message| %>
