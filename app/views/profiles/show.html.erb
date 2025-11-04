@@ -1,53 +1,106 @@
-<div class="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-3xl w-full bg-neutral-surface rounded-2xl shadow-2xl p-8 text-center">
-    <!-- Avatar -->
-    <div class="flex justify-center mb-6">
-      <% if current_user.avatar.attached? %>
-        <%= image_tag current_user.avatar.variant(resize_to_fill: [160, 160]), class: "rounded-full border-4 border-white shadow-lg" %>
-      <% else %>
-        <%= image_tag "blank_avatar.jpg", class: "rounded-full w-40 h-40 object-cover border-4 border-white shadow-lg" %>
-      <% end %>
-    </div>
+<% content_for :main_classes, "relative flex-grow overflow-x-hidden" %>
 
-    <!-- Header -->
-    <h1 class="text-3xl font-extrabold text-neutral-text mb-2">Your Profile</h1>
-    <p class="text-neutral-muted mb-6">Member since <%= current_user.created_at.strftime('%B %d, %Y') %></p>
-
-    <div class="mb-8">
-      <%= link_to "Edit Profile", edit_profile_path, class: "bg-brand text-white px-6 py-2 rounded-lg shadow hover:bg-brand-dark transition" %>
-    </div>
-
-    <!-- Profile Details -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-      <!-- Personal Info -->
-      <div>
-        <h2 class="text-lg font-semibold text-neutral-text mb-4">Personal Information</h2>
-        <ul class="space-y-2 text-neutral-muted">
-          <li><strong>First Name:</strong> <%= current_user.first_name || "Not provided" %></li>
-          <li><strong>Last Name:</strong> <%= current_user.last_name || "Not provided" %></li>
-          <li><strong>Email:</strong> <%= current_user.email %></li>
-          <li><strong>Birthday:</strong> <%= current_user.birthday ? current_user.birthday.strftime('%B %d, %Y') : "Not provided" %></li>
-        </ul>
+<div class="profile-shell">
+  <section class="profile-hero">
+    <div class="profile-hero__panel">
+      <div class="profile-hero__avatar">
+        <% if current_user.avatar.attached? %>
+          <%= image_tag current_user.avatar.variant(resize_to_fill: [168, 168]), class: "profile-avatar" %>
+        <% else %>
+          <%= image_tag "blank_avatar.jpg", class: "profile-avatar" %>
+        <% end %>
       </div>
-
-      <!-- Account Info -->
-      <div>
-        <h2 class="text-lg font-semibold text-neutral-text mb-4">Account Details</h2>
-        <ul class="space-y-2 text-neutral-muted">
-          <li><strong>Tag:</strong> <%= current_user.tag || "No tag available" %></li>
-          <li><strong>Username:</strong> <%= current_user.username %></li>
-        </ul>
+      <div class="profile-hero__details">
+        <p class="text-xs uppercase tracking-[0.45em] text-white/70">Your profile</p>
+        <h1 class="profile-hero__title">Hey <%= current_user.first_name.presence || current_user.username %>, keep shining</h1>
+        <p class="profile-hero__subtitle">
+          Member since <%= current_user.created_at.strftime('%B %d, %Y') %>. Share who you are, keep your details current, and make it easy for friends to connect.
+        </p>
+        <div class="profile-hero__actions">
+          <%= link_to "Edit profile", edit_profile_path,
+                class: "landing-cta-primary px-10 py-3 text-sm uppercase tracking-[0.35em]" %>
+          <%= link_to "View public profile",
+                public_profile_path(current_user.username),
+                class: "landing-cta-secondary px-8 py-3 text-sm uppercase tracking-[0.35em]" %>
+        </div>
       </div>
     </div>
+  </section>
 
-    <!-- Public Link -->
-    <div class="mt-8 text-sm text-neutral-muted">
-      Share your profile: 
-      <%= link_to current_user.username, public_profile_url(current_user.username), class: "text-accent-info hover:underline" %>
+  <section class="landing-section pt-0 pb-20">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+      <div class="space-y-6">
+        <div class="profile-card">
+          <h2 class="profile-card__title">Personal information</h2>
+          <dl class="profile-meta-grid">
+            <div>
+              <dt>First name</dt>
+              <dd><%= current_user.first_name.presence || "Not provided" %></dd>
+            </div>
+            <div>
+              <dt>Last name</dt>
+              <dd><%= current_user.last_name.presence || "Not provided" %></dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd><%= current_user.email %></dd>
+            </div>
+            <div>
+              <dt>Birthday</dt>
+              <dd><%= current_user.birthday ? current_user.birthday.strftime('%B %d, %Y') : "Not provided" %></dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="profile-card">
+          <h2 class="profile-card__title">Account details</h2>
+          <dl class="profile-meta-grid">
+            <div>
+              <dt>Tag</dt>
+              <dd><%= current_user.tag.presence || "No tag available" %></dd>
+            </div>
+            <div>
+              <dt>Username</dt>
+              <dd><%= current_user.username %></dd>
+            </div>
+            <div class="lg:col-span-2">
+              <dt>Share profile</dt>
+              <dd>
+                <div class="profile-share">
+                  <span><%= public_profile_url(current_user.username) %></span>
+                  <%= link_to "Open link",
+                        public_profile_path(current_user.username),
+                        class: "chip-link px-4 py-2 text-[11px] uppercase tracking-[0.35em]" %>
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <aside class="space-y-6">
+        <div class="profile-card">
+          <h3 class="text-lg font-semibold text-neutral-text">Need a refresh?</h3>
+          <p class="text-sm text-neutral-muted">
+            Update your profile details or add new friends so they can invite you faster.
+          </p>
+          <%= link_to "Go to friends",
+                friendships_path,
+                class: "chip-link px-6 py-3 text-xs uppercase tracking-[0.35em]" %>
+        </div>
+
+        <div class="profile-card space-y-4">
+          <h3 class="text-lg font-semibold text-neutral-text">Danger zone</h3>
+          <p class="text-sm text-neutral-muted">
+            Deleting your account removes all your data, including events and groups you created.
+          </p>
+          <%= button_to "Delete my account",
+                user_registration_path,
+                method: :delete,
+                data: { confirm: "Are you sure? This action cannot be undone." },
+                class: "chip-link px-6 py-3 text-xs uppercase tracking-[0.35em] text-red-500 hover:text-red-600" %>
+        </div>
+      </aside>
     </div>
-
-    <div class="mt-10"></div>
-
-    <%= button_to "Delete My Account", user_registration_path, method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600" %>
-  </div>
+  </section>
 </div>

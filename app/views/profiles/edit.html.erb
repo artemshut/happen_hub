@@ -1,77 +1,88 @@
-<div class="min-h-screen bg-neutral-bg flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-4xl w-full bg-neutral-surface rounded-2xl shadow-2xl p-10">
-    <!-- Header -->
-    <div class="mb-10">
-      <h1 class="text-3xl font-extrabold text-neutral-text mb-2">Edit Your Profile</h1>
-      <p class="text-neutral-muted">Keep your profile information up-to-date to make the most of your account.</p>
-    </div>
+<% content_for :main_classes, "relative flex-grow overflow-x-hidden" %>
 
-    <!-- Form -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
-      <!-- Sidebar -->
-      <div class="col-span-4">
-        <h2 class="text-lg font-semibold text-neutral-text mb-4">Profile Details</h2>
-        <p class="text-neutral-muted mb-2">Update your personal information here. Fields left blank will not overwrite existing data.</p>
+<div class="profile-shell">
+  <section class="profile-hero">
+    <div class="profile-hero__panel profile-hero__panel--muted">
+      <div class="profile-hero__avatar">
+        <% if @user.avatar.attached? %>
+          <%= image_tag @user.avatar.variant(resize_to_fill: [168, 168]), class: "profile-avatar" %>
+        <% else %>
+          <%= image_tag "blank_avatar.jpg", class: "profile-avatar" %>
+        <% end %>
       </div>
+      <div class="profile-hero__details">
+        <p class="text-xs uppercase tracking-[0.45em] text-neutral-muted/80">Edit profile</p>
+        <h1 class="profile-hero__title text-neutral-text">Keep your details fresh</h1>
+        <p class="profile-hero__subtitle text-neutral-muted">
+          Update your personal information, adjust your contact details, and refresh your avatar in one smooth flow.
+        </p>
+        <div class="profile-hero__actions">
+          <%= link_to "Cancel", profile_path, class: "chip-link px-6 py-3 text-xs uppercase tracking-[0.35em]" %>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <!-- Form Section -->
-      <div class="col-span-8">
-        <%= form_with(model: @user, url: profile_path, local: true, html: { multipart: true }) do |f| %>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <%= f.label :first_name, "First Name", class: "block text-neutral-text font-medium mb-2" %>
-              <%= f.text_field :first_name, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
+  <section class="landing-section pt-0 pb-20">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+      <div class="glass-panel space-y-8">
+        <%= form_with(model: @user, url: profile_path, local: true) do |f| %>
+          <div class="grid gap-6 md:grid-cols-2">
+            <div class="space-y-3">
+              <label class="form-label">First name</label>
+              <%= f.text_field :first_name, class: "form-input", placeholder: "Your first name" %>
             </div>
-
-            <div>
-              <%= f.label :last_name, "Last Name", class: "block text-neutral-text font-medium mb-2" %>
-              <%= f.text_field :last_name, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
+            <div class="space-y-3">
+              <label class="form-label">Last name</label>
+              <%= f.text_field :last_name, class: "form-input", placeholder: "Your last name" %>
             </div>
-
-            <div>
-              <%= f.label :email, "Email", class: "block text-neutral-text font-medium mb-2" %>
-              <%= f.email_field :email, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
+            <div class="space-y-3">
+              <label class="form-label">Email</label>
+              <%= f.email_field :email, class: "form-input", placeholder: "you@example.com" %>
             </div>
-
-            <div>
-              <%= f.label :birthday, "Birthday", class: "block text-neutral-text font-medium mb-2" %>
-              <%= f.text_field :birthday, class: "datepicker-date w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
+            <div class="space-y-3">
+              <label class="form-label">Birthday</label>
+              <%= f.text_field :birthday, class: "form-input datepicker-date", placeholder: "YYYY-MM-DD" %>
             </div>
           </div>
 
-          <div class="mt-6">
-            <%= f.label :password, "New Password (leave blank to keep current)", class: "block text-neutral-text font-medium mb-2" %>
-            <%= f.password_field :password, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
+          <div class="grid gap-6 md:grid-cols-2 mt-6">
+            <div class="space-y-3">
+              <label class="form-label">New password</label>
+              <%= f.password_field :password, class: "form-input", placeholder: "Leave blank to keep current" %>
+            </div>
+            <div class="space-y-3">
+              <label class="form-label">Confirm password</label>
+              <%= f.password_field :password_confirmation, class: "form-input" %>
+            </div>
           </div>
 
-          <div class="mt-6">
-            <%= f.label :password_confirmation, "Confirm Password", class: "block text-neutral-text font-medium mb-2" %>
-            <%= f.password_field :password_confirmation, class: "w-full px-4 py-2 border border-neutral-border rounded-lg focus:ring focus:ring-brand-light focus:border-brand" %>
-          </div>
-
-          <div class="flex justify-end space-x-4 mt-8">
-            <%= link_to "Cancel", profile_path, class: "text-neutral-muted px-4 py-2 rounded-lg hover:underline" %>
-            <%= f.submit "Save Changes", class: "bg-brand text-white px-6 py-2 rounded-lg hover:bg-brand-dark transition-all" %>
+          <div class="mt-8 flex justify-end">
+            <%= f.submit "Save changes", class: "landing-cta-primary px-10 py-3 text-sm uppercase tracking-[0.35em]" %>
           </div>
         <% end %>
+      </div>
 
-        <!-- Avatar Upload Form -->
-        <div class="mt-12">
+      <aside class="space-y-6">
+        <div class="glass-panel space-y-4 profile-avatar-upload">
+          <h2 class="text-lg font-semibold text-neutral-text">Update avatar</h2>
+          <p class="text-sm text-neutral-muted">
+            Choose a fresh photo. You can crop and adjust it before saving.
+          </p>
           <%= form_with model: current_user,
                         url: avatar_profile_path(current_user),
                         method: :patch,
                         html: { data: { controller: "avatar-upload" } } do |f| %>
-            <label class="block text-sm font-medium text-neutral-text">Upload Avatar</label>
             <input type="file"
                   accept="image/*"
                   data-avatar-upload-target="input"
                   data-action="change->avatar-upload#preview"
-                  class="block w-full text-sm text-neutral-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-light/10 file:text-brand hover:file:bg-brand-light/20" />
+                  class="form-input file:mr-4 file:rounded-full file:border-0 file:bg-brand file:px-4 file:py-2 file:text-white hover:file:bg-brand-dark" />
 
             <% if current_user.avatar.attached? %>
-              <div class="mt-4">
-                <%= image_tag current_user.avatar.variant(resize_to_limit: [200, 200]),
-                              class: "rounded-full w-32 h-32 object-cover",
+              <div class="mt-4 flex justify-center">
+                <%= image_tag current_user.avatar.variant(resize_to_limit: [160, 160]),
+                              class: "profile-avatar--small",
                               id: "current-avatar" %>
               </div>
             <% end %>
@@ -79,7 +90,14 @@
 
           <%= render "shared/image_crop_modal", id: "avatar-cropper-modal" %>
         </div>
-      </div>
+
+        <div class="glass-panel space-y-3">
+          <h3 class="text-lg font-semibold text-neutral-text">Need help?</h3>
+          <p class="text-sm text-neutral-muted">
+            Visit your profile after saving to double-check changes, or reach out to support if anything looks off.
+          </p>
+        </div>
+      </aside>
     </div>
-  </div>
+  </section>
 </div>
