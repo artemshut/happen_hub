@@ -5,6 +5,7 @@ module EventsHelper
     "tentative" => "bg-amber-100 text-amber-800 border-amber-200",
     "unknown" => "bg-gray-200 text-gray-700 border-gray-300"
   }.freeze
+
   ATTACHMENT_ICONS = {
     "pdf" => "📄",
     "doc" => "📝",

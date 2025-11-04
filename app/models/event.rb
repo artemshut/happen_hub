@@ -16,6 +16,7 @@ class Event < ApplicationRecord
   has_many :likes, as: :likeable, dependent: :destroy
 
   before_validation :assign_default_category
+  before_validation :ensure_share_token
   after_commit :schedule_reminders!, on: %i[create update]
 
   validates :title, :start_time, :end_time, presence: true
@@ -121,7 +122,42 @@ class Event < ApplicationRecord
     reflect_on_all_associations.map(&:name)
   end
 
+  def share_url(host: default_url_host, protocol: default_url_protocol)
+    Rails.application.routes.url_helpers.share_event_url(share_token, host: host, protocol: protocol)
+  end
+
+  def increment_share_clicks!
+    increment!(:share_clicks)
+  end
+
+  def increment_share_views!
+    increment!(:share_views)
+  end
+
   private
+
+  def default_url_host
+    Rails.application.config.action_mailer.default_url_options&.dig(:host) ||
+      Rails.application.routes.default_url_options[:host] ||
+      "localhost:3000"
+  end
+
+  def default_url_protocol
+    Rails.application.config.action_mailer.default_url_options&.dig(:protocol) ||
+      Rails.application.routes.default_url_options[:protocol] ||
+      "https"
+  end
+
+  def ensure_share_token
+    self.share_token ||= generate_share_token
+  end
+
+  def generate_share_token
+    loop do
+      token = SecureRandom.urlsafe_base64(12)
+      break token unless Event.exists?(share_token: token)
+    end
+  end
 
   def assign_default_category
     self.event_category ||= EventCategory.find_by(name: "Other") || EventCategory.create(name: "Other", emoji: "📅", description: "General events")

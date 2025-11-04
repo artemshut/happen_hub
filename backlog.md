@@ -10,17 +10,17 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## Backlog
 
-- [ ] HUB-006 Calendar day focus view (calendar-day-focus)
-  - Default dashboard calendar widget to show today’s events in a compact single-day view.
-  - Add an “Expand calendar” control that opens the full month/week experience inside a modal overlay.
-  - Ensure the modal calendar stays in sync with the day view (shared data source, consistent styling).
-- [ ] HUB-005 Sharing invite links / social previews
-  - Create shareable invitation cards with copy/graphics matching the landing-page CTA (“Share invite”).
-  - Generate secure invite URLs for guests (web + mobile) and surface native share sheet / copy link actions.
-  - Include lightweight analytics (views/clicks) so hosts see engagement pulse on the dashboard.
+- _empty_
 
 ## Done
 
+- [x] HUB-005 Sharing invite links / social previews
+  - Added gradient share panels on event pages with copy & native share actions.
+  - Delivered secure guest-facing invite pages backed by unique share tokens and lightweight view/share analytics.
+- [x] HUB-006 Calendar day focus view (calendar-day-focus)
+  - Default dashboard calendar widget to show today’s events in a compact single-day view.
+  - Add an “Expand calendar” control that opens the full month/week experience inside a modal overlay.
+  - Ensure the modal calendar stays in sync with the day view (shared data source, consistent styling).
 - [x] HUB-004 Test coverage and documentation for smart invitations
   - Add request/service specs covering each availability state.
   - Update README or internal docs to explain how availability is calculated.
