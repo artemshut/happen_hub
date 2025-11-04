@@ -1,40 +1,78 @@
-<div class="max-w-4xl mx-auto px-6 py-8 animate-fade-in">
-  <!-- Group Title -->
-  <h1 class="text-3xl font-bold mb-6 text-accent-red text-center"><%= @group.name %></h1>
+<% content_for :main_classes, "relative flex-grow overflow-x-hidden" %>
 
-  <!-- Group Description -->
-  <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-8">
-    <h2 class="text-xl font-semibold text-gray-800 mb-2">Description</h2>
-    <p class="text-gray-700">
-      <%= @group.description.presence || content_tag(:em, "No description provided.") %>
-    </p>
-  </div>
-
-  <!-- Group Members -->
-  <% if @members.present? %>
-    <h2 class="text-2xl font-semibold text-gray-900 mb-4">Group Members</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <% @members.each do |member| %>
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-4 hover:shadow-md transition">
-          <p class="text-lg font-semibold text-gray-900 mb-1">
-            <%= member.full_name %>
-          </p>
-          <p class="text-sm text-gray-500">(@<%= member.tag %>)</p>
-        </div>
-      <% end %>
+<div class="group-shell">
+  <section class="group-hero">
+    <div class="group-hero__panel">
+      <div class="space-y-4">
+        <p class="text-xs uppercase tracking-[0.45em] text-white/70">Group overview</p>
+        <h1 class="group-hero__title"><%= @group.name %></h1>
+        <p class="group-hero__subtitle">
+          <%= @group.description.presence || "This group is waiting for its story—add a short description so everyone feels the vibe." %>
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="chip-link--primary px-7 py-3 text-xs uppercase tracking-[0.35em]">
+          <%= pluralize(@members.count, "member") %>
+        </span>
+        <%= link_to "Edit group", edit_group_path(@group),
+              class: "landing-cta-secondary px-8 py-3 text-sm uppercase tracking-[0.35em]" %>
+        <%= link_to "Back to groups", groups_path,
+              class: "chip-link px-6 py-3 text-xs uppercase tracking-[0.35em]" %>
+      </div>
     </div>
-  <% else %>
-    <p class="text-gray-500 italic">No members in this group yet.</p>
-  <% end %>
+  </section>
 
-  <!-- Action Buttons -->
-  <div class="flex justify-end mt-8 gap-3">
-    <%= link_to 'Edit Group',
-          edit_group_path(@group),
-          class: "bg-accent-pink text-white font-semibold px-5 py-2 rounded-lg hover:bg-pink-600 transition" %>
+  <section class="landing-section pt-0 pb-20">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+      <div class="space-y-6">
+        <div class="glass-panel space-y-4">
+          <div class="flex items-center justify-between gap-3">
+            <h2 class="text-lg font-semibold text-neutral-text">Members</h2>
+            <span class="info-chip"><%= pluralize(@members.count, "member") %></span>
+          </div>
 
-    <%= link_to 'Back to Groups',
-          groups_path,
-          class: "bg-gray-100 text-gray-800 font-semibold px-5 py-2 rounded-lg hover:bg-gray-200 transition" %>
-  </div>
+          <% if @members.present? %>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <% @members.each do |member| %>
+                <div class="member-card">
+                  <p class="member-card__name"><%= member.full_name %></p>
+                  <p class="member-card__tag">@<%= member.tag %></p>
+                  <% if member == @group.creator %>
+                    <span class="soft-badge mt-2">Group admin</span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-sm text-neutral-muted">No members have joined this group yet.</p>
+          <% end %>
+        </div>
+      </div>
+
+      <aside class="space-y-6">
+        <div class="glass-panel space-y-4">
+          <h3 class="text-lg font-semibold text-neutral-text">Quick actions</h3>
+          <div class="flex flex-col gap-3">
+            <%= link_to "Invite friends", edit_group_path(@group, anchor: "members"),
+                  class: "chip-link--primary px-6 py-3 text-xs uppercase tracking-[0.35em]" %>
+            <%= button_to group_path(@group),
+                  method: :delete,
+                  data: { turbo_confirm: "Delete this group and remove all members?" },
+                  class: "chip-link px-6 py-3 text-xs uppercase tracking-[0.35em] text-red-500 hover:text-red-600" do %>
+              Delete group
+            <% end %>
+          </div>
+        </div>
+
+        <div class="glass-panel space-y-3">
+          <h3 class="text-lg font-semibold text-neutral-text">What’s next?</h3>
+          <p class="text-sm text-neutral-muted">
+            Create an event for this group, or capture notes in the description so everyone knows what’s happening next.
+          </p>
+          <%= link_to "Plan an event", new_event_path(group_id: @group.id),
+                class: "chip-link px-6 py-3 text-xs uppercase tracking-[0.35em]" %>
+        </div>
+      </aside>
+    </div>
+  </section>
 </div>

@@ -14,12 +14,6 @@ export default class extends Controller {
   }
 
   toggleVisual(selected) {
-    this.boxTarget.classList.remove("bg-green-100", "border-green-500", "bg-white", "border-gray-300", "ring-2", "ring-red-400")
-
-    if (selected) {
-      this.boxTarget.classList.add("bg-green-100", "border-green-500")
-    } else {
-      this.boxTarget.classList.add("bg-white", "border-gray-300", "ring-2", "ring-red-400")
-    }
+    this.boxTarget.dataset.selected = selected ? "true" : "false"
   }
 }

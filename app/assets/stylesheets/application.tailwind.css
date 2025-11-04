@@ -258,6 +258,86 @@
     @apply mt-5 max-h-[65vh] w-full overflow-y-auto rounded-[1.25rem] border border-brand-light/30 bg-white/90 p-3 shadow-[0_25px_65px_rgba(147,51,234,0.12)] backdrop-blur-xl;
   }
 
+  .group-shell {
+    @apply full-bleed overflow-hidden bg-gradient-to-br from-brand-soft/40 via-neutral-bg to-neutral-bg;
+  }
+
+  .group-hero {
+    @apply landing-section pb-10 pt-24 md:pt-32;
+  }
+
+  .group-hero__panel {
+    @apply glass-panel flex flex-col gap-6 bg-gradient-to-r from-brand-gradientFrom/95 via-brand-gradientVia/85 to-brand-gradientTo/90 text-white shadow-[0_40px_120px_rgba(124,58,237,0.35)];
+  }
+
+  .group-hero__title {
+    @apply text-3xl font-bold sm:text-4xl;
+  }
+
+  .group-hero__subtitle {
+    @apply text-sm text-white/80 max-w-3xl;
+  }
+
+  .group-grid {
+    @apply grid gap-6 sm:grid-cols-2 xl:grid-cols-3;
+  }
+
+  .group-card {
+    @apply glass-panel flex h-full flex-col gap-5;
+  }
+
+  .group-card__header {
+    @apply flex items-start justify-between gap-3;
+  }
+
+  .group-card__title {
+    @apply text-xl font-semibold text-neutral-text;
+  }
+
+  .group-card__meta {
+    @apply text-xs uppercase tracking-[0.35em] text-neutral-muted/70;
+  }
+
+  .group-card__description {
+    @apply text-sm text-neutral-muted;
+  }
+
+  .group-card__actions {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .member-card {
+    @apply glass-panel flex flex-col gap-1 bg-white/90;
+  }
+
+  .member-card__name {
+    @apply text-lg font-semibold text-neutral-text;
+  }
+
+  .member-card__tag {
+    @apply text-xs uppercase tracking-[0.35em] text-neutral-muted/80;
+  }
+
+  .friend-option {
+    @apply flex cursor-pointer items-center justify-between gap-4 rounded-3xl border border-brand-light/40 bg-white/80 px-5 py-4 text-sm shadow-[0_12px_30px_rgba(147,51,234,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_20px_45px_rgba(147,51,234,0.18)];
+  }
+
+  .friend-option[data-selected="true"] {
+    @apply border-brand-light bg-brand-soft/80 shadow-[0_20px_45px_rgba(147,51,234,0.25)];
+  }
+
+  .friend-option__meta {
+    @apply text-xs uppercase tracking-[0.35em] text-neutral-muted/70;
+  }
+
+  .friend-option__checkbox {
+    @apply flex h-8 w-8 items-center justify-center rounded-full border border-brand-light/40 bg-white text-brand transition;
+  }
+
+  .friend-option[data-selected="true"] .friend-option__checkbox {
+    @apply bg-gradient-to-r from-brand-gradientFrom to-brand-gradientTo text-white shadow-[0_18px_45px_rgba(147,51,234,0.35)];
+  }
+
   .glass-panel {
     @apply relative overflow-visible rounded-3xl border border-white/20 bg-white/80 p-6 shadow-[0_25px_60px_rgba(15,23,42,0.12)] backdrop-blur-xl transition-all duration-300;
   }

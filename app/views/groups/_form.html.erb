@@ -1,56 +1,91 @@
-<div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md animate-fade-in">
-  <h1 class="text-3xl font-bold text-gray-900 mb-6">
-    <%= @group.persisted? ? "Edit Group" : "New Group" %>
-  </h1>
+<% content_for :main_classes, "relative flex-grow overflow-x-hidden" %>
 
-  <%= form_with model: @group, local: true do |form| %>
-    <!-- Group Name -->
-    <div class="mb-4">
-      <%= form.label :name, "Group Name", class: "block text-lg font-semibold mb-2" %>
-      <%= form.text_field :name,
-            class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent-red focus:border-accent-red transition" %>
-    </div>
-
-    <!-- Description -->
-    <div class="mb-4">
-      <%= form.label :description, "Description", class: "block text-lg font-semibold mb-2" %>
-      <%= form.text_area :description,
-            class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-accent-red focus:border-accent-red transition" %>
-    </div>
-
-    <!-- Friends -->
-    <div class="mt-6">
-      <h3 class="text-lg font-medium text-gray-800 mb-2">Add Friends to Group</h3>
-
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <%= hidden_field_tag "group[member_ids][]", "" %>
-
-        <% current_user.friends.each do |friend| %>
-          <div
-            data-controller="friend-select"
-            data-action="click->friend-select#toggle"
-            class="border border-gray-300 rounded-xl p-4 cursor-pointer transition-all bg-gray-50 hover:shadow-md hover:border-accent-red peer-checked:ring-2 peer-checked:ring-accent-red"
-            data-friend-select-target="box"
-          >
-            <input
-              type="checkbox"
-              name="group[member_ids][]"
-              value="<%= friend.id %>"
-              <%= "checked" if @group.persisted? && @group.members.include?(friend) %>
-              hidden
-              data-friend-select-target="input"
-            >
-            <p class="font-semibold text-gray-800"><%= friend.full_name %></p>
-            <p class="text-sm text-gray-500 font-mono">@<%= friend.tag %></p>
-          </div>
-        <% end %>
+<div class="group-shell">
+  <section class="group-hero">
+    <div class="group-hero__panel">
+      <div class="space-y-4">
+        <p class="text-xs uppercase tracking-[0.45em] text-white/70"><%= @group.persisted? ? "Update group" : "Create group" %></p>
+        <h1 class="group-hero__title"><%= @group.persisted? ? "Refresh your group details" : "Launch a new group" %></h1>
+        <p class="group-hero__subtitle">
+          Give your crew a home, outline the vibe, and handpick the members that make every plan better.
+        </p>
+      </div>
+      <div>
+        <%= link_to "Back to groups", groups_path,
+              class: "chip-link px-6 py-3 text-xs uppercase tracking-[0.35em]" %>
       </div>
     </div>
+  </section>
 
-    <!-- Submit -->
-    <div class="mt-8">
-      <%= form.submit "Save Group",
-            class: "bg-accent-pink hover:bg-pink-600 text-white px-6 py-3 rounded-lg text-lg font-bold w-full transition" %>
+  <section class="landing-section pt-0 pb-20">
+    <div class="glass-panel space-y-8">
+      <%= form_with model: @group, local: true do |form| %>
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="space-y-4">
+            <label class="form-label">Group name</label>
+            <%= form.text_field :name,
+                  class: "form-input text-lg font-semibold",
+                  placeholder: "Film night crew" %>
+          </div>
+          <div class="space-y-4">
+            <label class="form-label">Purpose</label>
+            <%= form.text_area :description,
+                  class: "form-input min-h-[140px]",
+                  placeholder: "Weekly inspiration swaps, planning socials…" %>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="form-card__title">Invite friends</p>
+              <p class="form-card__subtitle">Tap to add or remove members. Everyone you select joins instantly.</p>
+            </div>
+            <span class="info-chip"><%= pluralize(current_user.friends.count, "friend") %></span>
+          </div>
+
+          <%= hidden_field_tag "group[member_ids][]", "" %>
+          <% if current_user.friends.any? %>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <% current_user.friends.each do |friend| %>
+                <% selected = @group.persisted? && @group.members.include?(friend) %>
+                <div
+                  class="friend-option"
+                  data-controller="friend-select"
+                  data-action="click->friend-select#toggle"
+                  data-friend-select-target="box"
+                  data-selected="<%= selected %>"
+                >
+                  <div>
+                    <p class="font-semibold text-neutral-text"><%= friend.full_name %></p>
+                    <p class="friend-option__meta">@<%= friend.tag %></p>
+                  </div>
+                  <div class="friend-option__checkbox">
+                    <i class="fa-solid fa-check"></i>
+                  </div>
+                  <input
+                    type="checkbox"
+                    name="group[member_ids][]"
+                    value="<%= friend.id %>"
+                    <%= "checked" if selected %>
+                    hidden
+                    data-friend-select-target="input"
+                  >
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="rounded-3xl border border-dashed border-brand-light/40 bg-white/70 px-5 py-6 text-sm text-neutral-muted">
+              You haven’t added any friends yet. Invite connections first so you can add them to this group.
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mt-8 flex justify-end">
+          <%= form.submit(@group.persisted? ? "Save changes" : "Create group",
+                class: "landing-cta-primary px-10 py-3 text-sm uppercase tracking-[0.35em]") %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+  </section>
 </div>
