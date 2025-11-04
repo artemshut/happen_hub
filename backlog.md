@@ -10,6 +10,10 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## Backlog
 
+- [ ] HUB-006 Calendar day focus view (calendar-day-focus)
+  - Default dashboard calendar widget to show today’s events in a compact single-day view.
+  - Add an “Expand calendar” control that opens the full month/week experience inside a modal overlay.
+  - Ensure the modal calendar stays in sync with the day view (shared data source, consistent styling).
 - [ ] HUB-005 Sharing invite links / social previews
   - Create shareable invitation cards with copy/graphics matching the landing-page CTA (“Share invite”).
   - Generate secure invite URLs for guests (web + mobile) and surface native share sheet / copy link actions.

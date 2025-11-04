@@ -1,22 +1,77 @@
-<div class="calendar-shell animate-fadeIn">
-  <div class="calendar-shell__glow"></div>
-  <div class="calendar-shell__content space-y-8">
-    <div class="flex flex-wrap items-start justify-between gap-4">
-      <div class="space-y-2">
-        <p class="text-xs uppercase tracking-[0.45em] text-brand-dark">Sync your rhythm</p>
-        <h2 class="text-3xl font-bold text-neutral-text md:text-4xl">Your calendar</h2>
-        <p class="text-sm text-neutral-muted max-w-lg">
-          Coordinate invites, reminders, and spontaneous plans without leaving the hub.
-        </p>
+<div data-controller="calendar-widget">
+  <div class="calendar-shell animate-fadeIn">
+    <div class="calendar-shell__glow"></div>
+    <div class="calendar-shell__content space-y-8">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div class="space-y-2">
+          <p class="text-xs uppercase tracking-[0.45em] text-brand-dark">Sync your rhythm</p>
+          <h2 class="text-3xl font-bold text-neutral-text md:text-4xl">Today’s plan</h2>
+          <p class="text-sm text-neutral-muted max-w-lg">
+            Glance at the moments happening today and expand for a full-month overview when you need it.
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="calendar-shell__badge hidden sm:inline-flex">
+            <i class="fa-regular fa-calendar"></i>
+            Live sync
+          </span>
+          <button
+            type="button"
+            class="calendar-expand-btn"
+            data-action="calendar-widget#openModal"
+          >
+            Expand calendar
+          </button>
+        </div>
       </div>
-      <span class="calendar-shell__badge hidden sm:inline-flex">
-        <i class="fa-regular fa-calendar"></i>
-        Live sync
-      </span>
-    </div>
 
-    <div class="calendar-surface">
-      <div id="calendar" class="calendar-modern"></div>
+      <div class="calendar-today">
+        <header class="calendar-today__header">
+          <div>
+            <p class="calendar-today__date-label"><%= Time.zone.now.strftime("%A") %></p>
+            <h3 class="calendar-today__date-value"><%= Time.zone.now.strftime("%B %e") %></h3>
+          </div>
+          <button
+            type="button"
+            class="calendar-today__jump"
+            data-action="calendar-widget#openModal"
+          >
+            Full schedule →
+          </button>
+        </header>
+
+        <ul class="calendar-today__list" data-calendar-widget-target="eventList">
+          <li class="calendar-today__placeholder" data-calendar-widget-target="emptyState">
+            <span class="calendar-today__empty-icon">✨</span>
+            <div>
+              <p class="font-semibold text-neutral-text">Nothing scheduled yet</p>
+              <p class="text-sm text-neutral-muted">Create an event or invite friends to fill the timeline.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="calendar-modal__backdrop hidden" data-calendar-widget-target="modal" data-action="click->calendar-widget#backdropClick">
+    <div class="calendar-modal__panel" data-calendar-widget-target="panel">
+      <div class="calendar-modal__header">
+        <div>
+          <p class="text-xs uppercase tracking-[0.45em] text-brand-dark">Full planner</p>
+          <h2 class="text-3xl font-bold text-neutral-text md:text-4xl">Calendar overview</h2>
+        </div>
+        <div class="calendar-modal__actions">
+          <button type="button" class="calendar-modal__today" data-action="calendar-widget#goToToday">
+            Today
+          </button>
+          <button type="button" class="calendar-modal__close" data-action="calendar-widget#closeModal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="calendar-modal__surface">
+        <div class="calendar-modern" data-calendar-widget-target="fullCalendar"></div>
+      </div>
     </div>
   </div>
 </div>

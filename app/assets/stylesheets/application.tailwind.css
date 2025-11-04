@@ -173,6 +173,91 @@
     @apply -translate-y-0.5 shadow-[0_26px_65px_rgba(147,51,234,0.35)];
   }
 
+  .calendar-expand-btn {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-light/40 bg-white/90 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-brand transition hover:-translate-y-0.5 hover:bg-white shadow-sm;
+  }
+
+  .calendar-today {
+    @apply rounded-[2.25rem] border border-white/50 bg-white/85 p-6 shadow-[0_35px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl transition;
+  }
+
+  .calendar-today__header {
+    @apply flex flex-wrap items-center justify-between gap-4;
+  }
+
+  .calendar-today__date-label {
+    @apply text-xs uppercase tracking-[0.45em] text-neutral-muted/80;
+  }
+
+  .calendar-today__date-value {
+    @apply text-2xl font-semibold text-neutral-text sm:text-3xl;
+  }
+
+  .calendar-today__jump {
+    @apply inline-flex items-center rounded-full border border-transparent bg-brand-soft/80 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-brand transition hover:-translate-y-0.5 hover:bg-brand-soft shadow-sm;
+  }
+
+  .calendar-today__list {
+    @apply mt-6 space-y-4;
+  }
+
+  .calendar-today__item {
+    @apply flex items-start gap-4 rounded-3xl border border-brand-light/30 bg-white/95 px-5 py-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_55px_rgba(147,51,234,0.2)];
+  }
+
+  .calendar-today__time {
+    @apply text-sm font-semibold uppercase tracking-[0.35em] text-brand;
+  }
+
+  .calendar-today__meta {
+    @apply text-xs uppercase tracking-[0.35em] text-neutral-muted/80;
+  }
+
+  .calendar-today__placeholder {
+    @apply flex items-center gap-4 rounded-3xl border border-dashed border-brand-light/40 bg-white/70 px-5 py-6 text-sm text-neutral-muted;
+  }
+
+  .calendar-today__empty-icon {
+    @apply flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-soft/80 text-xl;
+  }
+
+  .calendar-modal__backdrop {
+    @apply fixed inset-0 z-[120] flex items-center justify-center bg-neutral-text/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200;
+  }
+
+  .calendar-modal__backdrop.is-visible {
+    @apply opacity-100;
+    pointer-events: auto;
+  }
+
+  .calendar-modal__panel {
+    @apply relative w-full max-w-4xl translate-y-4 rounded-[1.5rem] border border-white/30 bg-white/95 px-5 py-6 sm:px-7 sm:py-7 shadow-[0_30px_80px_rgba(15,23,42,0.25)] opacity-0 transition-all duration-200 overflow-hidden;
+  }
+
+  .calendar-modal__panel--visible {
+    @apply translate-y-0 opacity-100;
+  }
+
+  .calendar-modal__actions {
+    @apply flex items-center gap-3;
+  }
+
+  .calendar-modal__close {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-light/30 bg-white/90 text-brand transition hover:-translate-y-0.5 hover:bg-white;
+  }
+
+  .calendar-modal__header {
+    @apply flex flex-wrap items-center justify-between gap-4;
+  }
+
+  .calendar-modal__today {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-light/30 bg-white/90 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-brand transition hover:-translate-y-0.5 hover:bg-white;
+  }
+
+  .calendar-modal__surface {
+    @apply mt-5 max-h-[65vh] w-full overflow-y-auto rounded-[1.25rem] border border-brand-light/30 bg-white/90 p-3 shadow-[0_25px_65px_rgba(147,51,234,0.12)] backdrop-blur-xl;
+  }
+
   .glass-panel {
     @apply relative overflow-visible rounded-3xl border border-white/20 bg-white/80 p-6 shadow-[0_25px_60px_rgba(15,23,42,0.12)] backdrop-blur-xl transition-all duration-300;
   }

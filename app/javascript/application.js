@@ -16,63 +16,6 @@ document.addEventListener('turbo:load', function () {
   }
 });
 
-document.addEventListener("turbo:load", () => {
-  const calendarEl = document.getElementById("calendar");
-
-  if (calendarEl) {
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [
-        FullCalendar.globalPlugins[7], // dayGridPlugin
-        FullCalendar.globalPlugins[6], // interactionPlugin
-      ],
-      initialView: "dayGridMonth",
-      height: "auto",
-      contentHeight: "auto",
-      buttonText: {
-        today: "Today",
-        dayGridMonth: "Month",
-        dayGridWeek: "Week",
-        dayGridDay: "Day",
-      },
-      headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth,dayGridWeek,dayGridDay",
-      },
-      events: "/api/events", // Your API endpoint
-
-      editable: true,
-      selectable: true,
-      eventDisplay: "block",
-      dayMaxEventRows: true,
-      navLinks: true,
-      titleFormat: { year: "numeric", month: "long" },
-
-      // General styling
-      eventClick: function (info) {
-        window.location.href = info.event.url;
-      },
-
-      eventDidMount: function (info) {
-        const el = info.el;
-        const color = info.event.extendedProps.color || "#9333EA";
-        el.style.background = color;
-        el.classList.add("calendar-event");
-      },
-
-      dayCellDidMount: function (info) {
-        info.el.classList.add("transition-colors", "duration-200");
-      },
-
-      dateClick: function (info) {
-        window.location.href = `/events/new?start_date=${info.dateStr}`;
-      },
-    });
-
-    calendar.render();
-  }
-});
-
 
 
 document.addEventListener("turbo:load", function () {
