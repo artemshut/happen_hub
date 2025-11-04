@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "terms-of-service", to: "pages#terms_of_service", as: :terms_of_service
 
   devise_for :users, controllers: {
+    sessions: "users/sessions",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
@@ -84,6 +85,11 @@ Rails.application.routes.draw do
       post "tokens/refresh", to: "tokens#refresh"
       get "me", to: "users#me"
     end
+  end
+
+  namespace :share do
+    get "events/:token", to: "events#show", as: :event
+    post "events/:token/track", to: "events#track", as: :event_track
   end
 
   # Root route

@@ -4,6 +4,7 @@
 <% duration = if @event.start_time.present? && @event.end_time.present?
                 distance_of_time_in_words(@event.start_time, @event.end_time)
               end %>
+<% share_url = "#{request.base_url}#{share_event_path(@event.share_token)}" %>
 
 <div class="full-bleed overflow-hidden bg-gradient-to-br from-brand-soft/30 via-neutral-bg to-neutral-bg pb-16">
   <div class="landing-bubble w-[28rem] h-[28rem] -left-24 top-0 animate-floatSlow"></div>
@@ -12,7 +13,7 @@
 
   <section class="landing-section pt-28 md:pt-36">
     <div class="space-y-12">
-      <div class="grid gap-10 xl:grid-cols-[1.2fr_0.8fr]">
+      <div class="grid gap-10 xl:grid-cols-[minmax(0,1.7fr)_minmax(0,1.1fr)]">
         <div class="space-y-8">
           <div class="glass-panel p-0 overflow-hidden">
             <div class="relative h-80 md:h-96">
@@ -208,6 +209,48 @@
         </div>
 
         <div class="space-y-6 xl:pl-4">
+          <div class="glass-panel space-y-4"
+               data-controller="share"
+               data-share-url-value="<%= share_url %>"
+               data-share-track-url-value="<%= share_event_track_path(@event.share_token) %>"
+               data-share-title-value="Join <%= @event.title %>"
+               data-share-text-value="Check out this event on HappenHub">
+            <div class="share-card__header">
+              <div>
+                <p class="form-card__eyebrow text-brand-dark">Share</p>
+                <h3 class="text-lg font-semibold text-neutral-text">Invite anyone</h3>
+              </div>
+              <div class="share-card__metrics">
+                <span><i class="fa-regular fa-eye"></i> <%= @event.share_views %> views</span>
+                <span><i class="fa-solid fa-arrow-up-right-from-square"></i> <%= @event.share_clicks %> shares</span>
+              </div>
+            </div>
+            <p class="text-sm text-neutral-muted">
+              Send a private invite link or share directly to your favorite apps. Guests can browse the invite even without an account.
+            </p>
+            <div class="share-card__url">
+              <span class="truncate"><%= share_url %></span>
+              <button type="button"
+                      class="chip-link px-4 py-2 text-[11px] uppercase tracking-[0.35em]"
+                      data-action="share#copy">
+                Copy
+              </button>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <button type="button"
+                      class="chip-link--primary px-6 py-3 text-xs uppercase tracking-[0.35em]"
+                      data-action="share#nativeShare">
+                Share
+              </button>
+              <%= link_to "Preview invite",
+                    share_event_path(@event.share_token),
+                    class: "chip-link px-6 py-3 text-xs uppercase tracking-[0.35em]",
+                    target: "_blank",
+                    rel: "noopener" %>
+            </div>
+            <p class="text-xs text-neutral-muted" data-share-target="feedback"></p>
+          </div>
+
           <div class="glass-panel space-y-6">
             <div class="flex items-center gap-3">
               <div class="icon-circle text-lg">🧭</div>
