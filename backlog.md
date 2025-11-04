@@ -10,7 +10,10 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## Backlog
 
-- _empty_
+- [ ] HUB-007 Mobile deep link for shared links (mobile-deeplink)
+  - On mobile browsers detect if the native app is installed and open it directly when a HappenHub URL is tapped.
+  - Provide a graceful fallback (store link or continue in web) when the app is missing.
+  - Cover invite/share URLs first; document approach for expanding to other routes.
 
 ## Done
 
