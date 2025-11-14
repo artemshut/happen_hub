@@ -33,8 +33,11 @@ ActiveAdmin.register User do
   form do |f|
     f.inputs do
       f.input :email
-      f.input :password
-      f.input :password_confirmation
+      f.input :password, required: false,
+                          input_html: { autocomplete: "new-password" },
+                          hint: "Leave blank to keep the existing password"
+      f.input :password_confirmation, required: false,
+                                       input_html: { autocomplete: "new-password" }
       f.input :first_name
       f.input :last_name
       f.input :username
@@ -78,5 +81,22 @@ ActiveAdmin.register User do
 
     resource.update!(plan:)
     redirect_to resource_path, notice: "Plan updated to #{plan.name}."
+  end
+
+  controller do
+    def update
+      scrub_password_params
+      super
+    end
+
+    private
+
+    def scrub_password_params
+      return unless params[:user]
+      return unless params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+
+      params[:user].delete(:password)
+      params[:user].delete(:password_confirmation)
+    end
   end
 end
