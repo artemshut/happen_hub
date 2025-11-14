@@ -12,4 +12,26 @@ class UserSerializer
       )
     end
   end
+
+  attribute :plan do |user|
+    plan = user.plan
+    next unless plan
+
+    {
+      id: plan.id,
+      key: plan.key,
+      name: plan.name,
+      tagline: plan.tagline,
+      highlighted: plan.highlighted,
+      max_active_events: plan.max_active_events,
+      unlimited_events: plan.unlimited_events?,
+      monthly_price_cents: plan.monthly_price_cents,
+      annual_price_cents: plan.annual_price_cents,
+      features: plan.feature_list,
+      priority: plan.priority,
+      active_events_count: user.active_events_count,
+      events_remaining: plan.unlimited_events? ? nil : user.events_remaining_on_plan,
+      can_create_event: user.can_create_event?
+    }
+  end
 end

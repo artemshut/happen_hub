@@ -18,6 +18,10 @@ Rails.application.routes.draw do
   end
 
   get "/dashboard", to: "users#dashboard", as: :dashboard
+  resources :plans, only: [ :index ] do
+    post :activate, on: :member
+  end
+  get "/pricing", to: "plans#index", as: :pricing
 
   unauthenticated :user do
     resources :events, only: [ :index, :show ]
@@ -76,6 +80,7 @@ Rails.application.routes.draw do
       end
       resources :event_categories, only: [ :index, :show ]
       resources :groups, only: [ :index, :show, :create, :update, :destroy ]
+      resources :plans, only: [ :index ]
       resources :users, only: [ :show ] do
         collection do
           post :fcm_token, to: "users#update_fcm_token"

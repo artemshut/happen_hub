@@ -51,6 +51,8 @@
         <%= link_to "Create Event", new_event_path,
               class: "hidden xl:inline-flex nav-cta" %>
 
+        <%= link_to "Pricing", plans_path, class: "nav-trigger hidden xl:inline-flex" %>
+
         <div data-controller="dropdown" class="relative">
           <button data-action="click->dropdown#toggle" class="nav-trigger">
             <% if current_user.avatar.attached? %>
@@ -61,12 +63,20 @@
             <span><%= current_user.first_name %></span>
           </button>
           <div data-dropdown-target="menu" class="nav-popover hidden">
+            <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-white/80">
+              <p class="text-white text-sm font-semibold">
+                <%= current_user.plan.name %> plan
+              </p>
+              <p class="text-white/70"> <%= plan_limit_label(current_user.plan) %> </p>
+              <%= link_to "Manage plan", plans_path, class: "inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-brand" %>
+            </div>
             <%= link_to "Dashboard", dashboard_path, class: "nav-popover__link" %>
             <%= link_to "Profile", profile_path, class: "nav-popover__link" %>
             <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "nav-popover__link text-red-400 hover:text-red-300" %>
           </div>
         </div>
       <% else %>
+        <%= link_to "Pricing", plans_path, class: "nav-trigger text-white/70 hover:text-white" %>
         <%= link_to "Log in", new_user_session_path, class: "nav-trigger text-white/70 hover:text-white" %>
         <%= link_to "Sign up", new_user_registration_path, class: "nav-cta" %>
       <% end %>
@@ -217,11 +227,23 @@
           <% end %>
         </div>
 
+        <div class="space-y-2">
+          <p class="text-xs uppercase tracking-[0.3em] text-neutral-muted">Plans</p>
+          <%= link_to plans_path, class: "mobile-nav-link" do %>
+            <span>Pricing</span>
+            <span>See plan features</span>
+          <% end %>
+        </div>
+
         <%= button_to "Sign out", destroy_user_session_path,
               method: :delete,
               class: "mobile-nav-cta" %>
       <% else %>
         <div class="space-y-4">
+          <%= link_to plans_path, class: "mobile-nav-link" do %>
+            <span>Pricing</span>
+            <span>Compare plans</span>
+          <% end %>
           <%= link_to new_user_session_path, class: "mobile-nav-link" do %>
             <span>Log in</span>
             <span>Jump back into planning</span>

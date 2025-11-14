@@ -2,6 +2,7 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[show edit update destroy add_friend update_rsvp invite_group upload_files remove_file availability_preview]
   before_action :authorize_event, only: %i[show edit update destroy add_friend invite_group upload_files remove_file availability_preview]
   before_action :authorize_event_rsvp, only: %i[update_rsvp]
+  before_action :ensure_plan_capacity!, only: %i[new create]
 
   def index
     authorize Event
@@ -262,5 +263,12 @@ class EventsController < ApplicationController
     Time.zone.parse(value)
   rescue ArgumentError
     nil
+  end
+
+  def ensure_plan_capacity!
+    return unless current_user
+    return if current_user.can_create_event?
+
+    redirect_to plans_path, alert: "You've reached the #{current_user.plan.name} plan limit. Upgrade to unlock more events."
   end
 end

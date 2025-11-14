@@ -44,4 +44,17 @@ RSpec.describe Event, type: :model do
       expect { event.increment_share_clicks! }.to change { event.reload.share_clicks }.by(1)
     end
   end
+
+  describe "plan limits" do
+    it "prevents creation when the owner reached the plan limit" do
+      plan = create(:plan, max_active_events: 1)
+      user = create(:user, plan: plan)
+      create(:event, user: user, end_time: 2.days.from_now)
+
+      new_event = build(:event, user: user)
+
+      expect(new_event).not_to be_valid
+      expect(new_event.errors[:base].join).to include("has reached its active event limit")
+    end
+  end
 end

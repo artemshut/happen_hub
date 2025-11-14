@@ -9,6 +9,7 @@ FactoryBot.define do
     sequence(:tag) { |n| "tag-#{n}" }
     sequence(:username) { |n| "test_user_#{n}" }
     confirmed_at { Time.current }
+    association :plan
 
     before(:create) do
       Role.find_or_create_by!(key: "member") do |role|

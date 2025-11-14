@@ -51,6 +51,31 @@
               Explore groups
             <% end %>
           </div>
+
+          <% if current_user.plan.present? %>
+            <% remaining = current_user.events_remaining_on_plan %>
+            <div class="glass-panel flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-white/80 border border-brand-soft/40">
+              <div>
+                <p class="text-sm font-semibold text-brand-dark uppercase tracking-[0.3em]">Your plan</p>
+                <h3 class="text-2xl font-bold text-neutral-text">
+                  <%= current_user.plan.name %>
+                </h3>
+                <p class="text-sm text-neutral-muted"><%= plan_limit_label(current_user.plan) %></p>
+              </div>
+              <div class="flex items-center gap-6">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.25em] text-neutral-muted">Events remaining</p>
+                  <p class="text-3xl font-extrabold text-neutral-text">
+                    <%= remaining == Float::INFINITY ? "∞" : remaining %>
+                  </p>
+                </div>
+                <%= link_to(current_user.plan.unlimited_events? ? events_path : plans_path,
+                      class: "chip-link--primary whitespace-nowrap") do %>
+                  <%= current_user.plan.unlimited_events? ? "View perks" : "Upgrade plan" %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
         </div>
 
         <div class="glass-panel bg-gradient-to-br from-brand-soft/60 via-white/90 to-white/95 shadow-glow">

@@ -1,5 +1,6 @@
 class Api::V1::EventsController < Api::V1::BaseController
   before_action :set_event, only: [ :show, :update, :update_rsvp, :upload_files ]
+  before_action :ensure_plan_capacity!, only: [ :create ]
 
   def index
     authorize Event
@@ -162,5 +163,14 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   def attach_uploaded_files(event, files)
     Array(files).each { |file| event.files.attach(file) }
+  end
+
+  def ensure_plan_capacity!
+    return if current_api_user.can_create_event?
+
+    render json: {
+      error: "Plan limit reached",
+      message: "Your #{current_api_user.plan.name} plan has reached its active event limit. Upgrade to create more events."
+    }, status: :payment_required
   end
 end

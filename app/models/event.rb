@@ -21,6 +21,7 @@ class Event < ApplicationRecord
 
   validates :title, :start_time, :end_time, presence: true
   validate :validate_file_sizes
+  validate :respect_plan_limits, on: :create
 
   enum :visibility, { private: "private", friends: "friends", public: "public" }, prefix: true
 
@@ -233,5 +234,12 @@ class Event < ApplicationRecord
     else
       "Attachment"
     end
+  end
+
+  def respect_plan_limits
+    return unless user
+    return if user.can_create_event?
+
+    errors.add(:base, "Your #{user.plan&.name} plan has reached its active event limit. Upgrade to create more gatherings.")
   end
 end

@@ -9,6 +9,8 @@ class User < ApplicationRecord
   # ActiveStorage
   has_one_attached :avatar
 
+  belongs_to :plan
+
   # Groups and Events
   has_many :group_memberships, dependent: :destroy
   has_many :created_groups, class_name: "Group", foreign_key: "user_id", inverse_of: :creator
@@ -49,6 +51,7 @@ class User < ApplicationRecord
   before_validation :assign_unique_tag, on: :create
   before_validation :assign_birthday, on: :create
   before_validation :generate_username, on: :create
+  before_validation :assign_default_plan, on: :create
   after_create :send_confirmation_instructions, unless: -> { confirmed? }
   after_create :assign_default_role
 
@@ -161,12 +164,39 @@ class User < ApplicationRecord
     Event.upcoming_for(self)
   end
 
+  def active_events_count
+    owned_events.where("end_time IS NULL OR end_time >= ?", Time.current).count
+  end
+
+  def plan_limit
+    plan&.max_active_events
+  end
+
+  def plan_limit_reached?
+    plan_limit.present? && active_events_count >= plan_limit
+  end
+
+  def can_create_event?
+    plan.nil? || plan.unlimited_events? || !plan_limit_reached?
+  end
+
+  def events_remaining_on_plan
+    return Float::INFINITY if plan&.unlimited_events?
+
+    remaining = plan_limit.to_i - active_events_count
+    [ remaining, 0 ].max
+  end
+
+  def needs_plan_upgrade?
+    !can_create_event?
+  end
+
   def self.search_by_tag(query)
     where("tag ILIKE ?", "%#{query}%")
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    [ "birthday", "confirmation_sent_at", "confirmation_token", "confirmed_at", "created_at", "email", "encrypted_password", "fcm_token", "first_name", "id", "id_value", "last_name", "platform", "provider", "remember_created_at", "reset_password_sent_at", "reset_password_token", "tag", "uid", "unconfirmed_email", "updated_at", "username" ]
+    [ "birthday", "confirmation_sent_at", "confirmation_token", "confirmed_at", "created_at", "email", "encrypted_password", "fcm_token", "first_name", "id", "id_value", "last_name", "plan_id", "platform", "provider", "remember_created_at", "reset_password_sent_at", "reset_password_token", "tag", "uid", "unconfirmed_email", "updated_at", "username" ]
   end
 
   def self.ransackable_associations(auth_object = nil)
@@ -212,5 +242,11 @@ class User < ApplicationRecord
     return unless member_role
 
     role_assignments.find_or_create_by(role: member_role)
+  end
+
+  def assign_default_plan
+    return if plan_id.present?
+
+    self.plan = Plan.find_by(key: "basic") || Plan.first
   end
 end

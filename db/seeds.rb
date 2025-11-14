@@ -36,4 +36,59 @@ end
     category.description = category_attrs[:description]
   end
 end
+
+[
+  {
+    key: "basic",
+    name: "Starter Circle",
+    tagline: "Host a handful of intimate plans for free.",
+    monthly_price_cents: 0,
+    annual_price_cents: 0,
+    max_active_events: 3,
+    highlighted: false,
+    priority: 1,
+    features: [
+      "Up to 3 active events",
+      "Smart invites & RSVPs",
+      "Shared maps & files"
+    ]
+  },
+  {
+    key: "social_plus",
+    name: "Social Spark",
+    tagline: "Level up recurring hangs with extra capacity.",
+    monthly_price_cents: 1200,
+    annual_price_cents: 12000,
+    max_active_events: 10,
+    highlighted: true,
+    priority: 2,
+    features: [
+      "Up to 10 active events",
+      "Priority reminders & follow-ups",
+      "Group polls & suggestion boosts",
+      "Guest availability heatmap"
+    ]
+  },
+  {
+    key: "galaxy",
+    name: "Galaxy Host",
+    tagline: "All-access hosting for power planners.",
+    monthly_price_cents: 2400,
+    annual_price_cents: 24000,
+    max_active_events: nil,
+    highlighted: false,
+    priority: 3,
+    features: [
+      "Unlimited active events",
+      "VIP launch announcements",
+      "White-glove onboarding for groups",
+      "Advanced analytics & share insights"
+    ]
+  }
+].each do |plan_attrs|
+  Plan.find_or_initialize_by(key: plan_attrs[:key]).tap do |plan|
+    plan.assign_attributes(plan_attrs)
+    plan.save!
+  end
+end
 AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
