@@ -14,6 +14,18 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
   - On mobile browsers detect if the native app is installed and open it directly when a HappenHub URL is tapped.
   - Provide a graceful fallback (store link or continue in web) when the app is missing.
   - Cover invite/share URLs first; document approach for expanding to other routes.
+- [ ] HUB-008 Sub-events data model & API (subevents-core)
+  - Extend events with nested sub-events (title, start/end, optional location/notes) and expose CRUD endpoints via the API.
+  - Ensure sub-events are ordered (by start time or explicit ordering) and scoped to their parent event.
+  - Add serializer coverage and request specs for new endpoints.
+- [ ] HUB-009 Event page timeline UI (subevents-ui)
+  - Surface sub-events on the host & attendee event pages as a timeline (or alternate visual) showing each segment’s timing and details.
+  - Provide creation/editing controls in the web UI with inline validation and a fallback layout for mobile.
+  - Include system tests or view specs ensuring the timeline renders correctly with various numbers of sub-events.
+- [ ] HUB-010 Mobile apps consume sub-events (subevents-mobile-api)
+  - Expand mobile-facing API responses (event show/list) to include sub-event data and relevant metadata for rendering.
+  - Provide versioning or capability flags so older app versions degrade gracefully.
+  - Add request specs verifying sub-events appear in event payloads and respect authorization rules.
 
 ## Done
 

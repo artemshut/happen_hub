@@ -12,6 +12,10 @@ console_command = '/rails/bin/rails console'
 
 [build]
 
+[processes]
+  app = "bundle exec puma -C config/puma.rb"
+  worker = "bundle exec solid_queue:start"
+
 [http_service]
   internal_port = 8080
   force_https = true
