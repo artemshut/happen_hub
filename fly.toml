@@ -14,6 +14,9 @@ console_command = '/rails/bin/rails console'
 
 [build]
 
+[deploy]
+  release_command = "bin/rails db:prepare db:queue:prepare"
+
 [processes]
   app = "bundle exec puma -C config/puma.rb"
   worker = "bin/jobs start"

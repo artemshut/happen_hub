@@ -85,6 +85,8 @@ git clone https://github.com/yourusername/happenhub.git
 cd happenhub
 bundle install
 bin/setup
+# If you skip bin/setup, make sure to prep the Solid Queue database as well:
+# bin/rails db:prepare db:queue:prepare
 bin/dev
 ```
 
