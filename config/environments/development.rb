@@ -64,17 +64,8 @@ Rails.application.configure do
   # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs = true
 
-  queue_db_config_present =
-    ActiveRecord::Base.configurations&.
-    configs_for(env_name: Rails.env, name: "queue")&.
-    any?
-
-  if queue_db_config_present
-    config.active_job.queue_adapter = :solid_queue
-    config.solid_queue.connects_to = { database: { writing: :queue } }
-  else
-    config.active_job.queue_adapter = :async
-  end
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :queue } }
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
