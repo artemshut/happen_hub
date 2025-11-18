@@ -14,7 +14,7 @@ console_command = '/rails/bin/rails console'
 
 [processes]
   app = "bundle exec puma -C config/puma.rb"
-  worker = "bundle exec solid_queue:start"
+  worker = "bin/rails solid_queue:start"
 
 [http_service]
   internal_port = 8080
