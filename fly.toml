@@ -10,12 +10,13 @@ console_command = '/rails/bin/rails console'
 [env]
   PORT = "8080"
   RAILS_MAX_THREADS = "3"
+  SOLID_QUEUE_THREADS = "3"
 
 [build]
 
 [processes]
   app = "bundle exec puma -C config/puma.rb"
-  worker = "bin/rails solid_queue:start"
+  worker = "bin/rails solid_queue:start --threads 3"
 
 [http_service]
   internal_port = 8080
