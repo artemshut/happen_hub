@@ -40,7 +40,7 @@ development:
   queue:
     <<: *default
     database: happen_hub_development_queue
-    pool: <%= ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 3)).to_i %>
+    pool: <%= ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 5)).to_i %>
     migrations_paths: db/queue_migrate
 
   # The specified database role being used to connect to PostgreSQL.
@@ -80,7 +80,7 @@ test:
   queue:
     <<: *default
     database: happen_hub_test_queue
-    pool: <%= ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 3)).to_i %>
+    pool: <%= ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 5)).to_i %>
     migrations_paths: db/queue_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
@@ -110,6 +110,7 @@ production:
     username: happen_hub
     password: <%= ENV["HAPPEN_HUB_DATABASE_PASSWORD"] %>
     url: <%= ENV["DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   cache:
     <<: *primary_production
     database: happen_hub_production_cache
@@ -118,7 +119,7 @@ production:
   queue:
     <<: *primary_production
     database: happen_hub_production_queue
-    pool: <%= ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 3)).to_i %>
+    pool: <%= ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 5)).to_i %>
     migrations_paths: db/queue_migrate
     url: <%= database_url_with(ENV["DATABASE_URL"], "happen_hub_production_queue") %>
   cable:
