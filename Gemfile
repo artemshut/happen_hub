@@ -48,7 +48,7 @@ gem "pundit"
 gem "dockerfile-rails", ">= 1.7", group: :development
 gem "aws-sdk-s3", "~> 1.178", require: false
 gem "redis", "~> 5.4"
-gem "activeadmin", "= 4.0.0beta15"
+gem "activeadmin", "4.0.0.beta18"
 gem "cssbundling-rails", "= 1.4.1"
 gem "mailgun-ruby", "~>1.4.0"
 
