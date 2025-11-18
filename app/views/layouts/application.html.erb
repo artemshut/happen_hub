@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HappenHub - Event Hub for Everyone</title>
-    <link rel="icon" type="image/png" href="<%= asset_path('icon_white.png') %>">
+    <link rel="icon" type="image/png" href="<%= asset_path('happenhub_icon_light.png') %>">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -60,8 +60,7 @@
         <!-- Logo -->
         <div class="flex items-center space-x-2 text-2xl font-bold">
           <%= link_to (user_signed_in? ? dashboard_path : new_user_session_path), class: "flex items-center hover:opacity-80 transition" do %>
-            <%= image_tag "icon_white.png", alt: "HappenHub Icon", class: "w-8 h-8" %>
-            <span>HappenHub</span>
+            <%= image_tag "happenhub_icon_light.png", alt: "HappenHub Icon", class: "w-20 h-10" %>
           <% end %>
         </div>
 
