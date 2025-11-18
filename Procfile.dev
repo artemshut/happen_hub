@@ -1,4 +1,4 @@
 web: bin/rails server
 css: bin/rails tailwindcss:watch
 css: yarn build:css --watch
-worker: bin/jobs start --threads 3
+worker: bin/jobs start --env BUNDLE_WITHOUT=development test --threads 3
