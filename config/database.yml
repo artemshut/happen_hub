@@ -25,12 +25,17 @@ end
 # Configure Using Gemfile
 # gem "pg"
 #
+<%
+rails_max_threads = ENV.fetch("RAILS_MAX_THREADS", 5).to_i
+solid_queue_threads = ENV.fetch("SOLID_QUEUE_THREADS", rails_max_threads).to_i
+%>
+
 default: &default
   adapter: postgresql
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: <%= rails_max_threads %>
 
 
 development:
@@ -40,7 +45,7 @@ development:
   queue:
     <<: *default
     database: happen_hub_development_queue
-    pool: <%= ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 5)).to_i %>
+    pool: <%= solid_queue_threads %>
     migrations_paths: db/queue_migrate
 
   # The specified database role being used to connect to PostgreSQL.
@@ -80,7 +85,7 @@ test:
   queue:
     <<: *default
     database: happen_hub_test_queue
-    pool: <%= ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 5)).to_i %>
+    pool: <%= solid_queue_threads %>
     migrations_paths: db/queue_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
@@ -110,7 +115,7 @@ production:
     username: happen_hub
     password: <%= ENV["HAPPEN_HUB_DATABASE_PASSWORD"] %>
     url: <%= ENV["DATABASE_URL"] %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    pool: <%= rails_max_threads %>
   cache:
     <<: *primary_production
     database: happen_hub_production_cache
@@ -119,7 +124,7 @@ production:
   queue:
     <<: *primary_production
     database: happen_hub_production_queue
-    pool: <%= ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 5)).to_i %>
+    pool: <%= solid_queue_threads %>
     migrations_paths: db/queue_migrate
     url: <%= database_url_with(ENV["DATABASE_URL"], "happen_hub_production_queue") %>
   cable:

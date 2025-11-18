@@ -39,5 +39,4 @@ class EventReminderJob < ApplicationJob
 
     Rails.logger.info "📬 Sent #{minutes_before} min reminder for event ##{event.id} to #{users.count} users"
   end
-
 end
