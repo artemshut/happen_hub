@@ -2,7 +2,7 @@ class EventReminderJob < ApplicationJob
   queue_as :default
 
   # minutes_before: integer – e.g., 1440 (24h), 60 (1h)
-  def perform(event_id, minutes_before)
+  def perform(user_id, minutes_before)
     # event = Event.find_by(id: event_id)
     # return unless event&.start_time.present?
 
