@@ -16,7 +16,7 @@ console_command = '/rails/bin/rails console'
 
 [processes]
   app = "bundle exec puma -C config/puma.rb"
-  worker = "bin/jobs start --threads 3"
+  worker = "bin/jobs start"
 
 [http_service]
   internal_port = 8080
