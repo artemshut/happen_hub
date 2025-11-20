@@ -9,6 +9,12 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+      PGHOST: 127.0.0.1
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGPORT: 5432
     services:
       postgres:
         image: postgres
@@ -50,12 +56,7 @@ jobs:
 
       - name: Run specs
         env:
-          RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/happen_hub_test
-          PGHOST: 127.0.0.1
-          PGUSER: postgres
-          PGPASSWORD: postgres
-          PGPORT: 5432
         run: bin/rails db:test:prepare && bundle exec rspec
 
   deploy:
