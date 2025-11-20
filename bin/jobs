@@ -2,5 +2,24 @@
 
 require_relative "../config/environment"
 require "solid_queue/cli"
+require "pg"
 
-SolidQueue::Cli.start(ARGV)
+# Fly machines can lose the DB connection during platform maintenance. If the
+# worker process crashes, loop with an exponential backoff so Solid Queue comes
+# back online automatically once Postgres is reachable again.
+backoff = 5
+
+loop do
+  begin
+    SolidQueue::Cli.start(ARGV)
+    break
+  rescue SystemExit, Interrupt
+    raise
+  rescue ActiveRecord::ConnectionFailed, PG::Error => e
+    warn "[SolidQueue] worker lost the database connection: #{e.class} - #{e.message.strip}. " \
+         "Retrying in #{backoff}s..."
+    ActiveRecord::Base.clear_active_connections!
+    sleep(backoff)
+    backoff = [backoff * 2, 60].min
+  end
+end
