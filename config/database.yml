@@ -33,6 +33,7 @@ solid_queue_threads = ENV.fetch("SOLID_QUEUE_THREADS", rails_max_threads).to_i
 default: &default
   adapter: postgresql
   encoding: unicode
+  host: <%= ENV.fetch("PGHOST", nil) %>
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= rails_max_threads %>
