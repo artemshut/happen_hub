@@ -211,9 +211,33 @@ class Event < ApplicationRecord
   end
 
   def decode_arguments(raw_arguments)
-    JSON.parse(raw_arguments)
+    case raw_arguments
+    when Array
+      raw_arguments
+    when Hash
+      extract_arguments_from_hash(raw_arguments)
+    when String
+      parsed = JSON.parse(raw_arguments)
+      decode_arguments(parsed)
+    else
+      Array(raw_arguments)
+    end
   rescue JSON::ParserError, TypeError
     YAML.safe_load(raw_arguments, permitted_classes: [ Symbol, Time, Date, ActiveSupport::TimeWithZone ])
+  end
+
+  def extract_arguments_from_hash(payload)
+    payload = payload.deep_stringify_keys
+
+    if payload["serialized_arguments"]
+      ActiveJob::Arguments.deserialize(payload["serialized_arguments"])
+    elsif payload["arguments"].is_a?(Array)
+      payload["arguments"]
+    elsif payload["arguments"]
+      Array(payload["arguments"])
+    else
+      payload
+    end
   end
 
   def file_size_for_validation(file)
