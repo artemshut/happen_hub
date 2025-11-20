@@ -9,8 +9,10 @@ console_command = '/rails/bin/rails console'
 
 [env]
   PORT = "8080"
-  RAILS_MAX_THREADS = "5"
-  SOLID_QUEUE_THREADS = "5"
+  RAILS_MAX_THREADS = "2"
+  DB_POOL = "2"
+  SOLID_QUEUE_THREADS = "1"
+  SOLID_QUEUE_POOL = "1"
 
 [build]
 

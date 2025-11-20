@@ -28,6 +28,8 @@ end
 <%
 rails_max_threads = ENV.fetch("RAILS_MAX_THREADS", 5).to_i
 solid_queue_threads = ENV.fetch("SOLID_QUEUE_THREADS", rails_max_threads).to_i
+db_pool = ENV.fetch("DB_POOL", rails_max_threads).to_i
+solid_queue_pool = ENV.fetch("SOLID_QUEUE_POOL", solid_queue_threads).to_i
 %>
 
 default: &default
@@ -37,7 +39,7 @@ default: &default
   port: <%= ENV.fetch("PGPORT", nil) %>
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= rails_max_threads %>
+  pool: <%= db_pool %>
   username: <%= ENV.fetch("PGUSER", nil) %>
   password: <%= ENV.fetch("PGPASSWORD", nil) %>
 
@@ -49,7 +51,7 @@ development:
   queue:
     <<: *default
     database: happen_hub_development_queue
-    pool: <%= solid_queue_threads %>
+    pool: <%= solid_queue_pool %>
     migrations_paths: db/queue_migrate
 
   # The specified database role being used to connect to PostgreSQL.
@@ -91,7 +93,7 @@ test:
     <<: *default
     database: happen_hub_test_queue
     host: <%= ENV.fetch("PGHOST", "localhost") %>
-    pool: <%= solid_queue_threads %>
+    pool: <%= solid_queue_pool %>
     migrations_paths: db/queue_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
@@ -121,7 +123,7 @@ production:
     username: happen_hub
     password: <%= ENV["HAPPEN_HUB_DATABASE_PASSWORD"] %>
     url: <%= ENV["DATABASE_URL"] %>
-    pool: <%= rails_max_threads %>
+    pool: <%= db_pool %>
   cache:
     <<: *primary_production
     database: happen_hub_production_cache
@@ -130,7 +132,7 @@ production:
   queue:
     <<: *primary_production
     database: happen_hub_production_queue
-    pool: <%= solid_queue_threads %>
+    pool: <%= solid_queue_pool %>
     migrations_paths: db/queue_migrate
     url: <%= database_url_with(ENV["DATABASE_URL"], "happen_hub_production_queue") %>
   cable:
