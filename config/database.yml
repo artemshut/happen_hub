@@ -36,8 +36,8 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= rails_max_threads %>
-  username: <%= ENV["PGUSER"] %>
-  password: <%= ENV["PGPASSWORD"] %>
+  username: <%= ENV.fetch("PGUSER", nil) %>
+  password: <%= ENV.fetch("PGPASSWORD", nil) %>
 
 
 development:
