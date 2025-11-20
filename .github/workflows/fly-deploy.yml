@@ -52,6 +52,10 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/happen_hub_test
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: postgres
+          PGPORT: 5432
         run: bin/rails db:test:prepare && bundle exec rspec
 
   deploy:
