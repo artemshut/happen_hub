@@ -56,6 +56,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      RAILS_ENV: test
+      PGHOST: 127.0.0.1
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGPORT: 5432
+
     services:
       postgres:
         image: postgres
@@ -64,7 +71,11 @@ jobs:
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
       # redis:
       #   image: redis
@@ -74,7 +85,7 @@ jobs:
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config google-chrome-stable
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config postgresql-client google-chrome-stable
 
       - name: Checkout code
         uses: actions/checkout@v5
@@ -85,10 +96,24 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Wait for Postgres
+        run: |
+          for i in {1..30}; do
+            if pg_isready -h 127.0.0.1 -p 5432; then
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+
+      - name: Create test database
+        env:
+          PGPASSWORD: postgres
+        run: createdb -h 127.0.0.1 -U postgres happen_hub_test || true
+
       - name: Run tests
         env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/happen_hub_test
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare && bundle exec rspec
 

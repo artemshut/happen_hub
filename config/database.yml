@@ -34,6 +34,7 @@ default: &default
   adapter: postgresql
   encoding: unicode
   host: <%= ENV.fetch("PGHOST", nil) %>
+  port: <%= ENV.fetch("PGPORT", nil) %>
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= rails_max_threads %>
