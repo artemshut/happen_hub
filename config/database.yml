@@ -82,9 +82,11 @@ test:
   primary:
     <<: *default
     database: happen_hub_test
+    host: <%= ENV.fetch("PGHOST", "localhost") %>
   queue:
     <<: *default
     database: happen_hub_test_queue
+    host: <%= ENV.fetch("PGHOST", "localhost") %>
     pool: <%= solid_queue_threads %>
     migrations_paths: db/queue_migrate
 
