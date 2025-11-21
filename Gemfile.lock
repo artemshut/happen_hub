@@ -238,7 +238,7 @@ GEM
     google-id-token (1.4.2)
       jwt (>= 1)
     google-logging-utils (0.2.0)
-    googleauth (1.15.1)
+    googleauth (1.16.0)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.2)
       google-logging-utils (~> 0.1)
@@ -669,7 +669,7 @@ DEPENDENCIES
   friendly_id (~> 5.5.0)
   fullcalendar-rails
   google-id-token
-  googleauth (~> 1.8)
+  googleauth (~> 1.16)
   hotwire-rails
   image_processing (~> 1.2)
   importmap-rails
