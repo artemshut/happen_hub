@@ -55,9 +55,9 @@
                   Current plan
                 </div>
               <% else %>
-                <%= button_to activate_plan_path(plan), method: :post, class: "chip-link--primary w-full justify-center", data: { turbo: true } do %>
-                  <%= current_user.plan&.priority.to_i < plan.priority ? "Upgrade" : "Switch" %> to <%= plan.name %>
-                <% end %>
+                <div class="chip-link w-full justify-center bg-neutral-100 text-neutral-muted cursor-not-allowed">
+                  <%= plan.name %> unavailable
+                </div>
               <% end %>
             <% else %>
               <%= link_to new_user_registration_path, class: "chip-link--primary w-full justify-center" do %>

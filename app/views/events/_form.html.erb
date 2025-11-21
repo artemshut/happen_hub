@@ -71,19 +71,25 @@
                 </div>
               </div>
 
+              <% start_value = event.start_time&.in_time_zone&.strftime("%Y-%m-%d %H:%M") %>
+              <% end_value = event.end_time&.in_time_zone&.strftime("%Y-%m-%d %H:%M") %>
               <div class="grid gap-4 sm:grid-cols-2">
                 <div class="form-field">
                   <%= form.label :start_time, "Start", class: "form-label" %>
-                  <%= form.datetime_local_field :start_time,
-                        data: { datetime_link_target: "start", action: "change->datetime-link#handleStartChange" },
-                        class: "form-input",
+                  <%= form.text_field :start_time,
+                        value: start_value,
+                        data: { datetime_link_target: "start" },
+                        class: "form-input datetime-picker",
+                        autocomplete: "off",
                         required: true %>
                 </div>
                 <div class="form-field">
                   <%= form.label :end_time, "End", class: "form-label" %>
-                  <%= form.datetime_local_field :end_time,
-                        data: { datetime_link_target: "end", action: "change->datetime-link#handleEndChange" },
-                        class: "form-input" %>
+                  <%= form.text_field :end_time,
+                        value: end_value,
+                        data: { datetime_link_target: "end" },
+                        class: "form-input datetime-picker",
+                        autocomplete: "off" %>
                 </div>
               </div>
             </section>
