@@ -26,6 +26,10 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
   - Expand mobile-facing API responses (event show/list) to include sub-event data and relevant metadata for rendering.
   - Provide versioning or capability flags so older app versions degrade gracefully.
   - Add request specs verifying sub-events appear in event payloads and respect authorization rules.
+- [ ] HUB-011 Event checklists (event-checklists)
+  - Allow hosts to create per-event task lists (item name, optional due date, assignee/owner).
+  - Surface checklist progress on the event detail page with controls to add, edit, complete, or reorder items.
+  - Provide API coverage so mobile apps can read/update checklists; include request specs and basic UI tests.
 
 ## Done
 
