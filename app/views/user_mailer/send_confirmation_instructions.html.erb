@@ -1,10 +1,18 @@
 <% @title = "Confirm your HappenHub account" %>
 
-<h2>Almost there, <%= @user.full_name %>!</h2>
-<p>Confirm your account so you can start creating and joining events.</p>
+<div class="pill">Security pulse</div>
+<h2>Almost live, <%= @user.full_name %>.</h2>
+<p>Lock in your identity so you can host secret sets, manage crews, and stay synced.</p>
 
-<p>
-  <a href="<%= @confirmation_url %>">Confirm my account</a>
-</p>
+<div class="panel">
+  <p><strong>What you unlock</strong></p>
+  <ul>
+    <li>Full access to event planning tools</li>
+    <li>Instant invites from the people that matter</li>
+    <li>Personalized updates on the scene</li>
+  </ul>
+</div>
 
-<p>If you didn’t request this, feel free to ignore this message.</p>
+<a href="<%= @confirmation_url %>" class="cta">Confirm my pulse</a>
+
+<p style="margin-top: 24px;">Didn’t request this? Ignore the message and we’ll keep things quiet.</p>

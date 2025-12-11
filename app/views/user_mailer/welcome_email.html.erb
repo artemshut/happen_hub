@@ -1,12 +1,18 @@
 <% @title = "Welcome to HappenHub!" %>
 
-<h2>Hello, <%= @username %>! 🎉</h2>
-<p>We’re thrilled to have you join HappenHub! Get ready to organize, plan, and enjoy events with your friends.</p>
+<div class="pill">New member signal</div>
+<h2>Hello, <%= @username %> — the night is yours.</h2>
+<p>HappenHub is where underground plans take shape. Build lineups, sync friends, and keep every set running perfectly.</p>
 
-<p>Your profile tag is <strong><%= @user_tag %></strong>. Share it so friends can find you fast.</p>
+<div class="panel">
+  <p><strong>Quick cues</strong></p>
+  <ul>
+    <li>Share your tag: <strong><%= @user_tag %></strong></li>
+    <li>Update your vibe on the profile page</li>
+    <li>Drop your first event or jump into an invite</li>
+  </ul>
+</div>
 
-<p>
-  <a href="<%= @account_url %>" class="button">Finish setting up your profile</a>
-</p>
+<a href="<%= @account_url %>" class="cta">Dial in my profile</a>
 
-<p>Need help? Feel free to reach out anytime.</p>
+<p style="margin-top: 24px;">Need backup? Ping the crew anytime.</p>

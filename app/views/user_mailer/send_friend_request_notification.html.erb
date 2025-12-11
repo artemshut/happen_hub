@@ -1,10 +1,18 @@
 <% @title = "New friend request" %>
 
-<h2>Hello <%= @friend_name %>!</h2>
-<p><strong><%= @user_name %></strong> just sent you a friend request on HappenHub.</p>
+<div class="pill">Crew ping</div>
+<h2><%= @friend_name %>, <%= @user_name %> wants to sync up.</h2>
+<p>Lock in the connection so you can exchange invites, swap setlists, and plan the next warehouse takeover together.</p>
 
-<p>
-  <a href="<%= @friendships_url %>">Review friend requests</a>
-</p>
+<div class="panel">
+  <p style="margin: 0 0 6px;"><strong>What happens when you accept?</strong></p>
+  <ul>
+    <li>See each other’s invite availability instantly</li>
+    <li>Collaborate on private or public events</li>
+    <li>Keep DMs organized right inside HappenHub</li>
+  </ul>
+</div>
 
-<p>Accept it to start planning events together.</p>
+<a href="<%= @friendships_url %>" class="cta">Open friend requests</a>
+
+<p style="margin-top: 24px;">Not feeling it? Ignore and the request will fade out quietly.</p>

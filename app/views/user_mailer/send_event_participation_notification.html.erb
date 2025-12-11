@@ -1,11 +1,16 @@
 <% @title = "You're invited to #{@event_name}" %>
 
-<h2>Hi <%= @user.full_name %>, you’ve been added to an event!</h2>
+<div class="pill">Fresh invite</div>
+<h2><%= @user.full_name %>, you’re on the list.</h2>
 
-<p><strong><%= @event_name %></strong> is happening on <%= @event_date %>.</p>
+<div class="panel">
+  <p style="margin: 0 0 6px;"><strong><%= @event_name %></strong></p>
+  <p style="margin: 0 0 6px;">Date & time: <%= @event_date %></p>
+  <p style="margin: 0;">HQ: <a href="<%= @event_url %>">View location</a></p>
+</div>
 
-<p>
-  <a href="<%= @event_url %>">See the event details</a>
-</p>
+<p>Tap the details, sync your RSVP, and get the conversation humming before doors open.</p>
 
-<p>Head over to HappenHub to chat with attendees and stay in the loop.</p>
+<a href="<%= @event_url %>" class="cta">Enter event hub</a>
+
+<p style="margin-top: 24px;">Need to invite more friends? Ping the host inside the event.</p>

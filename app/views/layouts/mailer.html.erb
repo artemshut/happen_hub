@@ -5,61 +5,114 @@
   <title><%= @title || "HappenHub Notification" %></title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+      background: #050505;
+      color: #f9f9f9;
       margin: 0;
-      padding: 0;
+      padding: 30px 10px;
+      letter-spacing: 0.2px;
     }
     .container {
-      max-width: 600px;
-      margin: 20px auto;
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 640px;
+      margin: 0 auto;
+      background: radial-gradient(circle at top left, rgba(148,0,211,0.15), transparent 60%),
+                  radial-gradient(circle at bottom right, rgba(0,255,213,0.1), transparent 55%),
+                  #0b0b10;
+      border-radius: 20px;
+      padding: 32px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.65);
+    }
+    .glow-bar {
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #9c27ff, #00ffd5);
+      margin-bottom: 24px;
+      border-radius: 4px;
     }
     .header {
-      background-color: #ff4d4f;
-      color: #ffffff;
-      text-align: center;
-      padding: 15px;
-      border-radius: 8px 8px 0 0;
-      font-size: 24px;
-      font-weight: bold;
+      text-align: left;
+      margin-bottom: 16px;
+    }
+    .header-title {
+      font-size: 26px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #f5f5f5;
     }
     .content {
-      padding: 20px;
       font-size: 16px;
-      color: #333;
+      line-height: 1.7;
+      color: #dfdfdf;
     }
-    .button {
-      display: inline-block;
-      background-color: #ff4d4f;
+    .content h2 {
       color: #ffffff;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+    }
+    .cta {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 14px 30px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, #8a2be2, #00ffd5);
+      color: #050505 !important;
+      font-weight: 600;
       text-decoration: none;
-      padding: 12px 24px;
-      border-radius: 5px;
-      font-size: 16px;
-      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.05);
+      margin-bottom: 16px;
+    }
+    .panel {
+      margin: 22px 0;
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    ul, ol {
+      padding-left: 20px;
+      margin: 10px 0;
+      color: #d7d7d7;
+    }
+    li {
+      margin-bottom: 6px;
     }
     .footer {
       text-align: center;
-      font-size: 14px;
-      color: #777;
-      margin-top: 20px;
-      padding-top: 10px;
-      border-top: 1px solid #ddd;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 32px;
+      letter-spacing: 1px;
+    }
+    a {
+      color: #00ffd5;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">HappenHub</div>
+    <div class="glow-bar"></div>
+    <div class="header">
+      <div class="header-title">HappenHub</div>
+    </div>
     <div class="content">
       <%= yield %>
     </div>
     <div class="footer">
-      © <%= Date.today.year %> HappenHub. All rights reserved.
+      © <%= Date.today.year %> HappenHub. Keep the night alive.
     </div>
   </div>
 </body>
