@@ -75,9 +75,9 @@
                         <%= participant.user.first_name[0].upcase %>
                       </div>
                     <% end %>
-                    <div>
-                      <p class="text-sm font-semibold text-neutral-text"><%= participant.user.full_name %></p>
-                      <p class="text-xs uppercase tracking-[0.3em] text-neutral-muted"><%= participant.user.username %></p>
+                    <div class="min-w-0">
+                      <p class="text-sm font-semibold text-neutral-text break-words leading-tight"><%= participant.user.full_name %></p>
+                      <p class="text-xs uppercase tracking-[0.3em] text-neutral-muted break-all"><%= participant.user.username %></p>
                       <% if participant.user == event.user %>
                         <span class="text-[10px] font-semibold uppercase tracking-[0.3em] text-brand">Host</span>
                       <% end %>
