@@ -1,10 +1,12 @@
 <% @title = "Welcome to HappenHub!" %>
 
-<h2>Hello, <%= @user.first_name %>! 🎉</h2>
+<h2>Hello, <%= @username %>! 🎉</h2>
 <p>We’re thrilled to have you join HappenHub! Get ready to organize, plan, and enjoy events with your friends.</p>
 
+<p>Your profile tag is <strong><%= @user_tag %></strong>. Share it so friends can find you fast.</p>
+
 <p>
-  <a href="<%= root_url %>" class="button">Explore HappenHub</a>
+  <a href="<%= @account_url %>" class="button">Finish setting up your profile</a>
 </p>
 
 <p>Need help? Feel free to reach out anytime.</p>

@@ -40,7 +40,7 @@ Rails.application.configure do
   # config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.delivery_method = :mailgun
 
-  config.action_mailer.enveloop_settings = {
+  config.action_mailer.mailgun_settings = {
     api_key: Rails.application.credentials.dig(:mailgun, :api_key),
     domain: Rails.application.credentials.dig(:mailgun, :domain),
     api_host: "api.eu.mailgun.net"

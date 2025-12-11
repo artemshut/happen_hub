@@ -36,7 +36,6 @@ gem "omniauth"
 gem "omniauth-google-oauth2" # For Google authentication
 gem "fullcalendar-rails"
 gem "sidekiq" # For background jobs
-gem "enveloop"
 gem "omniauth-rails_csrf_protection"
 gem "friendly_id", "~> 5.5.0"
 gem "jsonapi-serializer"

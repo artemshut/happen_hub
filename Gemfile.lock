@@ -186,8 +186,6 @@ GEM
       dry-logic (~> 1.4)
       zeitwerk (~> 2.6)
     ed25519 (1.4.0)
-    enveloop (0.2.0)
-      faraday
     erb (6.0.0)
     erubi (1.13.1)
     et-orbi (1.4.0)
@@ -662,7 +660,6 @@ DEPENDENCIES
   debug
   devise
   dockerfile-rails (>= 1.7)
-  enveloop
   factory_bot_rails (~> 6.4)
   faraday
   fcm

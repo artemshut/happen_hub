@@ -1,0 +1,11 @@
+<% @title = "You're invited to #{@event_name}" %>
+
+<h2>Hi <%= @user.full_name %>, you’ve been added to an event!</h2>
+
+<p><strong><%= @event_name %></strong> is happening on <%= @event_date %>.</p>
+
+<p>
+  <a href="<%= @event_url %>">See the event details</a>
+</p>
+
+<p>Head over to HappenHub to chat with attendees and stay in the loop.</p>
