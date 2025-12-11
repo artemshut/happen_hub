@@ -2,6 +2,7 @@ class CustomDeviseMailer < Devise::Mailer
   include MailgunDelivery
 
   default from: "no-reply@happenhub.co"
+  layout "mailer"
 
   def reset_password_instructions(record, token, opts = {})
     reset_link = edit_user_password_url(reset_password_token: token, host: "happenhub.co")
