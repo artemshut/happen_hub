@@ -94,6 +94,40 @@
               </div>
             </section>
 
+            <!-- Sub-events -->
+            <section class="form-card space-y-6"
+                     data-controller="sub-events datetime-link"
+                     data-action="sub-events:added->datetime-link#connectSubEvent sub-events:removed->datetime-link#disconnectSubEvent">
+              <div class="form-card__header">
+                <div>
+                  <p class="form-card__eyebrow">Segments</p>
+                  <h2 class="form-card__title">Break it into moments</h2>
+                  <p class="form-card__subtitle">Map out ceremonies, dinners, DJ sets, or any micro-schedule beats.</p>
+                </div>
+                <p class="text-xs text-neutral-muted max-w-sm">
+                  Guests will see this timeline in the event view so they know when to show up for each highlight.
+                </p>
+              </div>
+
+              <div class="space-y-4" data-sub-events-target="list">
+                <%= form.fields_for :sub_events do |sub_form| %>
+                  <%= render "events/sub_event_fields", f: sub_form %>
+                <% end %>
+              </div>
+
+              <template data-sub-events-target="template">
+                <%= form.fields_for :sub_events, SubEvent.new, child_index: "__INDEX__" do |sub_form| %>
+                  <%= render "events/sub_event_fields", f: sub_form %>
+                <% end %>
+              </template>
+
+              <button type="button"
+                      class="chip-link px-5 py-2 text-xs uppercase tracking-[0.35em]"
+                      data-action="sub-events#add">
+                + Add another segment
+              </button>
+            </section>
+
             <!-- Location -->
             <section class="form-card space-y-6" data-controller="location-autocomplete" data-location-autocomplete-target="container">
               <div class="form-card__header">

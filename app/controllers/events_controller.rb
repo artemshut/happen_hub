@@ -216,7 +216,18 @@ class EventsController < ApplicationController
     params.require(:event).permit(
       :title, :description, :rsvp_status, :start_time, :end_time,
       :location, :latitude, :longitude, :visibility, :cover_image,
-      :event_category_id, files: [],
+      :event_category_id,
+      files: [],
+      sub_events_attributes: [
+        :id,
+        :title,
+        :start_time,
+        :end_time,
+        :location,
+        :notes,
+        :position,
+        :_destroy
+      ]
     ).tap do |whitelisted|
       next unless whitelisted[:files].is_a?(Array)
 

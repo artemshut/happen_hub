@@ -1,0 +1,55 @@
+<div class="sub-event-card" data-sub-events-wrapper data-controller="datetime-link">
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <p class="text-xs uppercase tracking-[0.35em] text-neutral-muted">Segment</p>
+      <p class="text-sm font-semibold text-neutral-text"><%= f.object.title.presence || "Untitled block" %></p>
+    </div>
+    <button type="button"
+            class="chip-link text-[10px] px-3 py-1"
+            data-action="sub-events#remove">
+      Remove
+    </button>
+  </div>
+
+  <div class="mt-4 grid gap-4 md:grid-cols-2">
+    <div class="form-field">
+      <%= f.label :title, "Title", class: "form-label" %>
+      <%= f.text_field :title,
+            class: "form-input",
+            placeholder: "Soundcheck, Dinner, After-hours",
+            required: true %>
+    </div>
+    <div class="form-field">
+      <%= f.label :location, "Location (optional)", class: "form-label" %>
+      <%= f.text_field :location,
+            class: "form-input",
+            placeholder: "Rooftop bar, Stage B, etc." %>
+    </div>
+    <div class="form-field">
+      <%= f.label :start_time, "Starts at", class: "form-label" %>
+      <%= f.text_field :start_time,
+            value: f.object.start_time&.in_time_zone&.strftime("%Y-%m-%d %H:%M"),
+            class: "form-input datetime-picker",
+            autocomplete: "off",
+            data: { datetime_link_target: "subStart" } %>
+    </div>
+    <div class="form-field">
+      <%= f.label :end_time, "Ends at", class: "form-label" %>
+      <%= f.text_field :end_time,
+            value: f.object.end_time&.in_time_zone&.strftime("%Y-%m-%d %H:%M"),
+            class: "form-input datetime-picker",
+            autocomplete: "off",
+            data: { datetime_link_target: "subEnd" } %>
+    </div>
+    <div class="form-field md:col-span-2">
+      <%= f.label :notes, "Notes", class: "form-label" %>
+      <%= f.text_area :notes,
+            rows: 2,
+            class: "form-input min-h-[90px]",
+            placeholder: "Callouts, reminders, or instructions." %>
+    </div>
+  </div>
+
+  <%= f.hidden_field :position, value: f.object.position || 0 %>
+  <%= f.hidden_field :_destroy %>
+</div>

@@ -114,6 +114,8 @@
             <% end %>
           </div>
 
+          <%= render "events/sub_event_timeline", event: @event if @event.timeline_segments? %>
+
           <div class="glass-panel space-y-6">
             <div class="flex items-center gap-3">
               <div class="icon-circle text-lg">📖</div>

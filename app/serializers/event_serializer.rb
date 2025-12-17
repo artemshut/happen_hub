@@ -8,6 +8,7 @@ class EventSerializer
 
   has_many :comments, serializer: CommentSerializer
   has_many :likes, serializer: LikeSerializer
+  has_many :sub_events, serializer: SubEventSerializer
 
   has_many :event_participations, serializer: EventParticipationSerializer do |event, params|
     event.participant_scope_for(params[:current_user])

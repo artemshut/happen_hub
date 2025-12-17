@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_14_164245) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_20_123000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -245,6 +245,21 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_14_164245) do
     t.integer "user_id"
   end
 
+  create_table "sub_events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "end_time"
+    t.bigint "event_id", null: false
+    t.string "location"
+    t.text "notes"
+    t.integer "position", default: 0, null: false
+    t.datetime "start_time"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "position"], name: "index_sub_events_on_event_id_and_position"
+    t.index ["event_id", "start_time"], name: "index_sub_events_on_event_id_and_start_time"
+    t.index ["event_id"], name: "index_sub_events_on_event_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.date "birthday"
     t.datetime "confirmation_sent_at"
@@ -263,6 +278,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_14_164245) do
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.string "tag"
+    t.string "theme_preference", default: "light", null: false
     t.string "uid"
     t.string "unconfirmed_email"
     t.datetime "updated_at", null: false
@@ -290,5 +306,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_14_164245) do
   add_foreign_key "likes", "users"
   add_foreign_key "role_assignments", "roles"
   add_foreign_key "role_assignments", "users"
+  add_foreign_key "sub_events", "events"
   add_foreign_key "users", "plans"
 end

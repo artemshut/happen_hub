@@ -77,6 +77,7 @@ Rails.application.routes.draw do
         end
 
         resources :comments, only: [ :index, :create, :destroy ]
+        resources :sub_events, only: [ :index, :show, :create, :update, :destroy ]
       end
       resources :event_categories, only: [ :index, :show ]
       resources :groups, only: [ :index, :show, :create, :update, :destroy ]

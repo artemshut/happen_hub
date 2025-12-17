@@ -14,6 +14,9 @@ class Event < ApplicationRecord
   has_many :event_suggestions, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :likes, as: :likeable, dependent: :destroy
+  has_many :sub_events, -> { order(position: :asc, start_time: :asc, created_at: :asc) }, dependent: :destroy, inverse_of: :event
+
+  accepts_nested_attributes_for :sub_events, allow_destroy: true, reject_if: :sub_event_blank?
 
   before_validation :assign_default_category
   before_validation :ensure_share_token
@@ -133,6 +136,10 @@ class Event < ApplicationRecord
 
   def increment_share_views!
     increment!(:share_views)
+  end
+
+  def timeline_segments?
+    sub_events.any?
   end
 
   private
@@ -265,5 +272,10 @@ class Event < ApplicationRecord
     return if user.can_create_event?
 
     errors.add(:base, "Your #{user.plan&.name} plan has reached its active event limit. Upgrade to create more gatherings.")
+  end
+
+  def sub_event_blank?(attributes)
+    attrs = attributes.to_h.stringify_keys
+    attrs.values_at("title", "start_time", "end_time", "location", "notes").all?(&:blank?)
   end
 end

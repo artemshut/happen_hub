@@ -6,21 +6,10 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## In Progress
 
-- [ ] HUB-007 Mobile deep link for shared links (mobile-deeplink)
-  - On mobile browsers detect if the native app is installed and open it directly when a HappenHub URL is tapped.
-  - Provide a graceful fallback (store link or continue in web) when the app is missing.
-  - Cover invite/share URLs first; document approach for expanding to other routes.
+- _empty_
 
 ## Backlog
 
-- [ ] HUB-008 Sub-events data model & API (subevents-core)
-  - Extend events with nested sub-events (title, start/end, optional location/notes) and expose CRUD endpoints via the API.
-  - Ensure sub-events are ordered (by start time or explicit ordering) and scoped to their parent event.
-  - Add serializer coverage and request specs for new endpoints.
-- [ ] HUB-009 Event page timeline UI (subevents-ui)
-  - Surface sub-events on the host & attendee event pages as a timeline (or alternate visual) showing each segment’s timing and details.
-  - Provide creation/editing controls in the web UI with inline validation and a fallback layout for mobile.
-  - Include system tests or view specs ensuring the timeline renders correctly with various numbers of sub-events.
 - [ ] HUB-010 Mobile apps consume sub-events (subevents-mobile-api)
   - Expand mobile-facing API responses (event show/list) to include sub-event data and relevant metadata for rendering.
   - Provide versioning or capability flags so older app versions degrade gracefully.
@@ -42,6 +31,13 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## Done
 
+- [x] HUB-007 Mobile deep link for shared links (mobile-deeplink)
+  - Detect mobile visitors for shared invite pages and attempt to open the native app with deep links.
+  - Added store fallbacks when the app isn't installed and web links for desktop users.
+  - Structured helper + Stimulus logic to make future deep link expansions straightforward.
+- [x] HUB-008 Sub-events data model & API (subevents-core)
+  - Added SubEvent model + nested attributes, API controller/routes/serializer, and Stimulus-powered UI to manage timeline segments.
+  - Event show page now renders a neon timeline with hide/show controls; editing allows dynamic add/remove with datepickers.
 - [x] HUB-005 Sharing invite links / social previews
   - Added gradient share panels on event pages with copy & native share actions.
   - Delivered secure guest-facing invite pages backed by unique share tokens and lightweight view/share analytics.

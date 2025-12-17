@@ -141,7 +141,17 @@ class Api::V1::EventsController < Api::V1::BaseController
       :event_category_id,
       :visibility,
       :cover_image,
-      files: []
+      files: [],
+      sub_events_attributes: [
+        :id,
+        :title,
+        :start_time,
+        :end_time,
+        :location,
+        :notes,
+        :position,
+        :_destroy
+      ]
     )
   end
 
