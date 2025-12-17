@@ -196,7 +196,7 @@ class User < ApplicationRecord
   def active_user_missions
     @active_user_missions ||= user_missions.where.not(status: :expired).includes(:mission)
   end
-  
+
   def ensure_missions_assigned!
     return if @missions_synced
 

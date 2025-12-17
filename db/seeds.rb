@@ -133,7 +133,7 @@ missions_seed = [
     reward_xp: 80,
     reward_badge: "social-spark",
     metadata: { tip: "Share venue tips, playlists, or inside jokes." }
-  }
+  },
   {
     key: "planner_pro",
     title: "Planner Pro",

@@ -6,9 +6,7 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## In Progress
 
-- [ ] HUB-013 Missions & checklist boosts (gamify-missions)
-  - Rotate Weekend Missions (e.g., host + attend combos, invite growth goals) that grant XP or cosmetic drops upon completion.
-  - Reward “Soundcheck” prep checklists (cover photo, location confirmation, checklist completion before a deadline) with points or boosts.
+- _empty_
 
 ## Backlog
 
@@ -60,3 +58,6 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 - Use short codes in parentheses (e.g., `feature-flags`) to make it easy to reference a task in conversations.
 - Keep acceptance criteria or reference links below the item bullet (indent two spaces) if needed.
 - Only the top unchecked item should be picked up by the agent unless you explicitly request another one.
+- [x] HUB-013 Missions & checklist boosts (gamify-missions)
+  - Auto-assigned missions for hosts, attendees, commenters, and friend-makers + XP/badge rewards.
+  - Soundcheck checklist detection, RSVP/comment/friend hooks, profile dashboard (XP bar + badges), `/api/v1/missions` docs.
