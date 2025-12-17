@@ -1,10 +1,14 @@
 <% content_for :main_classes, "relative flex-grow overflow-x-hidden" %>
 
+<% deep_link = native_event_deep_link(@event) %>
 <div class="share-shell" data-controller="share"
      data-share-url-value="<%= "#{request.base_url}#{share_event_path(@event.share_token)}" %>"
      data-share-track-url-value="<%= share_event_track_path(@event.share_token) %>"
      data-share-title-value="Join <%= @event.title %>"
-     data-share-text-value="Check out this event on HappenHub">
+     data-share-text-value="Check out this event on HappenHub"
+     <%= %(data-share-app-url-value="#{deep_link}") if deep_link.present? %>
+     <%= %(data-share-ios-store-url-value="#{ios_app_store_link}") if ios_app_store_link.present? %>
+     <%= %(data-share-android-store-url-value="#{android_play_store_link}") if android_play_store_link.present? %>>
   <section class="share-hero">
     <div class="share-hero__panel">
       <div class="profile-hero__avatar">
@@ -25,14 +29,21 @@
           Hosted by <strong><%= @event.user.full_name %></strong>. Tap below to jump into the full experience.
         </p>
         <div class="share-hero__actions">
+          <% if deep_link.present? %>
+            <button type="button"
+                    class="landing-cta-primary px-10 py-3 text-sm uppercase tracking-[0.35em]"
+                    data-action="share#openNative">
+              Open in the HappenHub app
+            </button>
+          <% end %>
           <% if user_signed_in? %>
-            <%= link_to "Open in HappenHub",
+            <%= link_to "View on the web",
                   event_path(@event),
-                  class: "landing-cta-primary px-10 py-3 text-sm uppercase tracking-[0.35em]" %>
+                  class: "landing-cta-secondary px-8 py-3 text-sm uppercase tracking-[0.35em]" %>
           <% else %>
-            <%= link_to "Open in HappenHub",
+            <%= link_to "Continue in browser",
                   new_user_session_path(return_to: event_path(@event)),
-                  class: "landing-cta-primary px-10 py-3 text-sm uppercase tracking-[0.35em]" %>
+                  class: "landing-cta-secondary px-8 py-3 text-sm uppercase tracking-[0.35em]" %>
           <% end %>
           <button type="button"
                   class="landing-cta-secondary px-8 py-3 text-sm uppercase tracking-[0.35em]"

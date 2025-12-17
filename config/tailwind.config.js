@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sans: ['"Google Sans Flex"', '"Google Sans"', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         brand: {

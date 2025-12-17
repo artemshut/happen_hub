@@ -1,9 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@8..32,300..800&display=swap");
 @import "actiontext.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /*
+
+@layer base {
+  :root {
+    --font-body-wght: 420;
+    --font-body-wdth: 98;
+    --font-heading-wght: 640;
+    --font-heading-wdth: 108;
+    --font-label-wght: 560;
+    --font-label-wdth: 115;
+  }
+
+  body {
+    font-family: "Google Sans Flex", "Google Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-variation-settings: "wght" var(--font-body-wght), "wdth" var(--font-body-wdth);
+    font-feature-settings: "case" 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-variation-settings: "wght" var(--font-heading-wght), "wdth" var(--font-heading-wdth);
+    letter-spacing: 0.01em;
+  }
+
+  strong, b {
+    font-variation-settings: "wght" 680, "wdth" 105;
+  }
+
+  .uppercase, [class*="tracking-"] {
+    font-variation-settings: "wght" var(--font-label-wght), "wdth" var(--font-label-wdth);
+  }
+}
 
 @layer components {
   .btn-primary {

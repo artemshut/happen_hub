@@ -6,14 +6,13 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## In Progress
 
-- _empty_
-
-## Backlog
-
 - [ ] HUB-007 Mobile deep link for shared links (mobile-deeplink)
   - On mobile browsers detect if the native app is installed and open it directly when a HappenHub URL is tapped.
   - Provide a graceful fallback (store link or continue in web) when the app is missing.
   - Cover invite/share URLs first; document approach for expanding to other routes.
+
+## Backlog
+
 - [ ] HUB-008 Sub-events data model & API (subevents-core)
   - Extend events with nested sub-events (title, start/end, optional location/notes) and expose CRUD endpoints via the API.
   - Ensure sub-events are ordered (by start time or explicit ordering) and scoped to their parent event.
@@ -30,6 +29,16 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
   - Allow hosts to create per-event task lists (item name, optional due date, assignee/owner).
   - Surface checklist progress on the event detail page with controls to add, edit, complete, or reorder items.
   - Provide API coverage so mobile apps can read/update checklists; include request specs and basic UI tests.
+- [ ] HUB-012 Progress & status gamification (gamify-progress)
+  - Introduce Host XP + level badges visible on profile cards and invites; award points for hosting milestones, on-time logistics, attendance goals.
+  - Implement Rhythm Streaks for consecutive weeks hosting/attending; reset streak after configurable inactivity window.
+  - Add a Crew Sync meter tracking collaborations with friends; full meters unlock cosmetic rewards.
+- [ ] HUB-013 Missions & checklist boosts (gamify-missions)
+  - Rotate Weekend Missions (e.g., host + attend combos, invite growth goals) that grant XP or cosmetic drops upon completion.
+  - Reward “Soundcheck” prep checklists (cover photo, location confirmation, checklist completion before a deadline) with points or boosts.
+- [ ] HUB-014 Collectibles & avatar flair (gamify-custom)
+  - Create neon badge sets for key achievements (first midnight rave, 100+ attendance, etc.) and display them on profiles/share cards.
+  - Unlock new colorways/themes for event pages and share cards as users progress; include optional custom glowing circles/frames around avatars.
 
 ## Done
 
