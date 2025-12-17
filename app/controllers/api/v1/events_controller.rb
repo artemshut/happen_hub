@@ -87,6 +87,7 @@ class Api::V1::EventsController < Api::V1::BaseController
     participation = @event.event_participations.find_or_initialize_by(user: current_api_user)
 
     if participation.update(rsvp_status: status)
+      Missions::ProgressService.new(current_api_user).tick!(:attend_social, metadata: { event_id: @event.id }) if status == "accepted"
       render json: {
         event: EventSerializer.new(
           @event,

@@ -53,6 +53,7 @@ class EventsController < ApplicationController
     participation = @event.event_participations.find_by(user_id: current_user.id) || @event.event_participations.create(user_id: current_user.id)
 
     if participation&.update(rsvp_status: params[:status])
+      Missions::ProgressService.new(current_user).tick!(:attend_social, metadata: { event_id: @event.id }) if params[:status].to_s == "accepted"
       respond_to do |format|
         format.turbo_stream # Render a Turbo Stream template
         format.html { redirect_to event_path(@event), notice: "Your RSVP status has been updated." }

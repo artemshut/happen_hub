@@ -1,6 +1,8 @@
 class ProfilesController < ApplicationController
   def show
     @user = current_user
+    @user_missions = current_user.active_user_missions.includes(:mission)
+    @badge_unlocks = Array(current_user.cosmetic_unlocks["badges"])
   end
 
   def edit

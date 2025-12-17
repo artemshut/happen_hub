@@ -4,6 +4,7 @@ class PublicProfilesController < ApplicationController
   def show
     @is_friend = current_user&.friends_with?(@user)
     @request_sent = current_user&.friend_request_sent_to?(@user)
+    @badge_unlocks = Array(@user.cosmetic_unlocks["badges"])
   end
 
   def add_friend

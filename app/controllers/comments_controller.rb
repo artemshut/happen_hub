@@ -6,6 +6,7 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
+        Missions::ProgressService.new(current_user).tick!(:comment_supporter, metadata: { event_id: @event.id, comment_id: @comment.id })
         format.turbo_stream
         format.html { redirect_to event_url(@event), notice: "Comment was successfully created." }
         format.json { render :show, status: :created, location: @comment }

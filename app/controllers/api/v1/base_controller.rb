@@ -13,6 +13,7 @@ class Api::V1::BaseController < ActionController::API
     @current_api_user = User.find_by(id: decoded[:user_id]) if decoded
 
     render json: { error: "Unauthorized" }, status: :unauthorized unless @current_api_user
+    @current_api_user&.ensure_missions_assigned!
   end
 
   def current_api_user

@@ -595,6 +595,57 @@
     @apply inline-flex items-center gap-2 rounded-full bg-brand-soft/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand;
   }
 
+  .mission-card {
+    @apply rounded-2xl border border-white/30 bg-gradient-to-br from-brand-soft/50 via-white/90 to-white p-5 shadow-[0_20px_45px_rgba(15,23,42,0.15)] transition hover:-translate-y-1 hover:shadow-[0_30px_65px_rgba(124,58,237,0.25)];
+  }
+
+  .mission-card__eyebrow {
+    @apply text-xs uppercase tracking-[0.45em] text-brand-dark/70;
+  }
+
+  .mission-card__reward {
+    @apply inline-flex items-center rounded-full bg-brand-soft/70 px-3 py-1 text-xs font-semibold text-brand;
+  }
+
+  .mission-card__progress {
+    @apply mt-4 flex items-center gap-3 text-xs font-semibold text-neutral-muted;
+  }
+
+  .mission-card__progress-track {
+    @apply relative h-1 flex-1 rounded-full bg-neutral-border/60 overflow-hidden;
+  }
+
+  .mission-card__progress-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #7c3aed, #00ffd5);
+    transition: width 0.4s ease;
+  }
+
+  .mission-card__progress span {
+    @apply text-neutral-text;
+  }
+
+  .mission-card__status {
+    @apply text-[0.65rem] uppercase tracking-[0.35em] text-neutral-muted mt-3;
+  }
+
+  .xp-card {
+    @apply relative overflow-hidden;
+  }
+
+  .xp-meter {
+    @apply relative h-2 w-full rounded-full bg-neutral-border/60 overflow-hidden;
+  }
+
+  .xp-meter__bar {
+    @apply h-full rounded-full bg-gradient-to-r from-brand-gradientFrom via-brand-gradientVia to-brand-gradientTo transition-all duration-500;
+  }
+
+  .badge-pill {
+    @apply inline-flex items-center rounded-full border border-brand-light/40 bg-white/80 px-3 py-1 text-xs font-semibold text-brand;
+  }
+
   .timeline-card {
     @apply glass-panel p-5;
   }

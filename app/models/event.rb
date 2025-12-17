@@ -21,6 +21,7 @@ class Event < ApplicationRecord
   before_validation :assign_default_category
   before_validation :ensure_share_token
   after_commit :schedule_reminders!, on: %i[create update]
+  after_commit :evaluate_missions!, on: %i[create update]
 
   validates :title, :start_time, :end_time, presence: true
   validate :validate_file_sizes
@@ -277,5 +278,12 @@ class Event < ApplicationRecord
   def sub_event_blank?(attributes)
     attrs = attributes.to_h.stringify_keys
     attrs.values_at("title", "start_time", "end_time", "location", "notes").all?(&:blank?)
+  end
+
+  def evaluate_missions!
+    Missions::ProgressService.new(user).tick!(:weekend_host, metadata: { event_id: id }) if saved_change_to_id?
+    Missions::SoundcheckService.new(self).call
+  rescue StandardError => e
+    Rails.logger.warn "[missions] unable to evaluate for event ##{id}: #{e.message}"
   end
 end

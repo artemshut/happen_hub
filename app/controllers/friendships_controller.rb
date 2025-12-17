@@ -4,6 +4,7 @@ class FriendshipsController < ApplicationController
     friendship = current_user.friendships.build(friend: @friend, status: :pending)
 
     if friendship.save
+      Missions::ProgressService.new(current_user).tick!(:friend_magnet, metadata: { friend_id: @friend.id })
       redirect_to friendships_path, notice: "Friend request sent."
     else
       redirect_to friendships_path, alert: "Unable to send friend request."
@@ -15,6 +16,7 @@ class FriendshipsController < ApplicationController
 
     if params[:status] == "accepted"
       friendship.update(status: :accepted)
+      Missions::ProgressService.new(friendship.friend).tick!(:friend_magnet, metadata: { friend_id: friendship.user_id })
       redirect_to friendships_path, notice: "Friend request accepted."
     elsif params[:status] == "declined"
       friendship.update(status: :declined)

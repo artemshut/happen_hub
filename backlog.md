@@ -6,7 +6,9 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## In Progress
 
-- _empty_
+- [ ] HUB-013 Missions & checklist boosts (gamify-missions)
+  - Rotate Weekend Missions (e.g., host + attend combos, invite growth goals) that grant XP or cosmetic drops upon completion.
+  - Reward “Soundcheck” prep checklists (cover photo, location confirmation, checklist completion before a deadline) with points or boosts.
 
 ## Backlog
 
@@ -22,9 +24,6 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
   - Introduce Host XP + level badges visible on profile cards and invites; award points for hosting milestones, on-time logistics, attendance goals.
   - Implement Rhythm Streaks for consecutive weeks hosting/attending; reset streak after configurable inactivity window.
   - Add a Crew Sync meter tracking collaborations with friends; full meters unlock cosmetic rewards.
-- [ ] HUB-013 Missions & checklist boosts (gamify-missions)
-  - Rotate Weekend Missions (e.g., host + attend combos, invite growth goals) that grant XP or cosmetic drops upon completion.
-  - Reward “Soundcheck” prep checklists (cover photo, location confirmation, checklist completion before a deadline) with points or boosts.
 - [ ] HUB-014 Collectibles & avatar flair (gamify-custom)
   - Create neon badge sets for key achievements (first midnight rave, 100+ attendance, etc.) and display them on profiles/share cards.
   - Unlock new colorways/themes for event pages and share cards as users progress; include optional custom glowing circles/frames around avatars.

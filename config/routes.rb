@@ -87,6 +87,7 @@ Rails.application.routes.draw do
           post :fcm_token, to: "users#update_fcm_token"
         end
       end
+      resources :missions, only: [ :index, :update ]
 
       post "tokens/refresh", to: "tokens#refresh"
       get "me", to: "users#me"

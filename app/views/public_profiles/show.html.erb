@@ -34,4 +34,15 @@
       <%= public_profile_url(@user.username) %>
     </p>
   </div>
+
+  <% if @badge_unlocks.present? %>
+    <div class="mt-6 border-t border-neutral-border pt-6 text-center">
+      <p class="text-sm uppercase tracking-[0.35em] text-neutral-muted mb-3">Unlocked badges</p>
+      <div class="flex flex-wrap justify-center gap-2">
+        <% @badge_unlocks.each do |badge| %>
+          <span class="badge-pill"><%= badge.to_s.humanize %></span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>

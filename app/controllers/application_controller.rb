@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!
+  before_action :assign_missions, if: :user_signed_in?
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   protected
@@ -28,5 +29,9 @@ class ApplicationController < ActionController::Base
       end
       format.json { render json: { error: "forbidden" }, status: :forbidden }
     end
+  end
+
+  def assign_missions
+    current_user&.ensure_missions_assigned!
   end
 end

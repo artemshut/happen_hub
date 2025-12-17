@@ -1,0 +1,40 @@
+<% return if missions.blank? %>
+
+<div class="profile-card space-y-6 mission-pulse">
+  <div class="flex flex-wrap items-center gap-3">
+    <div class="icon-circle text-lg">🎮</div>
+    <div>
+      <h2 class="text-xl font-bold text-neutral-text">Current missions</h2>
+      <p class="text-sm text-neutral-muted">Earn XP and unlock badges by staying active on HappenHub.</p>
+    </div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2">
+    <% missions.each do |user_mission| %>
+      <% mission = user_mission.mission %>
+      <div class="mission-card">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="mission-card__eyebrow"><%= mission.category.capitalize %></p>
+            <h3 class="text-lg font-semibold text-neutral-text"><%= mission.title %></h3>
+          </div>
+          <span class="mission-card__reward">+<%= mission.reward_xp %> XP</span>
+        </div>
+        <p class="text-sm text-neutral-muted mt-2"><%= mission.description_text %></p>
+        <div class="mission-card__progress">
+          <div class="mission-card__progress-track">
+            <div class="mission-card__progress-bar" style="width:<%= (user_mission.progress_ratio * 100).round %>%"></div>
+          </div>
+          <span><%= user_mission.progress %>/<%= user_mission.target_value %></span>
+        </div>
+        <% if user_mission.completed? %>
+          <p class="mission-card__status text-emerald-400">Completed · Rewards granted</p>
+        <% elsif user_mission.expires_at.present? %>
+          <p class="mission-card__status">Expires in <%= distance_of_time_in_words(Time.current, user_mission.expires_at) %></p>
+        <% else %>
+          <p class="mission-card__status">In progress</p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

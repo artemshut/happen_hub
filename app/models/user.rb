@@ -35,6 +35,8 @@ class User < ApplicationRecord
   has_many :event_participations, dependent: :destroy
   has_many :role_assignments, dependent: :destroy
   has_many :roles, through: :role_assignments
+  has_many :user_missions, dependent: :destroy
+  has_many :missions, through: :user_missions
 
   # ------------------------
   # Validations
@@ -189,6 +191,23 @@ class User < ApplicationRecord
 
   def needs_plan_upgrade?
     !can_create_event?
+  end
+
+  def active_user_missions
+    @active_user_missions ||= user_missions.where.not(status: :expired).includes(:mission)
+  end
+  
+  def ensure_missions_assigned!
+    return if @missions_synced
+
+    Mission.auto_assignable.find_each do |mission|
+      user_missions.find_or_create_by!(mission: mission) do |assignment|
+        assignment.target_value = mission.target_value
+        assignment.status = :pending
+      end
+    end
+
+    @missions_synced = true
   end
 
   def self.search_by_tag(query)

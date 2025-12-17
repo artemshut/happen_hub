@@ -16,6 +16,7 @@ class Api::V1::CommentsController < Api::V1::BaseController
     authorize comment
 
     if comment.save
+      Missions::ProgressService.new(current_api_user).tick!(:comment_supporter, metadata: { event_id: @event.id, comment_id: comment.id })
       render json: CommentSerializer.new(comment, params: serializer_params).serializable_hash,
              status: :created
     else

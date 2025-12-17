@@ -91,4 +91,94 @@ end
     plan.save!
   end
 end
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+AdminUser.first_or_create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+
+missions_seed = [
+  {
+    key: "weekend_host",
+    title: "Host a weekend gathering",
+    description: "Create or host any event before Monday to keep your streak alive.",
+    category: "weekend",
+    target_value: 1,
+    reward_xp: 200,
+    reward_badge: nil,
+    metadata: { rotation: "weekly" }
+  },
+  {
+    key: "soundcheck_ready",
+    title: "Soundcheck checklist",
+    description: "Add a cover, set the location, and map your segments before guests arrive.",
+    category: "soundcheck",
+    target_value: 1,
+    reward_xp: 150,
+    reward_badge: "soundcheck-pro",
+    metadata: { checklist: %w[cover_image location sub_events description] }
+  },
+  {
+    key: "attend_social",
+    title: "Show up & vibe",
+    description: "RSVP 'going' to three different events.",
+    category: "weekend",
+    target_value: 3,
+    reward_xp: 120,
+    reward_badge: nil,
+    metadata: { repeatable: false }
+  },
+  {
+    key: "comment_supporter",
+    title: "Hype the crew",
+    description: "Drop a comment to keep the conversation alive.",
+    category: "custom",
+    target_value: 5,
+    reward_xp: 80,
+    reward_badge: "social-spark",
+    metadata: { tip: "Share venue tips, playlists, or inside jokes." }
+  }
+  {
+    key: "planner_pro",
+    title: "Planner Pro",
+    description: "Submit three event checklists in a week without missing any core details.",
+    category: "soundcheck",
+    target_value: 3,
+    reward_xp: 250,
+    reward_badge: "planner-pro",
+    metadata: { timebox: "weekly", checklist: %w[cover_image location files description] }
+  },
+  {
+    key: "night_owl",
+    title: "Night Owl",
+    description: "Host or attend five events that start after 9 PM.",
+    category: "weekend",
+    target_value: 5,
+    reward_xp: 180,
+    reward_badge: "night-owl",
+    metadata: { after_hour: true }
+  },
+  {
+    key: "vibes_curator",
+    title: "Vibes Curator",
+    description: "Upload cover art, photos, or decks to four different events.",
+    category: "custom",
+    target_value: 4,
+    reward_xp: 160,
+    reward_badge: "vibes-curator",
+    metadata: { action: "file_upload" }
+  },
+  {
+    key: "friend_magnet",
+    title: "Friend Magnet",
+    description: "Add 5 new friends on HappenHub.",
+    category: "custom",
+    target_value: 5,
+    reward_xp: 220,
+    reward_badge: "friend-magnet",
+    metadata: { action: "friend_connect" }
+  }
+]
+
+missions_seed.each do |mission_attrs|
+  Mission.find_or_initialize_by(key: mission_attrs[:key]).tap do |mission|
+    mission.assign_attributes(mission_attrs)
+    mission.save!
+  end
+end

@@ -63,7 +63,7 @@ When a host tweaks event times, friends in the invite panel show a status badge 
 - `Tentative` – overlaps exist but they have only responded `maybe`/`pending`.
 - `Unknown` – insufficient time data to decide (either event times are missing or the invitee has incomplete records).
 
-Badges and tooltips come from `InviteeAvailabilityService` and the invite preview Turbo frame in `EventsController#availability_preview`. For the full matrix and background see `docs/smart_invitation_availability.md`.
+Badges and tooltips come from `InviteeAvailabilityService` and the invite preview Turbo frame in `EventsController#availability_preview`. For the full matrix and background see `docs/smart_invitation_availability.md`. The XP/mission system is documented in `docs/gamification.md`.
 
 ---
 
