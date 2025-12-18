@@ -379,6 +379,22 @@
 
   .profile-hero__panel {
     @apply glass-panel flex flex-col items-center gap-8 bg-gradient-to-r from-brand-gradientFrom/95 via-brand-gradientVia/85 to-brand-gradientTo/90 text-white shadow-[0_40px_120px_rgba(124,58,237,0.35)] md:flex-row md:items-stretch;
+    position: relative;
+  }
+
+  .profile-hero__panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 1.5rem;
+    background: radial-gradient(circle at top center, rgba(0,0,0,0.35), transparent 45%);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .profile-hero__panel > * {
+    position: relative;
+    z-index: 1;
   }
 
   .profile-hero__panel--muted {
