@@ -422,7 +422,7 @@
   }
 
   .profile-hero__subtitle {
-    @apply text-sm text-white/75 max-w-2xl md:text-base;
+    @apply text-sm text-white/90 max-w-2xl md:text-base drop-shadow-[0_6px_18px_rgba(0,0,0,0.45)];
   }
 
   .profile-hero__actions {
