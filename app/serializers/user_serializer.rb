@@ -2,7 +2,7 @@
 class UserSerializer
   include JSONAPI::Serializer
 
-  attributes :id, :email, :first_name, :last_name, :username, :tag, :fcm_token
+  attributes :id, :email, :first_name, :last_name, :username, :tag, :fcm_token, :xp, :cosmetic_unlocks
 
   attribute :avatar_url do |user|
     if user.avatar.attached?

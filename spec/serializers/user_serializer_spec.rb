@@ -13,4 +13,13 @@ RSpec.describe UserSerializer do
     expect(plan_data[:max_active_events]).to eq(5)
     expect(plan_data[:unlimited_events]).to be(false)
   end
+
+  it "exposes xp and cosmetic unlocks" do
+    user = create(:user, xp: 420, cosmetic_unlocks: { "badges" => [ "soundcheck-pro" ] })
+
+    serialized = described_class.new(user).serializable_hash[:data][:attributes]
+
+    expect(serialized[:xp]).to eq(420)
+    expect(serialized[:cosmetic_unlocks]).to eq({ "badges" => [ "soundcheck-pro" ] })
+  end
 end
