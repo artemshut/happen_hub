@@ -114,7 +114,9 @@
             <% end %>
           </div>
 
-          <%= render "events/sub_event_timeline", event: @event if @event.timeline_segments? %>
+          <% if @event.timeline_segments? || policy(@event).update? %>
+            <%= render "events/sub_event_timeline", event: @event %>
+          <% end %>
 
           <div class="glass-panel space-y-6">
             <div class="flex items-center gap-3">

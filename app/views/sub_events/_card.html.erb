@@ -1,0 +1,46 @@
+<% segment = sub_event %>
+<% date_label = segment.start_time.present? ? segment.start_time.strftime("%b %d").upcase : "DATE TBA" %>
+<% time_label = if segment.start_time.present? && segment.end_time.present?
+                  "#{segment.start_time.strftime('%l:%M%p').strip} – #{segment.end_time.strftime('%l:%M%p').strip}"
+                elsif segment.start_time.present?
+                  segment.start_time.strftime('%l:%M%p').strip
+                else
+                  "Awaiting schedule"
+                end %>
+
+<li class="sub-event-timeline__item">
+  <div class="sub-event-timeline__dot">
+    <span><%= (segment.position.to_i + 1).to_s.rjust(2, "0") %></span>
+  </div>
+  <div class="sub-event-timeline__card">
+    <div class="sub-event-timeline__meta">
+      <p class="sub-event-timeline__date"><%= date_label %></p>
+      <p class="sub-event-timeline__time"><%= time_label %></p>
+    </div>
+    <div class="sub-event-timeline__details">
+      <div class="flex flex-wrap items-start gap-3">
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-neutral-text"><%= segment.title %></h3>
+          <% if segment.location.present? %>
+            <p class="mt-1 text-sm text-neutral-muted"><i class="fa-solid fa-location-dot mr-2 text-brand"></i><%= segment.location %></p>
+          <% end %>
+        </div>
+        <% if policy(event).update? %>
+          <div class="flex items-center gap-2">
+            <%= link_to "Edit", edit_event_sub_event_path(event, segment),
+                  class: "chip-link text-[10px] px-3 py-1",
+                  data: { turbo_frame: dom_id(segment) } %>
+            <%= button_to "Delete",
+                  event_sub_event_path(event, segment),
+                  method: :delete,
+                  form: { data: { turbo_confirm: "Remove this segment?" } },
+                  class: "chip-link text-[10px] px-3 py-1 text-red-500" %>
+          </div>
+        <% end %>
+      </div>
+      <% if segment.notes.present? %>
+        <p class="mt-3 text-sm text-neutral-muted"><%= segment.notes %></p>
+      <% end %>
+    </div>
+  </div>
+</li>

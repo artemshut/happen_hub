@@ -1,68 +1,35 @@
-<% return unless event.timeline_segments? %>
+<% allowed_manage = policy(event).update? %>
+<% return unless event.sub_events.any? || allowed_manage %>
 
-<div class="glass-panel space-y-6 sub-event-timeline" data-controller="toggle-display" data-toggle-display-expanded-text-value="Hide timeline" data-toggle-display-collapsed-text-value="Show timeline">
+<div class="glass-panel space-y-6 sub-event-timeline" id="sub_events_timeline_panel">
   <div class="flex flex-wrap items-center gap-3">
     <div class="icon-circle text-lg">⏱️</div>
     <div>
       <h2 class="text-xl font-bold text-neutral-text">Event timeline</h2>
-      <p class="text-sm text-neutral-muted">
-        Every beat mapped out so your crew knows where to be.
-      </p>
+      <p class="text-sm text-neutral-muted">Map out every segment and keep guests synced.</p>
     </div>
-    <div class="flex items-center gap-2 ml-auto">
-      <button type="button"
-              class="chip-link text-[10px] px-3 py-1"
-              data-action="toggle-display#toggle">
-        <span data-toggle-display-target="label">Hide timeline</span>
-      </button>
-      <% if policy(event).update? %>
-        <%= link_to "Edit segments", edit_event_path(event), class: "chip-link text-[10px]" %>
-      <% end %>
-    </div>
+    <% if allowed_manage %>
+      <div class="ml-auto">
+        <%= render partial: "sub_events/new_button", locals: { event: event } %>
+      </div>
+    <% end %>
   </div>
 
-  <ol class="sub-event-timeline__list" data-toggle-display-target="body">
-    <% event.sub_events.each_with_index do |segment, index| %>
-      <% date_label =
-           if segment.start_time.present?
-             segment.start_time.strftime("%b %d").upcase
-           else
-             "DATE TBA"
-           end %>
-      <% time_label =
-           if segment.start_time.present? && segment.end_time.present?
-             "#{segment.start_time.strftime('%l:%M%p').strip} – #{segment.end_time.strftime('%l:%M%p').strip}"
-           elsif segment.start_time.present?
-             segment.start_time.strftime("%l:%M%p").strip
-           else
-             "Awaiting schedule"
-           end %>
+  <% if allowed_manage %>
+    <p class="text-xs text-neutral-muted">Drag-friendly order will mirror the sequence shown below.</p>
+  <% end %>
 
-      <li class="sub-event-timeline__item">
-        <div class="sub-event-timeline__dot">
-          <span><%= (index + 1).to_s.rjust(2, "0") %></span>
-        </div>
-        <div class="sub-event-timeline__card">
-          <div class="sub-event-timeline__meta">
-            <p class="sub-event-timeline__date"><%= date_label %></p>
-            <p class="sub-event-timeline__time"><%= time_label %></p>
-          </div>
-          <div class="sub-event-timeline__details">
-            <h3 class="text-lg font-semibold text-neutral-text"><%= segment.title %></h3>
-            <div class="flex flex-wrap gap-3 text-sm text-neutral-muted mt-2">
-              <% if segment.location.present? %>
-                <span class="inline-flex items-center gap-2 rounded-full border border-brand-light/40 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-brand-dark">
-                  <i class="fa-solid fa-location-dot"></i>
-                  <%= segment.location %>
-                </span>
-              <% end %>
-            </div>
-            <% if segment.notes.present? %>
-              <p class="mt-3 text-sm text-neutral-muted"><%= segment.notes %></p>
-            <% end %>
-          </div>
-        </div>
-      </li>
+  <div id="sub_events_timeline">
+    <% if event.sub_events.any? %>
+      <ol class="sub-event-timeline__list">
+        <% event.sub_events.each do |segment| %>
+          <turbo-frame id="<%= dom_id(segment) %>" src="<%= event_sub_event_path(event, segment) %>">
+            <%= render "sub_events/card", event: event, sub_event: segment %>
+          </turbo-frame>
+        <% end %>
+      </ol>
+    <% else %>
+      <p class="text-sm text-neutral-muted">No segments yet. Use “Add segment” to outline the flow.</p>
     <% end %>
-  </ol>
+  </div>
 </div>

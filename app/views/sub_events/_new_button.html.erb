@@ -1,0 +1,8 @@
+<% button_html = link_to "Add segment",
+      new_event_sub_event_path(event),
+      class: "chip-link--primary px-5 py-2 text-xs uppercase tracking-[0.35em]",
+      data: { turbo_frame: "new_sub_event" } %>
+
+<%= turbo_frame_tag "new_sub_event", data: { default_content: button_html } do %>
+  <%= button_html %>
+<% end %>

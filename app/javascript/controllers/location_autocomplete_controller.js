@@ -19,8 +19,8 @@ export default class extends Controller {
       if (!place.geometry) return
 
       const location = place.geometry.location
-      this.latTarget.value = location.lat()
-      this.lngTarget.value = location.lng()
+      if (this.hasLatTarget) this.latTarget.value = location.lat()
+      if (this.hasLngTarget) this.lngTarget.value = location.lng()
     })
   }
 }
