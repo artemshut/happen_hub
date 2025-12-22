@@ -17,6 +17,7 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 - [ ] HUB-011 Event checklists (event-checklists)
   - Allow hosts to create per-event task lists (item name, optional due date, assignee/owner).
   - Surface checklist progress on the event detail page with controls to add, edit, complete, or reorder items.
+  - Refresh the event detail UI so checklist panels feel native (responsive layout, neon progress indicator, inline form + completion animations).
   - Provide API coverage so mobile apps can read/update checklists; include request specs and basic UI tests.
 - [ ] HUB-012 Progress & status gamification (gamify-progress)
   - Introduce Host XP + level badges visible on profile cards and invites; award points for hosting milestones, on-time logistics, attendance goals.

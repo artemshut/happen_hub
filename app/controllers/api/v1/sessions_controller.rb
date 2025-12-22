@@ -33,7 +33,8 @@ class Api::V1::SessionsController < Api::V1::BaseController
   end
 
   def destroy
-    # ⚡ With JWT, logout is client-side only (just delete token)
+    current_api_user&.update_columns(fcm_token: nil, platform: nil)
+
     render json: {
       meta: {
         message: "Logged out successfully"

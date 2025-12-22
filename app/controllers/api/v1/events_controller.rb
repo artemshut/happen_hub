@@ -8,18 +8,32 @@ class Api::V1::EventsController < Api::V1::BaseController
     events = Event.visible_to(current_api_user)
     events = params[:past] == "true" ? events.past.order(start_time: :desc) : events.upcoming.ordered_by_start
 
-    events = events.includes(:event_category, :user)
+    events = events.includes(:event_category, :user, { comments: :user }, { likes: :user })
     events = events.where(event_category_id: params[:category_id]) if params[:category_id].present?
+    updated_after = parse_iso8601_param(:updated_after)
+    return if performed?
+    events = events.where(Event.arel_table[:updated_at].gt(updated_after)) if updated_after.present?
+    events = events.page(page_param).per(per_page_param)
+    last_modified = events.maximum(:updated_at)
+    return if halt_if_fresh!(
+      etag_components: [ "events#index", last_modified&.utc&.to_i, events.total_count, params[:category_id], params[:past], params[:updated_after], events.current_page, events.limit_value ],
+      last_modified: last_modified
+    )
 
     render json: EventSerializer.new(
       events,
-      include: [ :user, :event_category, :comments, :"comments.user" ],
-      params: serializer_params
+      include: [ :user, :event_category, :comments, :likes, :"comments.user" ],
+      params: serializer_params,
+      meta: pagination_meta(events)
     ).serializable_hash
   end
 
   def show
     authorize @event
+    return if halt_if_fresh!(
+      etag_components: [ "events#show", @event.cache_key_with_version ],
+      last_modified: @event.updated_at
+    )
 
     render json: EventSerializer.new(
       @event,
@@ -127,7 +141,7 @@ class Api::V1::EventsController < Api::V1::BaseController
   private
 
   def set_event
-    @event = Event.friendly.find(params[:id])
+    @event = Event.includes(:event_category, :user, { comments: :user }, { likes: :user }).friendly.find(params[:id])
   end
 
   def event_params

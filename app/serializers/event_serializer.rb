@@ -1,7 +1,18 @@
 class EventSerializer
   include JSONAPI::Serializer
 
-  attributes :id, :title, :description, :start_time, :end_time, :location, :slug, :latitude, :longitude, :visibility, :created_at, :updated_at
+  attributes :id,
+             :title,
+             :description,
+             :start_time,
+             :end_time,
+             :location,
+             :slug,
+             :latitude,
+             :longitude,
+             :visibility,
+             :created_at,
+             :updated_at
 
   belongs_to :user, serializer: UserSerializer
   belongs_to :event_category, serializer: EventCategorySerializer, if: proc { |event| event.event_category.present? }
@@ -60,5 +71,38 @@ class EventSerializer
         avatar_url: user.avatar.attached? ? Rails.application.routes.url_helpers.rails_blob_url(user.avatar, host: host, only_path: false) : nil
       }
     end
+  end
+
+  attribute :archived do |event|
+    event.end_time.present? && event.end_time < Time.current
+  end
+
+  attribute :summary do |event|
+    summary_items = []
+
+    if event.start_time.present?
+      summary_items << {
+        key: "time",
+        label: "When",
+        value: event.start_time.iso8601,
+        ends_at: event.end_time&.iso8601
+      }
+    end
+
+    if event.location.present?
+      summary_items << {
+        key: "location",
+        label: "Where",
+        value: event.location
+      }
+    end
+
+    summary_items << {
+      key: "participants",
+      label: "RSVPs",
+      value: event.participant_count
+    } if event.respond_to?(:participant_count)
+
+    summary_items
   end
 end

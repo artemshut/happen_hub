@@ -2,7 +2,32 @@
 class UserSerializer
   include JSONAPI::Serializer
 
-  attributes :id, :email, :first_name, :last_name, :username, :tag, :fcm_token, :xp, :cosmetic_unlocks
+  attributes :id,
+             :email,
+             :first_name,
+             :last_name,
+             :username,
+             :tag,
+             :fcm_token,
+             :xp,
+             :cosmetic_unlocks,
+             :updated_at
+
+  attribute :handle do |user|
+    user.username
+  end
+
+  attribute :badges do |user|
+    Array(user.cosmetic_unlocks["badges"])
+  end
+
+  attribute :theme_settings do |user|
+    {
+      preference: user.theme_preference,
+      unlocked_themes: Array(user.cosmetic_unlocks["themes"]),
+      flags: user.cosmetic_unlocks.fetch("theme_flags", {})
+    }
+  end
 
   attribute :avatar_url do |user|
     if user.avatar.attached?

@@ -22,4 +22,24 @@ RSpec.describe UserSerializer do
     expect(serialized[:xp]).to eq(420)
     expect(serialized[:cosmetic_unlocks]).to eq({ "badges" => [ "soundcheck-pro" ] })
   end
+
+  it "exposes the mobile profile payload" do
+    unlocks = {
+      "badges" => [ "soundcheck-pro", "night-owl" ],
+      "themes" => [ "neon" ],
+      "theme_flags" => { "sparkle" => true }
+    }
+    user = create(:user, username: "profile_handle", theme_preference: "dark", cosmetic_unlocks: unlocks)
+
+    attributes = described_class.new(user).serializable_hash[:data][:attributes]
+
+    expect(attributes[:handle]).to eq("profile_handle")
+    expect(attributes[:badges]).to eq([ "soundcheck-pro", "night-owl" ])
+    expect(attributes[:theme_settings]).to eq(
+      preference: "dark",
+      unlocked_themes: [ "neon" ],
+      flags: { "sparkle" => true }
+    )
+    expect(attributes[:updated_at]).to be_present
+  end
 end

@@ -7,5 +7,9 @@ class GroupSerializer
     group.user_id
   end
 
+  attribute :archived do |_group|
+    false
+  end
+
   has_many :members, serializer: UserSerializer
 end

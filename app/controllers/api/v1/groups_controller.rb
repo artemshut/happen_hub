@@ -3,12 +3,25 @@ class Api::V1::GroupsController < Api::V1::BaseController
 
   def index
     groups = policy_scope(Group).includes(:members)
+    updated_after = parse_iso8601_param(:updated_after)
+    return if performed?
+    groups = groups.where(Group.arel_table[:updated_at].gt(updated_after)) if updated_after.present?
+    groups = groups.page(page_param).per(per_page_param)
+    last_modified = groups.maximum(:updated_at)
+    return if halt_if_fresh!(
+      etag_components: [ "groups#index", last_modified&.utc&.to_i, groups.total_count, params[:updated_after], groups.current_page, groups.limit_value ],
+      last_modified: last_modified
+    )
 
-    render json: GroupSerializer.new(groups, include: [ :members ]).serializable_hash
+    render json: GroupSerializer.new(groups, include: [ :members ], meta: pagination_meta(groups)).serializable_hash
   end
 
   def show
     authorize @group
+    return if halt_if_fresh!(
+      etag_components: [ "groups#show", @group.cache_key_with_version ],
+      last_modified: @group.updated_at
+    )
 
     render json: GroupSerializer.new(@group, include: [ :members ]).serializable_hash
   end
