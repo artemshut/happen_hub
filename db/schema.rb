@@ -311,7 +311,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_20_130200) do
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.string "tag"
-    t.string "theme_preference", default: "light", null: false
     t.string "uid"
     t.string "unconfirmed_email"
     t.datetime "updated_at", null: false

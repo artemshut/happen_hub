@@ -29,7 +29,7 @@ RSpec.describe UserSerializer do
       "themes" => [ "neon" ],
       "theme_flags" => { "sparkle" => true }
     }
-    user = create(:user, username: "profile_handle", theme_preference: "dark", cosmetic_unlocks: unlocks)
+    user = create(:user, username: "profile_handle", cosmetic_unlocks: unlocks)
 
     attributes = described_class.new(user).serializable_hash[:data][:attributes]
 

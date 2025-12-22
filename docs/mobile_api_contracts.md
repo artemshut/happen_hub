@@ -7,7 +7,7 @@ This document captures the endpoints that the Flutter app relies on, along with 
 - **Method:** `GET`
 - **Auth:** `Authorization: Bearer <jwt>`
 - **Response:** `200 OK`
-  - `data.attributes` includes `first_name`, `last_name`, `handle` (alias for `username`), `tag`, `xp`, `badges`, `cosmetic_unlocks`, `theme_settings` (`preference`, `unlocked_themes`, `flags`), `theme_preference`, `fcm_token`, and `updated_at`.
+  - `data.attributes` includes `first_name`, `last_name`, `handle` (alias for `username`), `tag`, `xp`, `badges`, `cosmetic_unlocks`, `theme_settings` (`preference`, `unlocked_themes`, `flags`), `fcm_token`, and `updated_at`.
   - `plan` object mirrors the dashboard (limits, feature list, counts).
 - **Usage:** `updated_at` allows the client to decide when to refetch profile data.
 
