@@ -36,7 +36,6 @@ RSpec.describe UserSerializer do
     expect(attributes[:handle]).to eq("profile_handle")
     expect(attributes[:badges]).to eq([ "soundcheck-pro", "night-owl" ])
     expect(attributes[:theme_settings]).to eq(
-      preference: "dark",
       unlocked_themes: [ "neon" ],
       flags: { "sparkle" => true }
     )
