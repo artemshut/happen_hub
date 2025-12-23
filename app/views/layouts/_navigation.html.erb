@@ -13,8 +13,8 @@
         <button
           data-mega-nav-target="toggle"
           data-section="events"
-          data-action="click->mega-nav#showSection click->mega-nav#toggle"
-          class="nav-trigger nav-trigger--active">
+          data-action="click->mega-nav#toggle"
+          class="nav-trigger">
           <span class="nav-icon">
             <i class="fa-solid fa-calendar-days"></i>
           </span>
@@ -24,7 +24,7 @@
         <button
           data-mega-nav-target="toggle"
           data-section="groups"
-          data-action="click->mega-nav#showSection click->mega-nav#toggle"
+          data-action="click->mega-nav#toggle"
           class="nav-trigger">
           <span class="nav-icon">
             <i class="fa-solid fa-people-group"></i>
@@ -35,7 +35,7 @@
         <button
           data-mega-nav-target="toggle"
           data-section="friends"
-          data-action="click->mega-nav#showSection click->mega-nav#toggle"
+          data-action="click->mega-nav#toggle"
           class="nav-trigger">
           <span class="nav-icon">
             <i class="fa-solid fa-user-group"></i>
@@ -69,6 +69,17 @@
               </p>
               <p class="text-white/70"> <%= plan_limit_label(current_user.plan) %> </p>
               <%= link_to "Manage plan", plans_path, class: "inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-brand" %>
+              <% xp_stats = xp_level_data(current_user) %>
+              <div class="mt-4 space-y-1">
+                <div class="flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.3em] text-white/60">
+                  <span>Level <%= xp_stats[:level] %></span>
+                  <span><%= xp_stats[:xp] %> XP</span>
+                </div>
+                <div class="xp-meter">
+                  <div class="xp-meter__bar" style="width:<%= xp_stats[:percent] %>%"></div>
+                </div>
+                <p class="text-[11px] text-white/70">Next level in <%= xp_stats[:xp_needed] %> XP</p>
+              </div>
             </div>
             <%= link_to "Dashboard", dashboard_path, class: "nav-popover__link" %>
             <%= link_to "Profile", profile_path, class: "nav-popover__link" %>
@@ -85,12 +96,12 @@
 
   <% if user_signed_in? %>
     <!-- Mega Overlay -->
-    <div data-mega-nav-target="backdrop" class="absolute inset-x-0 top-full hidden pt-2 pb-6">
+    <div data-mega-nav-target="backdrop" data-action="click->mega-nav#backdropClick" class="absolute inset-x-0 top-full hidden rounded-[2.5rem] bg-gradient-to-b from-brand-dark/40 via-brand/30 to-transparent backdrop-blur-xl pt-2 pb-6">
       <div class="container mx-auto max-w-6xl px-4">
         <div
           data-mega-nav-target="dialog"
           class="pointer-events-none -translate-y-4 opacity-0 transition-all duration-200">
-          <div class="rounded-[1.75rem] border border-white/15 bg-gradient-to-br from-brand-dark/85 via-brand/80 to-brand-gradientTo/85 px-10 py-8 text-sm shadow-[0_35px_80px_rgba(124,58,237,0.35)]">
+          <div class="rounded-[2rem] border border-white/10 bg-gradient-to-br from-brand-dark/90 via-brand/75 to-brand-gradientTo/90 backdrop-blur-[40px] px-10 py-8 text-sm shadow-[0_25px_70px_rgba(124,58,237,0.45)]">
             <div class="flex items-center justify-between text-white/75">
               <p class="text-[11px] uppercase tracking-[0.45em]">Explore HappenHub</p>
               <button class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/25" data-action="mega-nav#close">

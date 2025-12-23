@@ -35,4 +35,17 @@ module ApplicationHelper
     monthly = number_to_currency(plan.price_per_month, precision: 0)
     "#{monthly}/mo"
   end
+
+  def xp_level_data(user, level_size: 500)
+    total_xp = user.xp.to_i
+    xp_into_level = total_xp % level_size
+    {
+      level: (total_xp / level_size) + 1,
+      xp: total_xp,
+      xp_into_level: xp_into_level,
+      xp_needed: level_size - xp_into_level,
+      percent: ((xp_into_level.to_f / level_size) * 100).round,
+      level_size: level_size
+    }
+  end
 end
