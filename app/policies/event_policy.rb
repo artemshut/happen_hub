@@ -15,6 +15,8 @@ class EventPolicy < ApplicationPolicy
     manage?
   end
 
+  alias_method :new_button?, :update?
+
   def destroy?
     manage?
   end

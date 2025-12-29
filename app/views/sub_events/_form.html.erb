@@ -1,6 +1,8 @@
 <% frame_id = local_assigns.fetch(:frame_id, sub_event.persisted? ? dom_id(sub_event) : "new_sub_event") %>
 <% wrap_in_item = local_assigns.fetch(:wrap_in_item, true) %>
-<%= turbo_frame_tag frame_id, data: { controller: "sub-event-form", default_content: (wrap_in_item ? render(partial: "sub_events/card", locals: { event: event, sub_event: sub_event }) : nil) } do %>
+<% cancel_path = local_assigns[:cancel_path] %>
+
+<%= turbo_frame_tag frame_id do %>
   <% if wrap_in_item %>
     <li class="sub-event-timeline__item sub-event-timeline__item--editing">
   <% end %>
@@ -34,7 +36,7 @@
         <% if sub_event.persisted? %>
           <%= link_to "Cancel", event_sub_event_path(event, sub_event), class: "chip-link px-4 py-2 text-xs uppercase tracking-[0.35em]", data: { turbo_frame: frame_id } %>
         <% else %>
-          <button type="button" class="chip-link px-4 py-2 text-xs uppercase tracking-[0.35em]" data-action="sub-event-form#clear">Cancel</button>
+          <%= link_to "Cancel", cancel_path || new_button_event_sub_events_path(event), class: "chip-link px-4 py-2 text-xs uppercase tracking-[0.35em]", data: { turbo_frame: frame_id } %>
         <% end %>
       </div>
     <% end %>

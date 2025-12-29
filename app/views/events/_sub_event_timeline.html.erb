@@ -22,9 +22,9 @@
   <div id="sub_events_timeline">
     <% if event.sub_events.any? %>
       <ol class="sub-event-timeline__list">
-        <% event.sub_events.each do |segment| %>
+        <% event.sub_events.each_with_index do |segment, index| %>
           <turbo-frame id="<%= dom_id(segment) %>" src="<%= event_sub_event_path(event, segment) %>">
-            <%= render "sub_events/card", event: event, sub_event: segment %>
+            <%= render "sub_events/card", event: event, sub_event: segment, sequence: index + 1 %>
           </turbo-frame>
         <% end %>
       </ol>

@@ -8,19 +8,36 @@
                   "Awaiting schedule"
                 end %>
 
-<li class="sub-event-timeline__item">
-  <div class="sub-event-timeline__dot">
-    <span><%= (segment.position.to_i + 1).to_s.rjust(2, "0") %></span>
+<% sequence_number = local_assigns[:sequence] %>
+<% if sequence_number.blank? && defined?(event) && event.present? %>
+  <% ordered_ids = event.sub_events.order(position: :asc, start_time: :asc, created_at: :asc).pluck(:id) %>
+  <% sequence_number = ordered_ids.index(segment.id).to_i + 1 %>
+<% end %>
+<% sequence_number ||= segment.position.to_i + 1 %>
+<% past_segment = if segment.end_time.present?
+                    segment.end_time < Time.current
+                  elsif segment.start_time.present?
+                    segment.start_time < Time.current
+                  else
+                    false
+                  end %>
+
+<li class="sub-event-timeline__item <%= 'sub-event-timeline__item--past' if past_segment %>">
+  <div class="sub-event-timeline__dot <%= 'sub-event-timeline__dot--past' if past_segment %>">
+    <span><%= sequence_number.to_i.to_s.rjust(2, "0") %></span>
   </div>
-  <div class="sub-event-timeline__card">
+  <div class="sub-event-timeline__card <%= 'sub-event-timeline__card--past' if past_segment %>">
     <div class="sub-event-timeline__meta">
-      <p class="sub-event-timeline__date"><%= date_label %></p>
-      <p class="sub-event-timeline__time"><%= time_label %></p>
+      <p class="sub-event-timeline__date <%= 'sub-event-timeline__date--past' if past_segment %>"><%= date_label %></p>
+      <p class="sub-event-timeline__time <%= 'sub-event-timeline__time--past' if past_segment %>"><%= time_label %></p>
+      <% if past_segment %>
+        <span class="sub-event-timeline__badge">Completed</span>
+      <% end %>
     </div>
     <div class="sub-event-timeline__details">
       <div class="flex flex-wrap items-start gap-3">
         <div class="flex-1">
-          <h3 class="text-lg font-semibold text-neutral-text"><%= segment.title %></h3>
+          <h3 class="text-lg font-semibold text-neutral-text <%= 'line-through opacity-75' if past_segment %>"><%= segment.title %></h3>
           <% if segment.location.present? %>
             <p class="mt-1 text-sm text-neutral-muted"><i class="fa-solid fa-location-dot mr-2 text-brand"></i><%= segment.location %></p>
           <% end %>

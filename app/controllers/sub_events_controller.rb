@@ -5,7 +5,18 @@ class SubEventsController < ApplicationController
 
   def new
     @sub_event = @event.sub_events.build
-    render partial: "sub_events/form", locals: { event: @event, sub_event: @sub_event, frame_id: "new_sub_event", wrap_in_item: false }
+    render partial: "sub_events/form",
+           locals: {
+             event: @event,
+             sub_event: @sub_event,
+             frame_id: "new_sub_event",
+             wrap_in_item: false,
+             cancel_path: new_button_event_sub_events_path(@event)
+           }
+  end
+
+  def new_button
+    render partial: "sub_events/new_button", locals: { event: @event }
   end
 
   def show

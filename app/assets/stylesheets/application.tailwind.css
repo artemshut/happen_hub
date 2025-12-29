@@ -579,6 +579,24 @@
     @apply rounded-2xl border border-white/40 bg-white/90 px-4 py-3;
   }
 
+  .sub-event-timeline__badge {
+    @apply inline-flex items-center rounded-full bg-brand-soft/60 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.3em] text-brand-dark shadow-sm;
+  }
+
+  .sub-event-timeline__item--past .sub-event-timeline__card,
+  .sub-event-timeline__card--past {
+    @apply opacity-70 saturate-0;
+  }
+
+  .sub-event-timeline__dot--past {
+    @apply opacity-60;
+  }
+
+  .sub-event-timeline__date--past,
+  .sub-event-timeline__time--past {
+    @apply line-through;
+  }
+
   .chip-link {
     @apply inline-flex items-center gap-2 rounded-full border border-brand-light/40 bg-white/80 px-5 py-2 text-sm font-semibold text-brand transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-light hover:bg-brand-soft/60 hover:text-brand-dark;
   }

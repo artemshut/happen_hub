@@ -53,7 +53,11 @@ Rails.application.routes.draw do
     resources :events do
       resources :event_suggestions, only: [ :create, :update ]
       resources :comments, only: [ :create, :update, :destroy, :edit ]
-      resources :sub_events, only: [ :new, :create, :show, :edit, :update, :destroy ]
+      resources :sub_events, only: [ :new, :create, :show, :edit, :update, :destroy ] do
+        collection do
+          get :new_button
+        end
+      end
 
       member do
         post :add_friend
