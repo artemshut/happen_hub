@@ -1,0 +1,14 @@
+<% draggable = local_assigns.fetch(:draggable, false) %>
+<% frame_options = {} %>
+<% frame_options[:class] = "block" %>
+<% if draggable %>
+  <% frame_options[:data] = {
+    sortable_item: true,
+    reorder_url: reorder_event_checklist_path(event, checklist)
+  } %>
+  <% frame_options[:draggable] = true %>
+<% end %>
+
+<%= turbo_frame_tag dom_id(checklist, :panel), **frame_options do %>
+  <%= render "events/checklist", event:, checklist:, alert_message: local_assigns[:alert_message] %>
+<% end %>

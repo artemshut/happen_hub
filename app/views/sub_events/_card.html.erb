@@ -22,7 +22,7 @@
                     false
                   end %>
 
-<li class="sub-event-timeline__item <%= 'sub-event-timeline__item--past' if past_segment %>">
+<li class="sub-event-timeline__item mb-6 <%= 'sub-event-timeline__item--past' if past_segment %>">
   <div class="sub-event-timeline__dot <%= 'sub-event-timeline__dot--past' if past_segment %>">
     <span><%= sequence_number.to_i.to_s.rjust(2, "0") %></span>
   </div>

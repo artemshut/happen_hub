@@ -58,6 +58,18 @@ Rails.application.routes.draw do
           get :new_button
         end
       end
+      resources :checklists, controller: "event_checklists" do
+        member do
+          patch :reorder
+        end
+
+        resources :items, controller: "event_checklist_items" do
+          member do
+            patch :toggle_complete
+            patch :reorder
+          end
+        end
+      end
 
       member do
         post :add_friend
@@ -83,6 +95,17 @@ Rails.application.routes.draw do
 
         resources :comments, only: [ :index, :create, :destroy ]
         resources :sub_events, only: [ :index, :show, :create, :update, :destroy ]
+        resources :checklists, controller: "event_checklists" do
+          member do
+            patch :reorder
+          end
+          resources :items, controller: "event_checklist_items", only: [ :index, :create, :update, :destroy ] do
+            member do
+              patch :toggle_complete
+              patch :reorder
+            end
+          end
+        end
       end
       resources :event_categories, only: [ :index, :show ]
       resources :groups, only: [ :index, :show, :create, :update, :destroy ]

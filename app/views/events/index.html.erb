@@ -1,7 +1,7 @@
-<% content_for :main_classes, "relative flex-grow overflow-x-hidden pb-24" %>
+<% content_for :main_classes, "relative flex-grow overflow-x-hidden pb-12" %>
 
-<div class="full-bleed overflow-hidden bg-neutral-bg pb-32">
-  <section class="landing-section pt-20 md:pt-28">
+<div class="full-bleed overflow-hidden bg-neutral-bg pb-16">
+  <section class="landing-section">
     <div class="space-y-14">
       <header class="rounded-[2.5rem] border border-white/40 bg-white/70 p-10 shadow-[0_45px_120px_rgba(147,51,234,0.18)] backdrop-blur-2xl">
         <div class="grid gap-12 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:items-center">
@@ -41,43 +41,44 @@
         </div>
       </header>
 
-      <turbo-frame id="events_list">
+      <turbo-frame id="events_list" class="block mt-10">
         <% selected_category_id = params[:category_id].presence&.to_i %>
-        <div class="rounded-[2.25rem] border border-white/40 bg-white/80 p-6 shadow-[0_35px_90px_rgba(15,23,42,0.12)] backdrop-blur-xl">
-          <div class="flex flex-wrap items-center justify-between gap-4">
-            <div class="space-y-2">
-              <p class="text-xs uppercase tracking-[0.35em] text-neutral-muted/80">Browse</p>
-              <h2 class="text-xl font-semibold text-neutral-text">Pick a category</h2>
-            </div>
-            <% if selected_category_id.present? %>
-              <% current_category = @event_categories.detect { |cat| cat.id == selected_category_id } %>
-              <% if current_category %>
-                <span class="inline-flex items-center gap-2 rounded-full bg-brand-soft/90 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-brand">
-                  <%= current_category.emoji %> <%= current_category.name %>
-                </span>
+        <div class="space-y-8">
+          <div class="rounded-[2.25rem] border border-white/40 bg-white/80 p-6 shadow-[0_35px_90px_rgba(15,23,42,0.12)] backdrop-blur-xl">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <div class="space-y-2">
+                <p class="text-xs uppercase tracking-[0.35em] text-neutral-muted/80">Browse</p>
+                <h2 class="text-xl font-semibold text-neutral-text">Pick a category</h2>
+              </div>
+              <% if selected_category_id.present? %>
+                <% current_category = @event_categories.detect { |cat| cat.id == selected_category_id } %>
+                <% if current_category %>
+                  <span class="inline-flex items-center gap-2 rounded-full bg-brand-soft/90 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-brand">
+                    <%= current_category.emoji %> <%= current_category.name %>
+                  </span>
+                <% end %>
               <% end %>
-            <% end %>
-          </div>
 
-          <div class="mt-6 flex gap-3 overflow-x-auto pb-2">
-            <%= link_to events_path,
-                        data: { turbo_frame: "events_list" },
-                        class: "inline-flex items-center gap-2 whitespace-nowrap rounded-full px-6 py-2 text-xs font-semibold uppercase tracking-[0.35em] transition #{selected_category_id.nil? ? 'bg-gradient-to-r from-brand-gradientFrom to-brand-gradientTo text-white shadow-[0_18px_45px_rgba(147,51,234,0.35)]' : 'bg-white/80 text-brand border border-brand-light/30'}" do %>
-              All
-            <% end %>
-
-            <% @event_categories.each do |category| %>
-              <% active = selected_category_id == category.id %>
-              <%= link_to events_path(category_id: category.id),
+            <div class="mt-6 flex gap-3 overflow-x-auto pb-2">
+              <%= link_to events_path,
                           data: { turbo_frame: "events_list" },
-                          class: "inline-flex items-center gap-2 whitespace-nowrap rounded-full px-6 py-2 text-xs font-semibold uppercase tracking-[0.35em] transition #{active ? 'bg-gradient-to-r from-brand-gradientFrom to-brand-gradientTo text-white shadow-[0_18px_45px_rgba(236,72,153,0.35)]' : 'bg-white/80 text-brand border border-brand-light/30'}" do %>
-                <%= "#{category.emoji} #{category.name}" %>
+                          class: "inline-flex items-center gap-2 whitespace-nowrap rounded-full px-6 py-2 text-xs font-semibold uppercase tracking-[0.35em] transition #{selected_category_id.nil? ? 'bg-gradient-to-r from-brand-gradientFrom to-brand-gradientTo text-white shadow-[0_18px_45px_rgba(147,51,234,0.35)]' : 'bg-white/80 text-brand border border-brand-light/30'}" do %>
+                All
               <% end %>
-            <% end %>
-          </div>
-        </div>
 
-        <%= render partial: "events/events_list", locals: { events: @events } %>
+              <% @event_categories.each do |category| %>
+                <% active = selected_category_id == category.id %>
+                <%= link_to events_path(category_id: category.id),
+                            data: { turbo_frame: "events_list" },
+                            class: "inline-flex items-center gap-2 whitespace-nowrap rounded-full px-6 py-2 text-xs font-semibold uppercase tracking-[0.35em] transition #{active ? 'bg-gradient-to-r from-brand-gradientFrom to-brand-gradientTo text-white shadow-[0_18px_45px_rgba(236,72,153,0.35)]' : 'bg-white/80 text-brand border border-brand-light/30'}" do %>
+                  <%= "#{category.emoji} #{category.name}" %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+
+          <%= render partial: "events/events_list", locals: { events: @events } %>
+        </div>
       </turbo-frame>
     </div>
   </section>

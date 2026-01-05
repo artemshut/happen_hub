@@ -38,6 +38,13 @@ module EventsHelper
     )
   end
 
+  def checklist_assignment_options(event)
+    return [] unless event
+
+    users = ([ event.user ] + event.users.to_a).compact.uniq { |user| user.id }
+    users.map { |user| [ user.full_name, user.id ] }
+  end
+
   private
 
   def availability_badge_tooltip(availability)

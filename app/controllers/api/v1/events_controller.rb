@@ -8,7 +8,7 @@ class Api::V1::EventsController < Api::V1::BaseController
     events = Event.visible_to(current_api_user)
     events = params[:past] == "true" ? events.past.order(start_time: :desc) : events.upcoming.ordered_by_start
 
-    events = events.includes(:event_category, :user, { comments: :user }, { likes: :user })
+    events = events.includes(:event_category, :user, { comments: :user }, { likes: :user }, checklists: [ { items: :assignee } ])
     events = events.where(event_category_id: params[:category_id]) if params[:category_id].present?
     updated_after = parse_iso8601_param(:updated_after)
     return if performed?
@@ -22,7 +22,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
     render json: EventSerializer.new(
       events,
-      include: [ :user, :event_category, :comments, :likes, :"comments.user" ],
+      include: [ :user, :event_category, :comments, :likes, :"comments.user", :checklists, :"checklists.items" ],
       params: serializer_params,
       meta: pagination_meta(events)
     ).serializable_hash
@@ -37,7 +37,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
     render json: EventSerializer.new(
       @event,
-      include: [ :user, :event_category, :comments, :likes, :"comments.user" ],
+      include: [ :user, :event_category, :comments, :likes, :"comments.user", :checklists, :"checklists.items" ],
       params: serializer_params
     ).serializable_hash
   end
@@ -58,7 +58,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
       render json: EventSerializer.new(
         @event,
-        include: [ :user, :event_category, :comments, :likes, :"comments.user" ],
+        include: [ :user, :event_category, :comments, :likes, :"comments.user", :checklists, :"checklists.items" ],
         params: serializer_params
       ).serializable_hash, status: :created
     else
@@ -81,7 +81,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
       render json: EventSerializer.new(
         @event,
-        include: [ :user, :event_category, :comments, :likes, :"comments.user" ],
+        include: [ :user, :event_category, :comments, :likes, :"comments.user", :checklists, :"checklists.items" ],
         params: serializer_params
       ).serializable_hash, status: :ok
     else
@@ -105,7 +105,7 @@ class Api::V1::EventsController < Api::V1::BaseController
       render json: {
         event: EventSerializer.new(
           @event,
-          include: [ :user, :event_category ],
+          include: [ :user, :event_category, :checklists, :"checklists.items" ],
           params: serializer_params
         ).serializable_hash,
         rsvp_status: participation.rsvp_status
@@ -128,7 +128,7 @@ class Api::V1::EventsController < Api::V1::BaseController
       @event.reload
       render json: EventSerializer.new(
         @event,
-        include: [ :user, :event_category, :comments, :likes, :event_participations ],
+        include: [ :user, :event_category, :comments, :likes, :event_participations, :checklists, :"checklists.items" ],
         params: serializer_params
       ).serializable_hash, status: :created
     else
@@ -141,7 +141,7 @@ class Api::V1::EventsController < Api::V1::BaseController
   private
 
   def set_event
-    @event = Event.includes(:event_category, :user, { comments: :user }, { likes: :user }).friendly.find(params[:id])
+    @event = Event.includes(:event_category, :user, { comments: :user }, { likes: :user }, checklists: [ { items: :assignee } ]).friendly.find(params[:id])
   end
 
   def event_params

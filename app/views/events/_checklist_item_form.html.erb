@@ -1,0 +1,33 @@
+<%= turbo_frame_tag dom_id(item) do %>
+  <li class="rounded-2xl border border-brand-light bg-white/90 p-4 shadow-inner">
+    <%= form_with(model: item, url: event_checklist_item_path(event, checklist, item), class: "space-y-4") do |form| %>
+      <div class="grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]">
+        <div>
+          <%= form.label :title, "Task", class: "form-label" %>
+          <%= form.text_field :title, class: "form-input" %>
+          <% if item.errors[:title].present? %>
+            <p class="mt-1 text-xs text-red-600"><%= item.errors[:title].to_sentence %></p>
+          <% end %>
+        </div>
+        <div>
+          <%= form.label :due_at, "Due", class: "form-label" %>
+          <%= form.datetime_field :due_at, class: "form-input" %>
+        </div>
+        <div>
+          <%= form.label :assignee_id, "Owner", class: "form-label" %>
+          <%= form.select :assignee_id,
+                options_for_select(checklist_assignment_options(event), item.assignee_id),
+                { include_blank: "Unassigned" },
+                class: "form-input" %>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <%= form.submit "Save changes", class: "chip-link--primary px-5 py-2 text-xs uppercase tracking-[0.35em]" %>
+        <%= link_to "Cancel",
+              event_checklist_item_path(event, checklist, item),
+              class: "chip-link px-5 py-2 text-[10px]",
+              data: { turbo_frame: dom_id(item) } %>
+      </div>
+    <% end %>
+  </li>
+<% end %>

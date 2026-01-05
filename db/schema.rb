@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_20_130200) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_21_150000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -106,6 +106,33 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_20_130200) do
     t.string "emoji"
     t.string "name"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "event_checklist_items", force: :cascade do |t|
+    t.bigint "assignee_id"
+    t.boolean "completed", default: false, null: false
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "due_at"
+    t.bigint "event_checklist_id", null: false
+    t.bigint "event_id", null: false
+    t.integer "position", default: 0, null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assignee_id"], name: "index_event_checklist_items_on_assignee_id"
+    t.index ["event_checklist_id", "position"], name: "index_event_checklist_items_on_event_checklist_id_and_position"
+    t.index ["event_checklist_id"], name: "index_event_checklist_items_on_event_checklist_id"
+    t.index ["event_id"], name: "index_event_checklist_items_on_event_id"
+  end
+
+  create_table "event_checklists", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "event_id", null: false
+    t.integer "position", default: 0, null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "position"], name: "index_event_checklists_on_event_id_and_position"
+    t.index ["event_id"], name: "index_event_checklists_on_event_id"
   end
 
   create_table "event_participations", force: :cascade do |t|
@@ -311,6 +338,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_20_130200) do
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.string "tag"
+    t.string "theme_preference", default: "light", null: false
     t.string "uid"
     t.string "unconfirmed_email"
     t.datetime "updated_at", null: false
@@ -330,6 +358,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_20_130200) do
   add_foreign_key "activities", "users"
   add_foreign_key "comments", "events"
   add_foreign_key "comments", "users"
+  add_foreign_key "event_checklist_items", "event_checklists"
+  add_foreign_key "event_checklist_items", "events"
+  add_foreign_key "event_checklist_items", "users", column: "assignee_id"
+  add_foreign_key "event_checklists", "events"
   add_foreign_key "event_participations", "events"
   add_foreign_key "event_participations", "users"
   add_foreign_key "event_suggestions", "events"

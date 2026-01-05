@@ -15,6 +15,8 @@ class Event < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :likes, as: :likeable, dependent: :destroy
   has_many :sub_events, -> { order(position: :asc, start_time: :asc, created_at: :asc) }, dependent: :destroy, inverse_of: :event
+  has_many :checklists, -> { order(position: :asc, created_at: :asc) }, class_name: "EventChecklist", dependent: :destroy, inverse_of: :event
+  has_many :checklist_items, -> { order(position: :asc, created_at: :asc) }, class_name: "EventChecklistItem", dependent: :destroy, inverse_of: :event
 
   accepts_nested_attributes_for :sub_events, allow_destroy: true, reject_if: :sub_event_blank?
 

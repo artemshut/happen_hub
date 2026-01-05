@@ -10,7 +10,7 @@
   <div class="landing-bubble w-[20rem] h-[20rem] right-0 top-24 opacity-30 animate-floatSlow" style="animation-delay: 1.4s;"></div>
   <div class="landing-bubble w-[32rem] h-[32rem] left-1/2 top-[38rem] -translate-x-1/2 opacity-20 animate-pulseRing"></div>
 
-  <section class="landing-section pt-24 md:pt-32">
+  <section class="landing-section">
     <div class="space-y-12">
       <header class="glass-panel bg-gradient-to-r from-brand-gradientFrom/95 via-brand-gradientVia/85 to-brand-gradientTo/85 text-white shadow-[0_35px_80px_rgba(124,58,237,0.35)]">
         <div class="flex flex-wrap items-center justify-between gap-6">
@@ -201,14 +201,9 @@
               <div class="grid gap-4 md:grid-cols-2">
                 <div class="form-field">
                   <label for="event_event_category_id" class="form-label">Category</label>
-                  <div class="relative">
-                    <%= form.collection_select :event_category_id, @event_categories, :id, :name,
-                          { prompt: "Choose a category" },
-                          class: "form-input pr-10" %>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-neutral-muted">
-                      <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                  </div>
+                  <%= form.collection_select :event_category_id, @event_categories, :id, :name,
+                        { prompt: "Choose a category" },
+                        class: "form-input" %>
                 </div>
                 <div class="form-field">
                   <%= form.label :visibility, "Who can see this event?", class: "form-label" %>

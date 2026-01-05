@@ -1,0 +1,78 @@
+<% allowed_manage = policy(event).update? %>
+<% assignee = item.assignee %>
+<% draggable = local_assigns.fetch(:draggable, false) %>
+<% frame_options = { target: "_top" } %>
+<% if draggable %>
+  <% frame_options[:data] = {
+    sortable_item: true,
+    reorder_url: reorder_event_checklist_item_path(event, checklist, item)
+  } %>
+  <% frame_options[:draggable] = true %>
+<% end %>
+
+<%= turbo_frame_tag dom_id(item), **frame_options do %>
+  <li class="rounded-2xl border border-neutral-border bg-white/80 p-4 shadow-sm transition hover:border-brand-light/60">
+    <div class="flex flex-wrap items-center gap-4">
+    <div>
+      <% if allowed_manage %>
+        <%= button_to toggle_complete_event_checklist_item_path(event, checklist, item),
+              method: :patch,
+              form: { data: { turbo_frame: dom_id(item) } },
+              title: (item.completed? ? "Mark incomplete" : "Mark complete"),
+              class: "h-10 w-10 rounded-full border-2 #{item.completed? ? 'border-brand bg-brand-soft text-brand-dark' : 'border-neutral-border text-neutral-muted'} flex items-center justify-center transition hover:scale-105" do %>
+          <i class="fa-solid <%= item.completed? ? 'fa-check' : 'fa-circle' %>"></i>
+        <% end %>
+      <% else %>
+        <div class="h-10 w-10 rounded-full border-2 <%= item.completed? ? 'border-brand bg-brand-soft text-brand-dark' : 'border-neutral-border text-neutral-muted' %> flex items-center justify-center" title="<%= item.completed? ? 'Completed' : 'Pending' %>">
+          <i class="fa-solid <%= item.completed? ? 'fa-check' : 'fa-circle' %>"></i>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="min-w-[200px] flex-1">
+      <p class="text-base font-semibold <%= item.completed? ? 'text-neutral-muted line-through' : 'text-neutral-text' %>">
+        <%= item.title %>
+      </p>
+      <div class="mt-1 flex flex-wrap items-center gap-3 text-xs text-neutral-muted">
+        <% if item.due_at.present? %>
+          <span class="inline-flex items-center gap-1 rounded-full bg-neutral-bg px-2 py-1">
+            <i class="fa-regular fa-clock text-brand"></i>
+            <%= l(item.due_at, format: :short) %>
+          </span>
+        <% end %>
+        <% if assignee.present? %>
+          <span class="inline-flex items-center gap-1 rounded-full bg-neutral-bg px-2 py-1">
+            <i class="fa-regular fa-user"></i>
+            <%= assignee.full_name %>
+          </span>
+        <% elsif allowed_manage %>
+          <span class="inline-flex items-center gap-1 rounded-full bg-neutral-bg px-2 py-1">
+            <i class="fa-regular fa-user"></i>
+            Unassigned
+          </span>
+        <% end %>
+      </div>
+    </div>
+
+      <% if allowed_manage %>
+        <div class="flex items-center gap-2 text-neutral-muted">
+          <% if draggable %>
+            <div class="cursor-grab px-2 text-lg" title="Drag to reorder">
+              <i class="fa-solid fa-grip-vertical"></i>
+            </div>
+          <% end %>
+          <%= link_to "Edit",
+                edit_event_checklist_item_path(event, checklist, item),
+                class: "chip-link px-3 py-1 text-[10px]",
+                data: { turbo_frame: dom_id(item) } %>
+          <%= button_to "Delete",
+                event_checklist_item_path(event, checklist, item),
+                method: :delete,
+                form: { data: { turbo_frame: dom_id(checklist, :panel) } },
+                data: { turbo_confirm: "Remove this checklist item?" },
+                class: "chip-link px-3 py-1 text-[10px]" %>
+        </div>
+      <% end %>
+    </div>
+  </li>
+<% end %>

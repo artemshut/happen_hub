@@ -10,15 +10,6 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## Backlog
 
-- [ ] HUB-010 Mobile apps consume sub-events (subevents-mobile-api)
-  - Expand mobile-facing API responses (event show/list) to include sub-event data and relevant metadata for rendering.
-  - Provide versioning or capability flags so older app versions degrade gracefully.
-  - Add request specs verifying sub-events appear in event payloads and respect authorization rules.
-- [ ] HUB-011 Event checklists (event-checklists)
-  - Allow hosts to create per-event task lists (item name, optional due date, assignee/owner).
-  - Surface checklist progress on the event detail page with controls to add, edit, complete, or reorder items.
-  - Refresh the event detail UI so checklist panels feel native (responsive layout, neon progress indicator, inline form + completion animations).
-  - Provide API coverage so mobile apps can read/update checklists; include request specs and basic UI tests.
 - [ ] HUB-012 Progress & status gamification (gamify-progress)
   - Introduce Host XP + level badges visible on profile cards and invites; award points for hosting milestones, on-time logistics, attendance goals.
   - Implement Rhythm Streaks for consecutive weeks hosting/attending; reset streak after configurable inactivity window.
@@ -29,6 +20,14 @@ When the work has been reviewed and merged, move it to **Done** and include a sh
 
 ## Done
 
+- [x] HUB-011 Event checklists (event-checklists)
+  - Rebuilt the system so events can host multiple named checklists, each with drag-friendly ordering, progress meters, and inline rename/delete controls.
+  - Delivered nested API endpoints/serializers plus request + system specs and docs so web + mobile clients can manage checklists and tasks.
+- [x] HUB-010 Mobile apps consume sub-events (subevents-mobile-api)
+  - Expand mobile-facing API responses (event show/list) to include sub-event data and relevant metadata for rendering.
+  - Provide versioning or capability flags so older app versions degrade gracefully.
+  - Add request specs verifying sub-events appear in event payloads and respect authorization rules.
+  - Merged and deployed; mobile apps now consume sub-event payloads in production.
 - [x] HUB-007 Mobile deep link for shared links (mobile-deeplink)
   - Detect mobile visitors for shared invite pages and attempt to open the native app with deep links.
   - Added store fallbacks when the app isn't installed and web links for desktop users.

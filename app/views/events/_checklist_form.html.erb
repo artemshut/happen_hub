@@ -1,0 +1,18 @@
+<%= turbo_frame_tag dom_id(checklist, :panel) do %>
+  <div class="glass-panel space-y-4 border border-dashed border-brand-light/60 bg-white/90 p-6">
+    <h3 class="text-lg font-semibold text-neutral-text">Rename checklist</h3>
+    <%= form_with(model: checklist, url: event_checklist_path(event, checklist), class: "space-y-3") do |form| %>
+      <div>
+        <%= form.label :title, "Title", class: "form-label" %>
+        <%= form.text_field :title, class: "form-input" %>
+        <% if checklist.errors[:title].present? %>
+          <p class="mt-1 text-xs text-red-600"><%= checklist.errors[:title].to_sentence %></p>
+        <% end %>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <%= form.submit "Save", class: "chip-link--primary px-6 py-2 text-xs uppercase tracking-[0.35em]" %>
+        <%= link_to "Cancel", event_checklist_path(event, checklist), class: "chip-link px-5 py-2 text-[10px]", data: { turbo_frame: dom_id(checklist, :panel) } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

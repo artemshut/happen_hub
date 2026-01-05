@@ -202,7 +202,7 @@ class EventsController < ApplicationController
   private
 
   def set_event
-    @event = Event.friendly.find(params[:id])
+    @event = Event.includes(checklists: { items: :assignee }).friendly.find(params[:id])
   end
 
   def authorize_event
