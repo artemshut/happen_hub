@@ -19,7 +19,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
           next
         end
       end
-
+# 521400701362-a05bte3iqb85ii4mr2k6cod0e4cht8ro.apps.googleusercontent.com
       if payload
         user = User.from_mobile_omniauth(payload)
 
