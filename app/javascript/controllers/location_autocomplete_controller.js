@@ -9,9 +9,7 @@ export default class extends Controller {
       return;
     }
 
-    this.autocomplete = new google.maps.places.Autocomplete(this.inputTarget, {
-      types: ["geocode"]
-    })
+    this.autocomplete = new google.maps.places.Autocomplete(this.inputTarget)
 
     this.autocomplete.addListener("place_changed", () => {
       const place = this.autocomplete.getPlace()
