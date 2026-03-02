@@ -41,7 +41,7 @@ gem "friendly_id", "~> 5.5.0"
 gem "jsonapi-serializer"
 gem "google-id-token"
 gem "fcm"
-gem "googleauth", "~> 1.8"
+gem "googleauth", "~> 1.16"
 gem "faraday"
 gem "pundit"
 gem "dockerfile-rails", ">= 1.7", group: :development
